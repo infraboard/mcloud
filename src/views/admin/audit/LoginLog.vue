@@ -62,7 +62,11 @@ onMounted(() => {
           <a-table-column title="用户类型" data-index="user_type"></a-table-column>
           <a-table-column title="授权类型" data-index="grant_type"></a-table-column>
           <a-table-column title="用途" data-index="platform"></a-table-column>
-          <a-table-column title="颁发时间" data-index="issue_at"></a-table-column>
+          <a-table-column title="颁发时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.issue_at"></ShowTime>
+            </template>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>

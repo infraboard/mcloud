@@ -75,7 +75,11 @@ onMounted(() => {
           </a-table-column>
           <a-table-column title="描述" data-index="description"></a-table-column>
           <a-table-column title="来源" data-index="visiable_mode"></a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+          <a-table-column title="创建时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.create_at"></ShowTime>
+            </template>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>
