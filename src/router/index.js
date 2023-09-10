@@ -226,6 +226,12 @@ const router = createRouter({
               meta: { label: 'Gitlab项目导入' }
             },
             {
+              path: 'service/detail/:id',
+              name: 'ServiceDetail',
+              component: () => import('@/views/develop/service/DetailPage.vue'),
+              meta: { label: '服务详情' }
+            },
+            {
               path: 'approval/list',
               name: 'ApprovalList',
               component: () => import('@/views/develop/approval/ListPage.vue'),

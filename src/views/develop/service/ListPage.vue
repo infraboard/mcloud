@@ -71,7 +71,13 @@ onMounted(() => {
         @page-size-change="pageSizeChange"
       >
         <template #columns>
-          <a-table-column title="名称" data-index="name"></a-table-column>
+          <a-table-column title="名称">
+            <template #cell="{ record }">
+              <a-link @click="router.push({ name: 'ServiceDetail', params: { id: record.id } })">{{
+                record.name
+              }}</a-link>
+            </template>
+          </a-table-column>
           <a-table-column title="描述" data-index="description"></a-table-column>
           <a-table-column title="负责人" data-index="owner"></a-table-column>
           <a-table-column title="类型" data-index="type"></a-table-column>
