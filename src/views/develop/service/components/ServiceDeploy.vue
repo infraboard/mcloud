@@ -30,6 +30,7 @@ onMounted(() => {
       <a-radio-group type="button">
         <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
       </a-radio-group>
+      <a-button type="outline" size="small" style="margin-left: 12px;">创建集群</a-button>
     </div>
     <div class="service-cluster">
       <a-card :style="{ width: '360px' }">
