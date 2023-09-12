@@ -33,20 +33,17 @@ onMounted(() => {
       <a-button type="outline" size="small" style="margin-left: 12px;">创建集群</a-button>
     </div>
     <div class="service-cluster">
-      <a-card :style="{ width: '360px' }">
-        <template #actions>
-          <span class="icon-hover"> <IconThumbUp /> </span>
+      <a-card>
+        <template #title>
+          集群A
+        </template>
+        <template #extra>
+          <a-space>
+            <span class="icon-hover"> <IconThumbUp /> </span>
           <span class="icon-hover"> <IconShareInternal /> </span>
           <span class="icon-hover"> <IconMore /> </span>
+          </a-space>
         </template>
-        <a-card-meta title="Card Title" description="This is the description">
-          <template #avatar>
-            <div :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }">
-              <a-avatar :size="24" :style="{ marginRight: '8px' }"> A </a-avatar>
-              <a-typography-text>Username</a-typography-text>
-            </div>
-          </template>
-        </a-card-meta>
       </a-card>
     </div>
   </div>
