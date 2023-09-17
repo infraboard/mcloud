@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ServiceDeploy from './components/ServiceDeploy.vue'
+import ServiceCluster from './components/ServiceCluster.vue'
 import ServiceBuild from './components/ServiceBuild.vue'
 
 const router = useRouter()
@@ -23,8 +23,8 @@ const ChangeTab = (v) => {
     <!-- 详情标签页 -->
     <a-tabs :active-key="tab" @change="ChangeTab" lazy-load>
       <a-tab-pane key="BaseInfo" title="基础信息"> </a-tab-pane>
-      <a-tab-pane key="ServiceDeploy" title="服务部署">
-        <ServiceDeploy></ServiceDeploy>
+      <a-tab-pane key="ServiceCluster" title="服务部署">
+        <ServiceCluster></ServiceCluster>
       </a-tab-pane>
       <a-tab-pane key="ServiceBuild" title="持续构建">
         <ServiceBuild></ServiceBuild>
