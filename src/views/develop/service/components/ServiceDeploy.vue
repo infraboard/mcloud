@@ -1,5 +1,8 @@
 <script setup>
+import { ref } from 'vue';
+
 const props = defineProps(['deploy'])
+const k8s_deployment = ref(props.deploy.k8s_type_config.workload_config)
 console.log(props)
 </script>
 
@@ -19,7 +22,7 @@ console.log(props)
         <a-link>YAML</a-link>
         <a-link>详情</a-link>
       </template>
-      {{ deploy }}
+      {{ k8s_deployment }}
     </a-card>
   </div>
 </template>
