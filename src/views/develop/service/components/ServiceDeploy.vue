@@ -1,6 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { parse } from 'yaml'
+
+const router = useRouter()
 
 const props = defineProps(['deploy'])
 
@@ -66,13 +69,29 @@ watch(
           <a-table-column title="Pod IP" data-index="status.podIP"></a-table-column>
           <a-table-column align="center" title="操作" :width="200">
             <template #cell="{ record }">
-              <a-button type="text">
+              <a-button
+                type="text"
+                @click="
+                  router.push({
+                    name: 'ServiceLog',
+                    query: { pod_name: record.metadata.name }
+                  })
+                "
+              >
                 <template #icon>
                   <icon-file />
                 </template>
                 日志
               </a-button>
-              <a-button type="text">
+              <a-button
+                type="text"
+                @click="
+                  router.push({
+                    name: 'ServiceConsole',
+                    query: { pod_name: record.metadata.name }
+                  })
+                "
+              >
                 <template #icon>
                   <icon-desktop />
                 </template>

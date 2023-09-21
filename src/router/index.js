@@ -220,6 +220,18 @@ const router = createRouter({
               meta: { label: '服务列表' }
             },
             {
+              path: 'service/log',
+              name: 'ServiceLog',
+              component: () => import('@/views/develop/service/LogPage.vue'),
+              meta: { label: '服务日志' }
+            },
+            {
+              path: 'service/console',
+              name: 'ServiceConsole',
+              component: () => import('@/views/develop/service/ConsolePage.vue'),
+              meta: { label: '登录调试' }
+            },
+            {
               path: 'service/import/gitlab',
               name: 'GitlabImport',
               component: () => import('@/views/develop/service/GitlabImport.vue'),
