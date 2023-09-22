@@ -1,6 +1,5 @@
 <script setup>
 import { reactive } from 'vue'
-import ServiceConsole from './components/ServiceConsole.vue'
 
 const logOption = reactive({
   cluster_id: 'docker-desktop',
@@ -12,6 +11,6 @@ const logOption = reactive({
 
 <template>
   <div>
-    <ServiceConsole :option="logOption"></ServiceConsole>
+    <PodConsole :option="logOption" :height="'calc(100vh - 40px)'"></PodConsole>
   </div>
 </template>

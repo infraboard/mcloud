@@ -1,6 +1,5 @@
 <script setup>
 import { reactive } from 'vue'
-import ServiceLog from './components/ServiceLog.vue'
 
 const logOption = reactive({
   cluster_id: 'docker-desktop',
@@ -12,6 +11,8 @@ const logOption = reactive({
 
 <template>
   <div>
-    <ServiceLog :option="logOption"></ServiceLog>
+    <PodLog class="term" :option="logOption" :height="'calc(100vh - 40px)'"></PodLog>
   </div>
 </template>
+
+<style scoped></style>
