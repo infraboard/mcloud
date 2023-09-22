@@ -11,7 +11,11 @@ const logOption = reactive({
 
 <template>
   <div>
-    <PodLog class="term" :option="logOption" :height="'calc(100vh - 40px)'"></PodLog>
+    <PodLog
+      :option="logOption"
+      :width="'calc(100vw - 260px)'"
+      :height="'calc(100vh - 40px)'"
+    ></PodLog>
   </div>
 </template>
 

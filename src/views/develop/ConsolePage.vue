@@ -92,7 +92,7 @@ const originTreeData = [
         key: '1-0-0',
         children: [
           {
-            title: 'Pod AAAAaaaaaaaaaaaaaaaa',
+            title: 'Pod AAAAaaa',
             key: '1-0-0-0'
           },
           {
@@ -159,7 +159,7 @@ function getMatchIndex(title) {
       </div>
     </a-layout-header>
     <a-layout>
-      <a-layout-sider breakpoint="xl" width="260" class="sider">
+      <a-layout-sider breakpoint="xl" :width="260" class="sider">
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
         <a-tree size="mini" :blockNode="true" :show-line="true" :data="treeData">
           <template #title="nodeData">
