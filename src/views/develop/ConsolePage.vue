@@ -37,7 +37,8 @@ const QueryCluster = async () => {
     queryLoading.value = true
     const listClusterReq = {
       filters: `Env=${currentEnv.value}`,
-      with_deploy: true
+      with_deploy: true,
+      with_service: true,
     }
     clusters.value = await LIST_CLUSTER(listClusterReq)
   } catch (error) {
