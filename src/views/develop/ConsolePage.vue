@@ -134,7 +134,7 @@ const clickNode = (selectedKeys, data) => {
               </span>
             </template>
             <template #extra="nodeData">
-              <span class="f12">{{ nodeData.extra.status }}</span>
+              <div v-if="nodeData.extra.status" class="breathe"></div>
             </template>
           </a-tree>
           <a-empty v-else />
@@ -178,5 +178,27 @@ const clickNode = (selectedKeys, data) => {
 
 .search :deep(.arco-radio-group-button) {
   background-color: var(--color-fill-3);
+}
+
+.breathe {
+  margin-right: 12px;
+  position: relative;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #08b963;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0% {
+    box-shadow: 0 0 0 0px rgba(8, 166, 87, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(16, 246, 58, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 0px rgba(27, 151, 100, 0.2);
+  }
 }
 </style>
