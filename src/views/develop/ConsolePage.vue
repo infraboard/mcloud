@@ -39,6 +39,7 @@ const QueryCluster = async () => {
       filters: `Env=${currentEnv.value}`,
       with_deploy: true,
       with_service: true,
+      to_tree: true
     }
     clusters.value = await LIST_CLUSTER(listClusterReq)
   } catch (error) {
@@ -53,72 +54,10 @@ onBeforeMount(async () => {
   await QueryCluster()
 })
 
-const originTreeData = [
-  {
-    title: 'Service AA',
-    key: '0-0',
-    children: [
-      {
-        title: 'V1',
-        key: '0-0-0',
-        children: [
-          {
-            title: 'Pod A',
-            key: '0-0-0-0'
-          },
-          {
-            title: 'Pod B',
-            key: '0-0-0-1'
-          }
-        ]
-      },
-      {
-        title: 'V2',
-        key: '0-0-1',
-        children: [
-          {
-            title: 'PodA',
-            key: '0-0-1-0'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    title: 'Service B',
-    key: '1-0',
-    children: [
-      {
-        title: 'V1',
-        key: '1-0-0',
-        children: [
-          {
-            title: 'Pod AAAAaaa',
-            key: '1-0-0-0'
-          },
-          {
-            title: 'Pod B',
-            key: '1-0-0-1'
-          }
-        ]
-      },
-      {
-        title: 'V2',
-        key: '1-0-1',
-        children: [
-          {
-            title: 'PodA',
-            key: '1-0-1-0'
-          }
-        ]
-      }
-    ]
-  }
-]
 
 const searchKey = ref('')
 const treeData = computed(() => {
-  if (!searchKey.value) return originTreeData
+  if (!searchKey.value) return clusters.value.items
   return searchData(searchKey.value)
 })
 
@@ -141,7 +80,7 @@ function searchData(keyword) {
     return result
   }
 
-  return loop(originTreeData)
+  return loop(clusters.value.items)
 }
 
 function getMatchIndex(title) {
@@ -162,7 +101,7 @@ function getMatchIndex(title) {
     <a-layout>
       <a-layout-sider breakpoint="xl" :width="260" class="sider">
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
-        <a-tree size="mini" :blockNode="true" :show-line="true" :data="treeData">
+        <a-tree size="mini" default-expand-all block-node :show-line="true" :data="treeData">
           <template #title="nodeData">
             <template v-if="((index = getMatchIndex(nodeData?.title)), index < 0)">{{
               nodeData?.title
