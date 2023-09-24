@@ -41,6 +41,7 @@ const QueryCluster = async () => {
       with_service: true,
       to_tree: true
     }
+
     clusters.value = await LIST_CLUSTER(listClusterReq)
   } catch (error) {
     Message.error(`查询集群失败: ${error}`)
@@ -53,7 +54,6 @@ onBeforeMount(async () => {
   await QueryEnv()
   await QueryCluster()
 })
-
 
 const searchKey = ref('')
 const treeData = computed(() => {
@@ -87,6 +87,10 @@ function getMatchIndex(title) {
   if (!searchKey.value) return -1
   return title.toLowerCase().indexOf(searchKey.value.toLowerCase())
 }
+
+const clickNode = (selectedKeys, data) => {
+  console.log(selectedKeys, data)
+}
 </script>
 
 <template>
@@ -101,19 +105,40 @@ function getMatchIndex(title) {
     <a-layout>
       <a-layout-sider breakpoint="xl" :width="260" class="sider">
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
-        <a-tree size="mini" default-expand-all block-node :show-line="true" :data="treeData">
-          <template #title="nodeData">
-            <template v-if="((index = getMatchIndex(nodeData?.title)), index < 0)">{{
-              nodeData?.title
-            }}</template>
-            <span v-else>
-              {{ nodeData?.title?.substr(0, index) }}
-              <span style="color: var(--color-primary-light-4)">
-                {{ nodeData?.title?.substr(index, searchKey.length) }} </span
-              >{{ nodeData?.title?.substr(index + searchKey.length) }}
-            </span>
-          </template>
-        </a-tree>
+        <!-- Loading 骨架 -->
+        <a-skeleton v-if="queryLoading" animation :loading="queryLoading">
+          <a-space direction="vertical" :style="{ width: '100%' }" size="mini">
+            <a-skeleton-line :rows="10" />
+          </a-space>
+        </a-skeleton>
+        <div v-else>
+          <!-- 服务树 -->
+          <a-tree
+            v-if="clusters.items.length > 0"
+            style="width: 100%"
+            size="mini"
+            :blockNode="true"
+            :show-line="true"
+            :data="treeData"
+            @select="clickNode"
+          >
+            <template #title="nodeData">
+              <template v-if="((index = getMatchIndex(nodeData?.title)), index < 0)">{{
+                nodeData?.title
+              }}</template>
+              <span v-else>
+                {{ nodeData?.title?.substr(0, index) }}
+                <span style="color: var(--color-primary-light-4)">
+                  {{ nodeData?.title?.substr(index, searchKey.length) }} </span
+                >{{ nodeData?.title?.substr(index + searchKey.length) }}
+              </span>
+            </template>
+            <template #extra="nodeData">
+              <span class="f12">{{ nodeData.extra.status }}</span>
+            </template>
+          </a-tree>
+          <a-empty v-else />
+        </div>
       </a-layout-sider>
       <a-layout-content>
         <!-- 内容操作区 -->

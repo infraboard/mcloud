@@ -110,7 +110,6 @@ watch(
 watch(
   () => props.option,
   (newV) => {
-    console.log(newV)
     if (newV) {
       // 连接终端
       connect()
