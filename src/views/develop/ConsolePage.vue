@@ -1,8 +1,9 @@
 <script setup>
 import { LIST_LABEL } from '@/api/mcenter/label'
 import { Message } from '@arco-design/web-vue'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, h, onBeforeMount, ref } from 'vue'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
+import BreatheLamp from '@/components/BreatheLamp.vue'
 
 // 查询环境标签
 const queryLoading = ref(false)
@@ -42,12 +43,31 @@ const QueryCluster = async () => {
       to_tree: true
     }
 
-    clusters.value = await LIST_CLUSTER(listClusterReq)
+    const resp = await LIST_CLUSTER(listClusterReq)
+    initData(resp.items)
+    clusters.value = resp
   } catch (error) {
     Message.error(`查询集群失败: ${error}`)
   } finally {
     queryLoading.value = false
   }
+}
+
+function initData(nodes) {
+  const loop = (data) => {
+    data.forEach((item) => {
+      if (item.extra.status) {
+        item.switcherIcon = () => {
+          return h(BreatheLamp)
+        }
+      }
+      if (item.children) {
+        loop(item.children)
+      }
+    })
+  }
+
+  return loop(nodes)
 }
 
 onBeforeMount(async () => {
@@ -133,9 +153,6 @@ const clickNode = (selectedKeys, data) => {
                 >{{ nodeData?.title?.substr(index + searchKey.length) }}
               </span>
             </template>
-            <template #extra="nodeData">
-              <div v-if="nodeData.extra.status" class="breathe"></div>
-            </template>
           </a-tree>
           <a-empty v-else />
         </div>
@@ -178,27 +195,5 @@ const clickNode = (selectedKeys, data) => {
 
 .search :deep(.arco-radio-group-button) {
   background-color: var(--color-fill-3);
-}
-
-.breathe {
-  margin-right: 12px;
-  position: relative;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: #08b963;
-  animation: breathe 2s ease-in-out infinite;
-}
-
-@keyframes breathe {
-  0% {
-    box-shadow: 0 0 0 0px rgba(8, 166, 87, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 5px rgba(16, 246, 58, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 0 0px rgba(27, 151, 100, 0.2);
-  }
 }
 </style>
