@@ -110,7 +110,7 @@ watch(
 watch(
   () => props.option,
   (newV) => {
-    if (newV) {
+    if (newV && newV.cluster_id && newV.namespace && newV.pod_name) {
       // 连接终端
       connect()
     }

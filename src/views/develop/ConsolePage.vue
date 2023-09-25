@@ -4,6 +4,10 @@ import { Message } from '@arco-design/web-vue'
 import { computed, h, onBeforeMount, ref } from 'vue'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
 import BreatheLamp from '@/components/BreatheLamp.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const selectedPod = ref([router.currentRoute.value.query.pod_name])
 
 // 查询环境标签
 const queryLoading = ref(false)
@@ -109,7 +113,17 @@ function getMatchIndex(title) {
 }
 
 const clickNode = (selectedKeys, data) => {
-  console.log(selectedKeys, data)
+  const e = data.node.extra
+  selectedPod.value[0] = e.pod_name
+  if (e) {
+    router.replace({
+      query: {
+        cluster_id: e.cluster_id,
+        namespace: e.namespace,
+        pod_name: e.pod_name
+      }
+    })
+  }
 }
 </script>
 
@@ -140,6 +154,7 @@ const clickNode = (selectedKeys, data) => {
             :blockNode="true"
             :show-line="true"
             :data="treeData"
+            :selected-keys="selectedPod"
             @select="clickNode"
           >
             <template #title="nodeData">

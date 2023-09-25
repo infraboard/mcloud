@@ -19,7 +19,7 @@
     box-shadow: 0 0 0 0px rgba(8, 166, 87, 0.2);
   }
   50% {
-    box-shadow: 0 0 0 5px rgba(16, 246, 58, 0.5);
+    box-shadow: 0 0 0 3px rgba(16, 246, 58, 0.5);
   }
   100% {
     box-shadow: 0 0 0 0px rgba(27, 151, 100, 0.2);
