@@ -69,7 +69,12 @@ onBeforeMount(async () => {
     </div>
     <div class="service-cluster">
       <a-empty v-if="clusters.total == 0" />
-      <a-card :loading="queryLoading" v-for="item in clusters.items" :key="item.id">
+      <a-card
+        class="cluster-item"
+        :loading="queryLoading"
+        v-for="item in clusters.items"
+        :key="item.id"
+      >
         <template #title>
           {{ item.name }}
           <span>创建于 <ShowTime :timestamp="item.create_at"></ShowTime></span>
@@ -99,5 +104,9 @@ onBeforeMount(async () => {
 
 .service-cluster {
   margin-top: 12px;
+}
+
+.cluster-item {
+  margin-bottom: 12px;
 }
 </style>

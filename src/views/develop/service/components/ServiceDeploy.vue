@@ -74,11 +74,11 @@ watch(
                 @click="
                   router.push({
                     name: 'ServiceLog',
-                    query: { 
+                    query: {
                       cluster_id: deploy.k8s_type_config.cluster_id,
                       namespace: record.metadata.namespace,
-                      pod_name: record.metadata.name,
-                     }
+                      pod_name: record.metadata.name
+                    }
                   })
                 "
               >
@@ -92,10 +92,10 @@ watch(
                 @click="
                   router.push({
                     name: 'ServiceConsole',
-                    query: { 
+                    query: {
                       cluster_id: deploy.k8s_type_config.cluster_id,
                       namespace: record.metadata.namespace,
-                      pod_name: record.metadata.name,
+                      pod_name: record.metadata.name
                     }
                   })
                 "
