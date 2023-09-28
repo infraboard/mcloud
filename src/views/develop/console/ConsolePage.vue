@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import  DocumentPage  from './components/DocumentPage.vue'
 
 const router = useRouter()
 
@@ -31,7 +32,6 @@ watch(
 
 <template>
   <div>
-    
     <PodLog
       v-if="consoleType === 'log'"
       :key="ts"
@@ -46,6 +46,8 @@ watch(
       :width="'calc(100vw - 260px)'"
       :height="'calc(100vh - 40px)'"
     ></PodConsole>
+    <DocumentPage  v-if="!consoleType">
+    </DocumentPage>
   </div>
 </template>
 
