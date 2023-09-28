@@ -38,6 +38,11 @@ const menuItemClickHandler = (routeName) => {
           <a-menu-item key="DomainPipelineList">Pipeline模版</a-menu-item>
           <a-menu-item key="DomainJobList">Job管理</a-menu-item>
         </a-sub-menu>
+        <a-sub-menu key="ConsoleAudit">
+          <template #icon><icon-video-camera /></template>
+          <template #title>登录审计</template>
+          <a-menu-item key="DomainPipelineList">Pod 登录</a-menu-item>
+        </a-sub-menu>
       </a-menu>
     </div>
     <!-- 内容操作区 -->

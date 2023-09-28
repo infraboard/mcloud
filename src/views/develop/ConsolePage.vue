@@ -15,9 +15,9 @@ const selectedPod = ref([router.currentRoute.value.query.pod_name])
 // Tab 列表
 const consoleType = ref('log')
 const changeTab = async (v) => {
-  const query = JSON.parse(JSON.stringify(router.currentRoute.value.query) ) 
+  const query = JSON.parse(JSON.stringify(router.currentRoute.value.query))
   query.tab = v
-  await router.replace({query})
+  await router.replace({ query })
 }
 
 // 查询空间列表
@@ -35,7 +35,7 @@ const ChangeNamespace = async (namespace) => {
   app.value.token = resp
   router.go(0)
   selectedPod.value = []
-  router.push({name: 'ServiceConsole'})
+  router.push({ name: 'ServiceConsole' })
 }
 
 // 查询环境标签
@@ -151,7 +151,7 @@ const clickNode = (selectedKeys, data) => {
         cluster_id: e.cluster_id,
         namespace: e.namespace,
         pod_name: e.pod_name,
-        tab: consoleType.value,
+        tab: consoleType.value
       }
     })
   }
@@ -162,6 +162,11 @@ const clickNode = (selectedKeys, data) => {
   <a-layout class="layout">
     <a-layout-header class="content-header">
       <a-space>
+        <a-button type="text" @click="router.push({ name: 'ServiceList' })">
+          <template #icon>
+            <icon-reply />
+          </template>
+        </a-button>
         <a-select
           placeholder="请选择工作空间"
           :bordered="false"

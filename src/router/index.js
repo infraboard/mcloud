@@ -218,7 +218,7 @@ const router = createRouter({
               name: 'ServiceConsole',
               component: () => import('@/views/develop/console/ConsolePage.vue'),
               meta: { label: '服务控制台' }
-            },
+            }
           ]
         },
         {
