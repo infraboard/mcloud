@@ -9,10 +9,16 @@ import { CHANGE_NAMESPACE } from '@/api/mcenter/token'
 import { useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
 
-const consoleType = ref('log')
-
 const router = useRouter()
 const selectedPod = ref([router.currentRoute.value.query.pod_name])
+
+// Tab 列表
+const consoleType = ref('log')
+const changeTab = async (v) => {
+  const query = JSON.parse(JSON.stringify(router.currentRoute.value.query) ) 
+  query.tab = v
+  await router.replace({query})
+}
 
 // 查询空间列表
 const currentNamespace = ref(app.value.token.namespace)
@@ -144,7 +150,8 @@ const clickNode = (selectedKeys, data) => {
       query: {
         cluster_id: e.cluster_id,
         namespace: e.namespace,
-        pod_name: e.pod_name
+        pod_name: e.pod_name,
+        tab: consoleType.value,
       }
     })
   }
@@ -189,11 +196,11 @@ const clickNode = (selectedKeys, data) => {
       </a-space>
       <a-space>
         <a-radio-group
-          style="margin-left: 12px"
           size="small"
           type="button"
           v-model="consoleType"
           default-value="log"
+          @change="changeTab"
         >
           <a-radio value="log"><icon-file /> 日志</a-radio>
           <a-radio value="console"><icon-desktop /> 控制台</a-radio>

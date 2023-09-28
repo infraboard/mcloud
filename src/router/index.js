@@ -207,24 +207,18 @@ const router = createRouter({
       redirect: { name: 'BaseDevelop' },
       children: [
         {
-          path: 'console',
-          name: 'DevelopConsole',
+          path: 'service_tree',
+          name: 'ServiceTree',
           component: () => import('@/views/develop/ConsolePage.vue'),
-          meta: { label: '服务控制台' },
+          meta: { label: '服务看板' },
           redirect: { name: 'ServiceConsole' },
           children: [
             {
-              path: 'service/log',
-              name: 'ServiceLog',
-              component: () => import('@/views/develop/console/LogPage.vue'),
-              meta: { label: '服务日志' }
-            },
-            {
-              path: 'service/console',
+              path: 'console',
               name: 'ServiceConsole',
               component: () => import('@/views/develop/console/ConsolePage.vue'),
-              meta: { label: '登录调试' }
-            }
+              meta: { label: '服务控制台' }
+            },
           ]
         },
         {

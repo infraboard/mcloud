@@ -10,6 +10,7 @@ const logOption = reactive({
   pod_name: '',
   container_name: ''
 })
+const consoleType = ref('log')
 
 // 更新数据
 const ts = ref(0)
@@ -22,6 +23,7 @@ watch(
       logOption.pod_name = newV.pod_name
       ts.value = new Date().getTime()
     }
+    consoleType.value = newV.tab
   },
   { immediate: true }
 )
@@ -29,7 +31,16 @@ watch(
 
 <template>
   <div>
+    
+    <PodLog
+      v-if="consoleType === 'log'"
+      :key="ts"
+      :option="logOption"
+      :width="'calc(100vw - 260px)'"
+      :height="'calc(100vh - 40px)'"
+    ></PodLog>
     <PodConsole
+      v-if="consoleType === 'console'"
       :key="ts"
       :option="logOption"
       :width="'calc(100vw - 260px)'"
@@ -37,3 +48,5 @@ watch(
     ></PodConsole>
   </div>
 </template>
+
+<style scoped></style>

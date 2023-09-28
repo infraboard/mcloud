@@ -61,11 +61,11 @@ onBeforeMount(async () => {
 
 <template>
   <div class="page">
-    <div>
-      <a-radio-group :model-value="currentEnv" @change="changeEnv" type="button">
+    <div class="header-item">
+      <a-button type="outline" size="small" style="margin-left: 12px">创建集群</a-button>
+      <a-radio-group  style="margin-left: auto;" :model-value="currentEnv" @change="changeEnv" type="button">
         <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
       </a-radio-group>
-      <a-button type="outline" size="small" style="margin-left: 12px">创建集群</a-button>
     </div>
     <div class="service-cluster">
       <a-empty v-if="clusters.total == 0" />
@@ -102,6 +102,10 @@ onBeforeMount(async () => {
   background-color: var(--color-fill-3);
 }
 
+.header-item {
+  display: flex;
+}
+
 .service-cluster {
   margin-top: 12px;
 }
@@ -109,4 +113,6 @@ onBeforeMount(async () => {
 .cluster-item {
   margin-bottom: 12px;
 }
+
+
 </style>
