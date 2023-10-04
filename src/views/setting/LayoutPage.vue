@@ -1,12 +1,17 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
+import { onMounted } from 'vue';
 
 const router = useRouter()
 const menuItemClickHandler = (routeName) => {
   app.value.menu.setting = routeName
   router.push({ name: routeName })
 }
+
+onMounted(() =>  {
+  app.value.menu.setting = router.currentRoute.value.name
+})
 </script>
 
 <template>

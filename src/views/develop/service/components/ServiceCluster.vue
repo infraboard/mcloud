@@ -62,7 +62,7 @@ onBeforeMount(async () => {
 <template>
   <div class="page">
     <div class="header-item">
-      <a-button type="outline" size="small" style="margin-left: 12px">创建集群</a-button>
+      <a-button type="outline" size="small">创建集群</a-button>
       <a-radio-group
         style="margin-left: auto"
         :model-value="currentEnv"
