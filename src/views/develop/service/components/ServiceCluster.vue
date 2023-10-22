@@ -62,12 +62,11 @@ onBeforeMount(async () => {
 <template>
   <div class="page">
     <div class="header-item">
-      <a-button type="outline" size="small">创建集群</a-button>
       <a-radio-group
-        style="margin-left: auto"
         :model-value="currentEnv"
         @change="changeEnv"
         type="button"
+        size="small"
       >
         <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
       </a-radio-group>
@@ -83,6 +82,7 @@ onBeforeMount(async () => {
         <template #title>
           {{ item.name }}
           <span>创建于 <ShowTime :timestamp="item.create_at"></ShowTime></span>
+          <a-button type="text" size="mini">创建部署</a-button>
         </template>
         <template #extra>
           <a-space>

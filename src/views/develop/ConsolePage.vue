@@ -162,9 +162,9 @@ const clickNode = (selectedKeys, data) => {
   <a-layout class="layout">
     <a-layout-header class="content-header">
       <a-space>
-        <a-button type="text" @click="router.push({ name: 'ServiceList' })">
+        <a-button type="text" @click="router.go(-1)">
           <template #icon>
-            <icon-reply />
+            <icon-arrow-left />
           </template>
         </a-button>
         <a-select

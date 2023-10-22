@@ -28,6 +28,10 @@ instance.interceptors.response.use(
       message = error.response.data.message
 
       switch (error.response.data.code) {
+        case 401:
+          app.value.isLogin = false
+          window.location.reload()
+          return
         // Token过期
         case 50015:
           Modal.error({
