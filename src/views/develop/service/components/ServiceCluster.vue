@@ -62,12 +62,7 @@ onBeforeMount(async () => {
 <template>
   <div class="page">
     <div class="header-item">
-      <a-radio-group
-        :model-value="currentEnv"
-        @change="changeEnv"
-        type="button"
-        size="small"
-      >
+      <a-radio-group :model-value="currentEnv" @change="changeEnv" type="button" size="small">
         <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
       </a-radio-group>
     </div>

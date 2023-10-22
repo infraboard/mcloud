@@ -12,14 +12,6 @@ import { app } from '@/stores/localstorage'
 const router = useRouter()
 const selectedPod = ref([router.currentRoute.value.query.pod_name])
 
-// Tab 列表
-const consoleType = ref('log')
-const changeTab = async (v) => {
-  const query = JSON.parse(JSON.stringify(router.currentRoute.value.query))
-  query.tab = v
-  await router.replace({ query })
-}
-
 // 查询空间列表
 const currentNamespace = ref(app.value.token.namespace)
 const namespaces = reactive({ items: [], total: 0 })
@@ -144,16 +136,26 @@ function getMatchIndex(title) {
 
 const clickNode = (selectedKeys, data) => {
   const e = data.node.extra
-  selectedPod.value[0] = e.pod_name
-  if (e) {
-    router.replace({
-      query: {
-        cluster_id: e.cluster_id,
-        namespace: e.namespace,
-        pod_name: e.pod_name,
-        tab: consoleType.value
+
+  switch (data.node.type) {
+    case 'cluster':
+      return
+    case 'deploy':
+      return
+    case 'pod':
+      selectedPod.value[0] = e.pod_name
+      if (e) {
+        console.log(e.pod_name)
+        router.push({
+          name: 'ServiceTerminal',
+          query: {
+            cluster_id: e.cluster_id,
+            namespace: e.namespace,
+            pod_name: e.pod_name
+          }
+        })
       }
-    })
+      return
   }
 }
 </script>
@@ -190,26 +192,6 @@ const clickNode = (selectedKeys, data) => {
         >
           <a-option :value="env.value" v-for="env in envs" :key="env.label" :label="env.label" />
         </a-select>
-      </a-space>
-      <a-space>
-        <a-button type="outline" size="small">
-          <template #icon>
-            <icon-tool />
-          </template>
-          工具箱
-        </a-button>
-      </a-space>
-      <a-space>
-        <a-radio-group
-          size="small"
-          type="button"
-          v-model="consoleType"
-          default-value="log"
-          @change="changeTab"
-        >
-          <a-radio value="log"><icon-file /> 日志</a-radio>
-          <a-radio value="console"><icon-desktop /> 控制台</a-radio>
-        </a-radio-group>
       </a-space>
     </a-layout-header>
     <a-layout>

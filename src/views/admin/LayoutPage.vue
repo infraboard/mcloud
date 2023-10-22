@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const menuItemClickHandler = (routeName) => {
@@ -9,7 +9,7 @@ const menuItemClickHandler = (routeName) => {
   router.push({ name: routeName })
 }
 
-onMounted(() =>  {
+onMounted(() => {
   app.value.menu.admin = router.currentRoute.value.name
 })
 </script>

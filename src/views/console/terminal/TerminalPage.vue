@@ -1,17 +1,18 @@
 <script setup>
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import DocumentPage from './components/DocumentPage.vue'
 
 const router = useRouter()
+const query = router.currentRoute.value.query
 
+// Tab 列表
+const consoleType = ref('log')
 const logOption = reactive({
-  cluster_id: '',
-  namespace: '',
-  pod_name: '',
+  cluster_id: query.cluster_id,
+  namespace: query.namespace,
+  pod_name: query.pod_name,
   container_name: ''
 })
-const consoleType = ref('log')
 
 // 更新数据
 const ts = ref(0)
@@ -24,7 +25,6 @@ watch(
       logOption.pod_name = newV.pod_name
       ts.value = new Date().getTime()
     }
-    consoleType.value = newV.tab
   },
   { immediate: true }
 )
@@ -32,22 +32,43 @@ watch(
 
 <template>
   <div>
+    <a-space class="headline">
+      <!-- <a-space>
+        <a-button type="outline" size="small">
+          <template #icon>
+            <icon-tool />
+          </template>
+          工具箱
+        </a-button>
+      </a-space> -->
+      <a-space>
+        <a-radio-group size="small" type="button" v-model="consoleType" default-value="log">
+          <a-radio value="log"><icon-file /> 日志</a-radio>
+          <a-radio value="console"><icon-desktop /> 控制台</a-radio>
+        </a-radio-group>
+      </a-space>
+    </a-space>
+
     <PodLog
       v-if="consoleType === 'log'"
       :key="ts"
       :option="logOption"
       :width="'calc(100vw - 260px)'"
-      :height="'calc(100vh - 40px)'"
+      :height="'calc(100vh - 80px)'"
     ></PodLog>
     <PodConsole
       v-if="consoleType === 'console'"
       :key="ts"
       :option="logOption"
       :width="'calc(100vw - 260px)'"
-      :height="'calc(100vh - 40px)'"
+      :height="'calc(100vh - 80px)'"
     ></PodConsole>
-    <DocumentPage v-if="!consoleType"> </DocumentPage>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.headline {
+  height: 40px;
+  padding: 0 12px;
+}
+</style>

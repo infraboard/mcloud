@@ -199,32 +199,38 @@ const router = createRouter({
         }
       ]
     },
+    // 服务控制台
+    {
+      path: '/service_console',
+      name: 'ServiceConsole',
+      component: () => import('@/views/console/LayoutPage.vue'),
+      redirect: { name: 'ServiceDashboard' },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'ServiceDashboard',
+          component: () => import('@/views/console/dashboard/BoardPage.vue'),
+          meta: { label: '终端看板' }
+        },
+        {
+          path: 'terminal',
+          name: 'ServiceTerminal',
+          component: () => import('@/views/console/terminal/TerminalPage.vue'),
+          meta: { label: '服务终端控制台' }
+        }
+      ]
+    },
     // 研发交付
     {
       path: '/develop',
       name: 'DevelopPage',
-      component: () => import('@/components/RedirectPage.vue'),
+      component: () => import('@/views/develop/LayoutPage.vue'),
       redirect: { name: 'BaseDevelop' },
       children: [
         {
-          path: 'service_tree',
-          name: 'ServiceTree',
-          component: () => import('@/views/develop/ConsolePage.vue'),
-          meta: { label: '服务看板' },
-          redirect: { name: 'ServiceConsole' },
-          children: [
-            {
-              path: 'console',
-              name: 'ServiceConsole',
-              component: () => import('@/views/develop/console/ConsolePage.vue'),
-              meta: { label: '服务控制台' }
-            }
-          ]
-        },
-        {
           path: 'base',
           name: 'BaseDevelop',
-          component: () => import('@/views/develop/LayoutPage.vue'),
+          component: () => import('@/components/RedirectPage.vue'),
           meta: { label: '服务管理' },
           redirect: { name: 'ServiceList' },
           children: [
@@ -269,7 +275,7 @@ const router = createRouter({
         {
           path: 'tool',
           name: 'DevToolManage',
-          component: () => import('@/views/develop/LayoutPage.vue'),
+          component: () => import('@/components/RedirectPage.vue'),
           meta: { label: '研发工具' },
           redirect: { name: 'DomainPipelineList' },
           children: [
