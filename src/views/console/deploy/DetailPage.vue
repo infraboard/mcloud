@@ -1,51 +1,60 @@
 <script setup>
-import { ref, watch } from 'vue'
+// import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { parse } from 'yaml'
+import { Message } from '@arco-design/web-vue'
+// import { parse } from 'yaml'
+import { DESCRIBE_CLUSTER } from '@/api/mpaas/deploy'
+import { onBeforeMount } from 'vue'
 
 const router = useRouter()
+const deployId = router.currentRoute.value.params.id
 
-const props = defineProps(['deploy'])
+// 查询集群详情
+const GetDeploy = async () => {
+  try {
+    const resp = await DESCRIBE_CLUSTER(deployId)
+    console.log(resp)
+  } catch (error) {
+    Message.error(`查询部署失败: ${error}`)
+  }
+}
 
-const workload_yaml = ref('')
-const workload_obj = ref({})
-const pods = ref([])
-watch(
-  () => props.deploy,
-  (newV) => {
-    if (newV) {
-      const kc = props.deploy.k8s_type_config
-      workload_yaml.value = kc.workload_config
-      try {
-        workload_obj.value = parse(kc.workload_config)
-      } catch (error) {
-        console.log(error)
-      }
+// 加载数据
+onBeforeMount(async () => {
+  await GetDeploy()
+})
 
-      let tempPods = []
-      Object.keys(kc.pods).forEach((key) => {
-        tempPods.push(parse(kc.pods[key]))
-      })
-      pods.value = tempPods
-
-      console.log(pods.value)
-    }
-  },
-  { immediate: true }
-)
-
-// const k8s_deployment = ref(parse())
+// const workload_yaml = ref('')
+// const workload_obj = ref({})
 // const pods = ref([])
-// console.log(props.deploy.k8s_type_config.pods)
-// props.deploy.k8s_type_config.pods.forEach((_, value) => {
-//     pods.value.push(parse(value))
-// })
-// console.log(pods)
+// watch(
+//   () => props.deploy,
+//   (newV) => {
+//     if (newV) {
+//       const kc = props.deploy.k8s_type_config
+//       workload_yaml.value = kc.workload_config
+//       try {
+//         workload_obj.value = parse(kc.workload_config)
+//       } catch (error) {
+//         console.log(error)
+//       }
+
+//       let tempPods = []
+//       Object.keys(kc.pods).forEach((key) => {
+//         tempPods.push(parse(kc.pods[key]))
+//       })
+//       pods.value = tempPods
+
+//       console.log(pods.value)
+//     }
+//   },
+//   { immediate: true }
+// )
 </script>
 
 <template>
-  <div v-if="deploy">
-    <a-card style="margin-bottom: 12px" :bordered="true">
+  <div>
+    <!-- <a-card style="margin-bottom: 12px" :bordered="true">
       <template #title>
         {{ deploy.name }}
         <span v-if="deploy.k8s_type_config">
@@ -111,7 +120,7 @@ watch(
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
+    </a-card> -->
   </div>
 </template>
 

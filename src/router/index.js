@@ -217,6 +217,18 @@ const router = createRouter({
           name: 'ServiceTerminal',
           component: () => import('@/views/console/terminal/TerminalPage.vue'),
           meta: { label: '服务终端控制台' }
+        },
+        {
+          path: 'cluster',
+          name: 'ClusterDetail',
+          component: () => import('@/views/console/cluster/DetailPage.vue'),
+          meta: { label: '应用集群' }
+        },
+        {
+          path: 'deploy/:id',
+          name: 'DeployDetail',
+          component: () => import('@/views/console/deploy/DetailPage.vue'),
+          meta: { label: '应用部署' }
         }
       ]
     },

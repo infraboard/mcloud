@@ -139,8 +139,17 @@ const clickNode = (selectedKeys, data) => {
 
   switch (data.node.type) {
     case 'cluster':
+      router.push({
+        name: 'ClusterDetail'
+      })
       return
     case 'deploy':
+      router.push({
+        name: 'DeployDetail',
+        params: {
+          id: data.node.key
+        }
+      })
       return
     case 'pod':
       selectedPod.value[0] = e.pod_name

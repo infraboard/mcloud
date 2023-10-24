@@ -12,7 +12,7 @@ const logOption = reactive({
   cluster_id: query.cluster_id,
   namespace: query.namespace,
   pod_name: query.pod_name,
-  container_name: '',
+  container_name: ''
 })
 
 // 更新数据
@@ -48,14 +48,13 @@ watch(
       </a-space>
       <a-space>
         <a-radio-group size="mini" type="button" v-model="app.xterm.theme" default-value="GitHub">
-            <a-radio value="Solarized_Darcula"><icon-moon-fill /></a-radio>
-            <a-radio value="GitHub"><icon-sun-fill /></a-radio>
-          </a-radio-group>
+          <a-radio value="Solarized_Darcula"><icon-moon-fill /></a-radio>
+          <a-radio value="GitHub"><icon-sun-fill /></a-radio>
+        </a-radio-group>
       </a-space>
     </div>
 
-
-      <PodLog
+    <PodLog
       v-if="consoleType === 'log'"
       :key="ts"
       :option="logOption"
@@ -71,7 +70,6 @@ watch(
       :height="'calc(100vh - 80px)'"
       :theme="app.xterm.theme"
     ></PodConsole>
-
   </div>
 </template>
 
