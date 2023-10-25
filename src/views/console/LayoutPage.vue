@@ -137,10 +137,14 @@ function getMatchIndex(title) {
 const clickNode = (selectedKeys, data) => {
   const e = data.node.extra
 
+  console.log(selectedKeys, data)
   switch (data.node.type) {
     case 'cluster':
       router.push({
-        name: 'ClusterDetail'
+        name: 'ClusterDetail',
+        params: {
+          id: data.node.key
+        }
       })
       return
     case 'deploy':

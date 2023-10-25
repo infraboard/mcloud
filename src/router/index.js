@@ -219,7 +219,7 @@ const router = createRouter({
           meta: { label: '服务终端控制台' }
         },
         {
-          path: 'cluster',
+          path: 'cluster/:id',
           name: 'ClusterDetail',
           component: () => import('@/views/console/cluster/DetailPage.vue'),
           meta: { label: '应用集群' }
