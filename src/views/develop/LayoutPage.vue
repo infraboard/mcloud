@@ -34,6 +34,7 @@ onMounted(() => {
           <template #icon><icon-apps /></template>
           <template #title>服务管理</template>
           <a-menu-item key="ServiceList">服务列表</a-menu-item>
+          <a-menu-item key="ServiceCluster">部署集群</a-menu-item>
           <a-menu-item key="ApprovalList">上线申请</a-menu-item>
           <a-menu-item key="ServiceConsole">控制台</a-menu-item>
         </a-sub-menu>
@@ -46,7 +47,7 @@ onMounted(() => {
         <a-sub-menu key="ConsoleAudit">
           <template #icon><icon-video-camera /></template>
           <template #title>登录审计</template>
-          <a-menu-item key="DomainPipelineList">Pod 登录</a-menu-item>
+          <a-menu-item key="PodAudit">Pod 登录</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>

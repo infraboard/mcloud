@@ -7,13 +7,16 @@ const router = useRouter()
 const query = router.currentRoute.value.query
 
 // Tab 列表
-const consoleType = ref('log')
+const consoleType = ref(query.tag)
 const logOption = reactive({
   cluster_id: query.cluster_id,
   namespace: query.namespace,
   pod_name: query.pod_name,
   container_name: ''
 })
+if (!consoleType.value) {
+  consoleType.value = 'log'
+}
 
 // 更新数据
 const ts = ref(0)
@@ -24,6 +27,10 @@ watch(
       logOption.cluster_id = newV.cluster_id
       logOption.namespace = newV.namespace
       logOption.pod_name = newV.pod_name
+      if (newV.tab) {
+        consoleType.value = newV.tab
+        console.log(consoleType.value)
+      }
       ts.value = new Date().getTime()
     }
   },

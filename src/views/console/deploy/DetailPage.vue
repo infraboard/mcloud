@@ -79,7 +79,7 @@ watch(
               type="text"
               @click="
                 router.push({
-                  name: 'ServiceConsole',
+                  name: 'ServiceTerminal',
                   query: {
                     cluster_id: deploy.k8s_type_config.cluster_id,
                     namespace: record.metadata.namespace,
@@ -98,7 +98,7 @@ watch(
               type="text"
               @click="
                 router.push({
-                  name: 'ServiceConsole',
+                  name: 'ServiceTerminal',
                   query: {
                     cluster_id: deploy.k8s_type_config.cluster_id,
                     namespace: record.metadata.namespace,

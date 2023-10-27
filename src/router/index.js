@@ -271,17 +271,23 @@ const router = createRouter({
               meta: { label: '上线申请' }
             },
             {
-              path: 'deploy/list',
-              name: 'DeployList',
-              component: () => import('@/views/develop/deploy/ListPage.vue'),
-              meta: { label: '服务部署' }
+              path: 'cluster/list',
+              name: 'ServiceCluster',
+              component: () => import('@/views/develop/cluster/ListPage.vue'),
+              meta: { label: '部署集群' }
             },
             {
               path: 'trigger/list',
               name: 'TriggerList',
               component: () => import('@/views/develop/trigger/ListPage.vue'),
               meta: { label: '持续构建' }
-            }
+            },
+            {
+              path: 'audit/pod/list',
+              name: 'PodAudit',
+              component: () => import('@/views/develop/audit/ListPage.vue'),
+              meta: { label: 'Pod登录' }
+            },
           ]
         },
         {

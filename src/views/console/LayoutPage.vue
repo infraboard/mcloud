@@ -136,8 +136,7 @@ function getMatchIndex(title) {
 
 const clickNode = (selectedKeys, data) => {
   const e = data.node.extra
-
-  console.log(selectedKeys, data)
+  selectedPod.value = selectedKeys
   switch (data.node.type) {
     case 'cluster':
       router.push({
@@ -156,7 +155,7 @@ const clickNode = (selectedKeys, data) => {
       })
       return
     case 'pod':
-      selectedPod.value[0] = e.pod_name
+      
       if (e) {
         console.log(e.pod_name)
         router.push({
@@ -177,9 +176,9 @@ const clickNode = (selectedKeys, data) => {
   <a-layout class="layout">
     <a-layout-header class="content-header">
       <a-space>
-        <a-button type="text" @click="router.go(-1)">
+        <a-button type="text" @click="router.push({ name: 'ServiceList' })">
           <template #icon>
-            <icon-arrow-left />
+            <icon-import />
           </template>
         </a-button>
         <a-select
@@ -195,7 +194,6 @@ const clickNode = (selectedKeys, data) => {
             :value="item.name"
           ></a-option>
         </a-select>
-
         <a-select
           :bordered="false"
           :model-value="currentEnv"
@@ -209,6 +207,7 @@ const clickNode = (selectedKeys, data) => {
     </a-layout-header>
     <a-layout>
       <a-layout-sider breakpoint="xl" :width="260" class="sider">
+        <!-- 搜索框 -->
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
         <!-- Loading 骨架 -->
         <a-skeleton v-if="queryLoading" animation :loading="queryLoading">
