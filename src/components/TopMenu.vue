@@ -18,7 +18,7 @@ const JumpToAdmin = () => {
 }
 const ChangeSystem = () => {
   if (app.value.system === '') {
-    app.value.system = 'HomePage'
+    app.value.system = 'ServiceConsole'
   }
 
   switch (app.value.system) {
@@ -100,11 +100,11 @@ onBeforeMount(() => {
       <div v-if="!isAdminPage" class="nav-menu">
         <a-menu
           mode="horizontal"
-          :default-selected-keys="['HomePage']"
+          :default-selected-keys="['ServiceConsole']"
           :selected-keys="[app.system]"
           @menu-item-click="menuItemClickHandler"
         >
-          <a-menu-item key="HomePage">工作台</a-menu-item>
+          <a-menu-item key="ServiceConsole">工作台</a-menu-item>
           <a-menu-item key="SettingPage">空间管理</a-menu-item>
           <a-menu-item key="ResourcePage">资源管理</a-menu-item>
           <a-menu-item key="DevelopPage">研发交付</a-menu-item>

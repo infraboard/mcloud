@@ -1,34 +1,13 @@
 <script setup>
 import { LIST_LABEL } from '@/api/mcenter/label'
 import { Message } from '@arco-design/web-vue'
-import { computed, h, onBeforeMount, ref, reactive } from 'vue'
+import { computed, h, onBeforeMount, ref } from 'vue'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
 import BreatheLamp from '@/components/BreatheLamp.vue'
-import { LIST_NAMESPACE } from '@/api/mcenter/namespace'
-import { CHANGE_NAMESPACE } from '@/api/mcenter/token'
 import { useRouter } from 'vue-router'
-import { app } from '@/stores/localstorage'
 
 const router = useRouter()
 const selectedPod = ref([router.currentRoute.value.query.pod_name])
-
-// 查询空间列表
-const currentNamespace = ref(app.value.token.namespace)
-const namespaces = reactive({ items: [], total: 0 })
-const ListNamespace = async () => {
-  var resp = await LIST_NAMESPACE()
-  namespaces.items = resp.items
-  namespaces.total = resp.total
-}
-
-// 切换空间
-const ChangeNamespace = async (namespace) => {
-  var resp = await CHANGE_NAMESPACE({ namespace })
-  app.value.token = resp
-  router.go(0)
-  selectedPod.value = []
-  router.push({ name: 'ServiceConsole' })
-}
 
 // 查询环境标签
 const queryLoading = ref(false)
@@ -96,7 +75,6 @@ function initData(nodes) {
 }
 
 onBeforeMount(async () => {
-  await ListNamespace()
   await QueryEnv()
   await QueryCluster()
 })
@@ -174,39 +152,13 @@ const clickNode = (selectedKeys, data) => {
 
 <template>
   <a-layout class="layout">
-    <a-layout-header class="content-header">
-      <a-space>
-        <a-button type="text" @click="router.push({ name: 'ServiceList' })">
-          <template #icon>
-            <icon-import />
-          </template>
-        </a-button>
-        <a-select
-          placeholder="请选择工作空间"
-          :bordered="false"
-          v-model="currentNamespace"
-          @change="ChangeNamespace"
-        >
-          <a-option
-            v-for="item in namespaces.items"
-            :key="item.id"
-            :label="item.description"
-            :value="item.name"
-          ></a-option>
-        </a-select>
-        <a-select
-          :bordered="false"
-          :model-value="currentEnv"
-          size="small"
-          @change="changeEnv"
-          placeholder="请选择环境"
-        >
-          <a-option :value="env.value" v-for="env in envs" :key="env.label" :label="env.label" />
-        </a-select>
-      </a-space>
-    </a-layout-header>
+    <TopMenu />
     <a-layout>
       <a-layout-sider breakpoint="xl" :width="260" class="sider">
+        <!-- 环境 -->
+        <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
+          <a-radio :value="env.value"  v-for="env in envs" :key="env.label" >{{ env.label }}</a-radio>
+        </a-radio-group>
         <!-- 搜索框 -->
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
         <!-- Loading 骨架 -->
@@ -262,25 +214,7 @@ const clickNode = (selectedKeys, data) => {
   border-right: 1px solid rgb(229, 230, 235);
 }
 
-.content-header {
-  padding: 0px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 40px;
-  border-bottom: 1px solid rgb(229, 230, 235);
-}
-
-.content {
-  height: 100%;
-}
-
-.search {
-  display: flex;
-  height: 30px;
-}
-
-.search :deep(.arco-radio-group-button) {
-  background-color: var(--color-fill-3);
+.env {
+  margin-bottom: 8px;
 }
 </style>

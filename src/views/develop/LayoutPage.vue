@@ -36,7 +36,6 @@ onMounted(() => {
           <a-menu-item key="ServiceList">服务列表</a-menu-item>
           <a-menu-item key="ServiceCluster">部署集群</a-menu-item>
           <a-menu-item key="ApprovalList">上线申请</a-menu-item>
-          <a-menu-item key="ServiceConsole">控制台</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="DevToolManage">
           <template #icon><icon-common /></template>

@@ -11,18 +11,42 @@ const router = createRouter({
       name: 'LoginPage',
       component: LoginPage
     },
-    // 工作台
+    // Home页面
     {
       path: '/',
       name: 'UserWorkspace',
-      redirect: { name: 'HomePage' },
-      component: () => import('@/views/workspace/LayoutPage.vue'),
+      redirect: { name: 'ServiceConsole' },
+    },
+    // 服务工作台
+    {
+      path: '/service_console',
+      name: 'ServiceConsole',
+      component: () => import('@/views/console/LayoutPage.vue'),
+      redirect: { name: 'ServiceDashboard' },
       children: [
         {
           path: 'dashboard',
-          name: 'HomePage',
-          component: () => import('@/views/workspace/dashboard/HomePage.vue'),
-          meta: { label: '个人看版' }
+          name: 'ServiceDashboard',
+          component: () => import('@/views/console/dashboard/BoardPage.vue'),
+          meta: { label: '终端看板' }
+        },
+        {
+          path: 'terminal',
+          name: 'ServiceTerminal',
+          component: () => import('@/views/console/terminal/TerminalPage.vue'),
+          meta: { label: '服务终端控制台' }
+        },
+        {
+          path: 'cluster/:id',
+          name: 'ClusterDetail',
+          component: () => import('@/views/console/cluster/DetailPage.vue'),
+          meta: { label: '应用集群' }
+        },
+        {
+          path: 'deploy/:id',
+          name: 'DeployDetail',
+          component: () => import('@/views/console/deploy/DetailPage.vue'),
+          meta: { label: '应用部署' }
         }
       ]
     },
@@ -196,39 +220,6 @@ const router = createRouter({
               component: () => import('@/views/resource/secret/ListPage.vue')
             }
           ]
-        }
-      ]
-    },
-    // 服务控制台
-    {
-      path: '/service_console',
-      name: 'ServiceConsole',
-      component: () => import('@/views/console/LayoutPage.vue'),
-      redirect: { name: 'ServiceDashboard' },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'ServiceDashboard',
-          component: () => import('@/views/console/dashboard/BoardPage.vue'),
-          meta: { label: '终端看板' }
-        },
-        {
-          path: 'terminal',
-          name: 'ServiceTerminal',
-          component: () => import('@/views/console/terminal/TerminalPage.vue'),
-          meta: { label: '服务终端控制台' }
-        },
-        {
-          path: 'cluster/:id',
-          name: 'ClusterDetail',
-          component: () => import('@/views/console/cluster/DetailPage.vue'),
-          meta: { label: '应用集群' }
-        },
-        {
-          path: 'deploy/:id',
-          name: 'DeployDetail',
-          component: () => import('@/views/console/deploy/DetailPage.vue'),
-          meta: { label: '应用部署' }
         }
       ]
     },
