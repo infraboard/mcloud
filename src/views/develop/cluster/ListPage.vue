@@ -3,7 +3,7 @@ import { app } from '@/stores/localstorage'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
 import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
@@ -60,10 +60,9 @@ onMounted(() => {
         <template #columns>
           <a-table-column title="名称">
             <template #cell="{ record }">
-              <a-link
-                @click="router.push({ name: 'ClusterDetail', params: { id: record.id } })"
-                >{{ record.name }}</a-link
-              >
+              <a-link @click="router.push({ name: 'ClusterDetail', params: { id: record.id } })">{{
+                record.name
+              }}</a-link>
             </template>
           </a-table-column>
           <a-table-column title="类型" data-index="type"></a-table-column>

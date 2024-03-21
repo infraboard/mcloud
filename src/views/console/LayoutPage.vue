@@ -133,7 +133,6 @@ const clickNode = (selectedKeys, data) => {
       })
       return
     case 'pod':
-      
       if (e) {
         console.log(e.pod_name)
         router.push({
@@ -157,7 +156,7 @@ const clickNode = (selectedKeys, data) => {
       <a-layout-sider breakpoint="xl" :width="260" class="sider">
         <!-- 环境 -->
         <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
-          <a-radio :value="env.value"  v-for="env in envs" :key="env.label" >{{ env.label }}</a-radio>
+          <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
         </a-radio-group>
         <!-- 搜索框 -->
         <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />

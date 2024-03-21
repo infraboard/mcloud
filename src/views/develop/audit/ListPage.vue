@@ -1,13 +1,7 @@
 <template>
-    <div>
-        审计列表
-    </div>
+  <div>审计列表</div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style lang="css" scoped>
-
-</style>
+<style lang="css" scoped></style>

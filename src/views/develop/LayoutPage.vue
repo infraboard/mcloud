@@ -40,13 +40,13 @@ onMounted(() => {
         <a-sub-menu key="DevToolManage">
           <template #icon><icon-common /></template>
           <template #title>研发工具</template>
-          <a-menu-item key="DomainPipelineList">Pipeline模版</a-menu-item>
-          <a-menu-item key="DomainJobList">Job管理</a-menu-item>
+          <a-menu-item key="DomainPipelineList">流水线模版</a-menu-item>
+          <a-menu-item key="DomainJobList">任务管理</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="ConsoleAudit">
           <template #icon><icon-video-camera /></template>
           <template #title>登录审计</template>
-          <a-menu-item key="PodAudit">Pod 登录</a-menu-item>
+          <a-menu-item key="PodAudit">容器登录</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>

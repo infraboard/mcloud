@@ -45,7 +45,9 @@ onMounted(() => {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op">
-      <a-button type="primary" :size="app.size"> 添加集群 </a-button>
+      <a-button type="primary" @click="$router.push({ name: 'K8sClusterCreate' })" :size="app.size">
+        添加集群
+      </a-button>
     </div>
     <a-card class="table-data">
       <a-table
