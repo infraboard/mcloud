@@ -153,13 +153,13 @@ const clickNode = (selectedKeys, data) => {
   <a-layout class="layout">
     <TopMenu />
     <a-layout>
-      <a-layout-sider breakpoint="xl" :width="260" class="sider">
+      <a-layout-sider breakpoint="xl" :width="380" class="sider">
         <!-- 环境 -->
         <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
           <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
         </a-radio-group>
         <!-- 搜索框 -->
-        <a-input-search style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
+        <a-input-search style="margin-bottom: 8px; max-width: 360px" v-model="searchKey" />
         <!-- Loading 骨架 -->
         <a-skeleton v-if="queryLoading" animation :loading="queryLoading">
           <a-space direction="vertical" :style="{ width: '100%' }" size="mini">
