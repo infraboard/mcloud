@@ -9,3 +9,8 @@ export var LIST_CLUSTER = (params) => {
 export var DESCRIBE_CLUSTER = (id, params) => {
   return instance.get(`/mpaas/api/v1/clusters/${id}`, { params })
 }
+
+// 创建部署
+export var CREATE_CLUSTER = (data) => {
+  return instance.post(`/mpaas/api/v1/clusters/`, data)
+}

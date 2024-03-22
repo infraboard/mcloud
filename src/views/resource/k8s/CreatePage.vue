@@ -1,33 +1,27 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { GET_POLICY, CREATE_POLICY } from '@/api/mcenter/policy'
+import { GET_K8S_CLUSTER, CREATE_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Notification } from '@arco-design/web-vue'
-import SearchUser from '@/components/SearchUser.vue'
-import SearchRole from '@/components/SearchRole.vue'
-import dayjs from 'dayjs'
 
 const router = useRouter()
 const form = ref({
-  enabled: true,
-  user_id: '',
-  role_id: '',
-  scope: [],
-  expired_time: 0
+  provider: '自建',
+  region: '本地',
+  name: '',
+  kube_config: '',
+  description: '',
 })
-const isExpired = ref(false)
-const expiredTime = ref(0)
 
 // 提交处理
 const submitLoading = ref(false)
 const handleSubmit = async (data) => {
   if (!data.errors) {
-    form.value.expired_time = dayjs(expiredTime.value).hour(23).minute(59).second(59).unix()
     try {
       submitLoading.value = true
-      await CREATE_POLICY(data.values)
+      await CREATE_K8S_CLUSTER(data.values)
       Notification.success(`保存成功`)
-      router.push({ name: 'NamespacePolicyList' })
+      router.push({ name: 'K8sClusterList' })
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
     } finally {
@@ -37,28 +31,22 @@ const handleSubmit = async (data) => {
 }
 
 // 判断更新模式
-let pageHeader = '创建策略'
+let pageHeader = '添加集群'
 const id = router.currentRoute.value.query.id
 const isCreate = id === undefined
-const GetPolicy = async () => {
+const GetK8sCluster = async () => {
   if (!isCreate) {
-    pageHeader = '编辑策略'
+    pageHeader = '编辑集群'
     try {
-      const resp = await GET_POLICY(id)
+      const resp = await GET_K8S_CLUSTER(id)
       form.value = resp
-
-      // 补充界面的过期选项
-      isExpired.value = resp.expired_time > 0
-      if (isExpired.value) {
-        expiredTime.value = dayjs.unix(resp.expired_time)
-      }
     } catch (error) {
-      Notification.error(`查询策略失败: ${error}`)
+      Notification.error(`查询集群失败: ${error}`)
     }
   }
 }
 onBeforeMount(async () => {
-  GetPolicy()
+  GetK8sCluster()
 })
 </script>
 
@@ -69,34 +57,24 @@ onBeforeMount(async () => {
 
     <a-card>
       <a-form :model="form" @submit="handleSubmit" auto-label-width>
-        <a-form-item field="enabled" label="启用" class="enable-line" help="启用后该策略才会生效">
-          <a-switch type="round" v-model="form.enabled">
-            <template #checked> ON </template>
-            <template #unchecked> OFF </template>
-          </a-switch>
+        <a-form-item field="provider" label="提供商" help="集群提供商" required>
+          <a-input v-model="form.provider"></a-input>
         </a-form-item>
-
-        <a-form-item field="user_id" label="用户" help="请输入用户名进行模糊搜索" required>
-          <SearchUser v-model="form.user_id"></SearchUser>
+        <a-form-item field="region" label="区域" help="集群所在区域" required>
+          <a-input v-model="form.region"></a-input>
         </a-form-item>
-        <a-form-item field="role_id" label="角色" required>
-          <SearchRole v-model="form.role_id"></SearchRole>
+        <a-form-item field="name" label="名称" help="集群名称" required>
+          <a-input v-model="form.name"></a-input>
         </a-form-item>
-        <a-form-item label="是否过期" help="">
-          <a-switch type="round" v-model="isExpired">
-            <template #checked> ON </template>
-            <template #unchecked> OFF </template>
-          </a-switch>
+        <a-form-item field="kube_config" label="凭证" help="集群访问凭证: KubeConfig, 存储路径: ~/.kube/config" required>
+          <a-textarea v-model="form.kube_config" auto-size allow-clear/>
         </a-form-item>
-        <a-form-item v-if="isExpired" field="expired_time" label="过期时间">
-          <a-date-picker
-            :disabled-date="(current) => dayjs(current).add(1, 'day').isBefore(dayjs())"
-            v-model="expiredTime"
-          />
+        <a-form-item field="description" label="描述" help="集群用途描述" required>
+          <a-input v-model="form.description"></a-input>
         </a-form-item>
         <div class="form-submit">
           <a-space>
-            <a-button @click="router.push({ name: 'NamespacePolicyList' })">取消</a-button>
+            <a-button @click="router.push({ name: 'K8sClusterList' })">取消</a-button>
             <a-button type="primary" html-type="submit" :loading="submitLoading">保存</a-button>
           </a-space>
         </div>

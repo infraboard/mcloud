@@ -27,7 +27,7 @@ instance.interceptors.response.use(
     if (error.response && error.response.data) {
       message = error.response.data.message
 
-      switch (error.response.data.code) {
+      switch (error.response.data.error_code) {
         case 401:
           app.value.isLogin = false
           window.location.reload()
