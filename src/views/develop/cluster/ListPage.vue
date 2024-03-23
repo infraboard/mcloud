@@ -41,13 +41,19 @@ const QueryData = async () => {
 onMounted(() => {
   QueryData()
 })
+
+//
+const kindMap = {
+  'WORKLOAD': '工作负载',
+  'MIDDLEWARE': '中间件'
+}
 </script>
 
 <template>
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op">
-      <a-button type="primary" :size="app.size"> 创建集群 </a-button>
+      <a-button type="primary" @click="$router.push({ name: 'ServiceClusterCreate' })"  :size="app.size"> 创建集群 </a-button>
     </div>
     <a-card class="table-data">
       <a-table
@@ -65,9 +71,35 @@ onMounted(() => {
               }}</a-link>
             </template>
           </a-table-column>
-          <a-table-column title="类型" data-index="type"></a-table-column>
-          <a-table-column title="仓库" data-index="code_repository.ssh_url"></a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+          <a-table-column title="类型" data-index="kind">
+            <template #cell="{ record }">
+              {{ kindMap[record.kind] }}
+            </template>
+          </a-table-column>
+          <a-table-column title="描述" data-index="describe"></a-table-column>
+          <a-table-column title="创建时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.create_at"></ShowTime>
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="操作" :width="200">
+            <template #cell="{ record }">
+              <a-button
+                type="text"
+                :size="app.size"
+                @click="router.push({ name: 'ServiceClusterCreate', query: { id: record.id } })"
+              >
+                编辑
+              </a-button>
+              <a-divider direction="vertical" />
+              <a-dropdown>
+                <a-button type="text"><icon-more-vertical /></a-button>
+                <template #content>
+                  <a-doption>删除</a-doption>
+                </template>
+              </a-dropdown>
+            </template>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>

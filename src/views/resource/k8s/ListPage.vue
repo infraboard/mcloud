@@ -1,8 +1,9 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
+import { LIST_K8S_CLUSTER, DELETE_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
+import { Notification } from '@arco-design/web-vue'
 
 // 分页参数
 const pagination = reactive(app.value.pagination)
@@ -37,8 +38,22 @@ const QueryData = async () => {
   }
 }
 onMounted(() => {
-  QueryData(queryParams)
+  QueryData()
 })
+
+
+// 处理操作
+const handleSelect = async (v, id) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_K8S_CLUSTER(id)
+      Notification.success(`删除${id}成功`)
+      QueryData()
+      break;
+    default:
+      break;
+  }
+}
 </script>
 
 <template>
@@ -62,7 +77,34 @@ onMounted(() => {
           <a-table-column title="地址" data-index="server_info.server"></a-table-column>
           <a-table-column title="版本" data-index="server_info.version"></a-table-column>
           <a-table-column title="认证用户" data-index="server_info.auth_user"></a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+          <a-table-column title="创建时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.create_at"></ShowTime>
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="操作" :width="200">
+            <template #cell="{ record }">
+              <a-button
+                type="text"
+                :size="app.size"
+                @click="$router.push({ name: 'K8sClusterCreate', query: { id: record.id } })"
+              >
+                编辑
+              </a-button>
+              <a-divider direction="vertical" />
+              <a-dropdown @select="handleSelect($event, record.id)">
+                <a-button type="text"><icon-more-vertical /></a-button>
+                <template #content>
+                  <a-doption value="delete">
+                        <template #icon>
+                          <icon-delete />
+                        </template>
+                        删除
+                    </a-doption>
+                </template>
+              </a-dropdown>
+            </template>
+          </a-table-column>
         </template>
       </a-table>
     </a-card>

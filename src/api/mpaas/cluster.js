@@ -14,3 +14,8 @@ export var DESCRIBE_CLUSTER = (id, params) => {
 export var CREATE_CLUSTER = (data) => {
   return instance.post(`/mpaas/api/v1/clusters/`, data)
 }
+
+// 更新部署
+export var UPDATE_CLUSTER = (id, data) => {
+  return instance.put(`/mpaas/api/v1/clusters/${id}`, data)
+}

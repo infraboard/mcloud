@@ -85,7 +85,11 @@ onMounted(() => {
           <a-table-column title="用户名" data-index="username"></a-table-column>
           <a-table-column title="类型" data-index="type"></a-table-column>
           <a-table-column title="状态" data-index="status.locked"></a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+          <a-table-column title="创建时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.create_at"></ShowTime>
+            </template>
+          </a-table-column>
           <a-table-column align="center" title="操作" :width="200">
             <template #cell="{ record }">
               <a-button

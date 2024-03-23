@@ -14,3 +14,13 @@ export var GET_K8S_CLUSTER = (id, params) => {
 export var CREATE_K8S_CLUSTER = (data) => {
   return instance.post('/mpaas/api/v1/k8s_clusters', data)
 }
+
+// 更新k8s集群
+export var UPDATE_K8S_CLUSTER = (id, data) => {
+  return instance.put(`/mpaas/api/v1/k8s_clusters/${id}`, data)
+}
+
+// 删除k8s集群
+export var DELETE_K8S_CLUSTER = (id) => {
+  return instance.delete(`/mpaas/api/v1/k8s_clusters/${id}`)
+}

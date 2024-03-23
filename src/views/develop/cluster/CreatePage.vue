@@ -1,19 +1,17 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { GET_K8S_CLUSTER, CREATE_K8S_CLUSTER, UPDATE_K8S_CLUSTER } from '@/api/mpaas/k8s'
+import { DESCRIBE_CLUSTER, CREATE_CLUSTER, UPDATE_CLUSTER } from '@/api/mpaas/cluster'
 import { Notification } from '@arco-design/web-vue'
 
 const router = useRouter()
 const form = ref({
-  provider: '自建',
-  region: '本地',
+  kind: 'WORKLOAD',
   name: '',
-  kube_config: '',
-  description: '',
+  describe: '',
 })
 
-let pageHeader = '添加集群'
+let pageHeader = '创建集群'
 const id = router.currentRoute.value.query.id
 const isCreate = id === undefined
 
@@ -24,16 +22,16 @@ const handleSubmit = async (data) => {
     try {
       submitLoading.value = true
       switch (pageHeader) {
-        case '添加集群':
-          await CREATE_K8S_CLUSTER(data.values)
-          Notification.success(`添加成功`)
-          break;
+        case '创建集群':
+            await CREATE_CLUSTER(data.values)
+            Notification.success(`创建成功`)
+            break;
         default:
-          await UPDATE_K8S_CLUSTER(id,data.values)
-          Notification.success(`更新成功`)
-          break;
+            await UPDATE_CLUSTER(id, data.values)
+            Notification.success(`更新成功`)
+            break;
       }
-      router.push({ name: 'K8sClusterList' })
+      router.push({ name: 'ServiceClusterList' })
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
     } finally {
@@ -47,7 +45,7 @@ const GetK8sCluster = async () => {
   if (!isCreate) {
     pageHeader = '编辑集群'
     try {
-      const resp = await GET_K8S_CLUSTER(id)
+      const resp = await DESCRIBE_CLUSTER(id)
       form.value = resp
     } catch (error) {
       Notification.error(`查询集群失败: ${error}`)
@@ -66,25 +64,22 @@ onBeforeMount(async () => {
 
     <a-card>
       <a-form :model="form" @submit="handleSubmit" auto-label-width>
-        <a-form-item field="provider" label="提供商" help="集群提供商" required>
-          <a-input v-model="form.provider"></a-input>
-        </a-form-item>
-        <a-form-item field="region" label="区域" help="集群所在区域" required>
-          <a-input v-model="form.region"></a-input>
+        <a-form-item field="kind" label="类型" help="工作负载需要关联应用，中间件不需要关联">
+            <a-radio-group type="button" v-model="form.kind">
+                <a-radio value="WORKLOAD">工作负载</a-radio>
+                <a-radio value="MIDDLEWARE">中间件</a-radio>
+            </a-radio-group>
         </a-form-item>
         <a-form-item field="name" label="名称" help="集群名称" required>
           <a-input v-model="form.name"></a-input>
         </a-form-item>
-        <a-form-item field="kube_config" label="凭证" help="集群访问凭证: KubeConfig, 存储路径: ~/.kube/config" required>
-          <a-textarea v-model="form.kube_config" auto-size allow-clear/>
-        </a-form-item>
-        <a-form-item field="description" label="描述" help="集群用途描述" required>
-          <a-input v-model="form.description"></a-input>
+        <a-form-item field="describe" label="描述" help="集群用途描述" required>
+          <a-input v-model="form.describe"></a-input>
         </a-form-item>
         <div class="form-submit">
           <a-space>
-            <a-button @click="router.push({ name: 'K8sClusterList' })">取消</a-button>
-            <a-button type="primary" html-type="submit" :loading="submitLoading">保存</a-button>
+            <a-button @click="router.push({ name: 'ServiceClusterList' })">取消</a-button>
+            <a-button type="primary" html-type="submit" :loading="submitLoading">确认</a-button>
           </a-space>
         </div>
       </a-form>

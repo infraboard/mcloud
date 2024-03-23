@@ -37,9 +37,15 @@ export default {
         },
         {
           path: 'cluster/list',
-          name: 'ServiceCluster',
+          name: 'ServiceClusterList',
           component: () => import('@/views/develop/cluster/ListPage.vue'),
           meta: { label: '部署集群' }
+        },
+        {
+          path: 'cluster/create',
+          name: 'ServiceClusterCreate',
+          component: () => import('@/views/develop/cluster/CreatePage.vue'),
+          meta: { label: '创建集群' }
         },
         {
           path: 'trigger/list',

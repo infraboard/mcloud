@@ -21,7 +21,7 @@
     "yaml": "^2.3.2"
   },
   "devDependencies": {
-    "@arco-design/web-vue": "^2.49.1",
+    "@arco-design/web-vue": "^2.55.0",
     "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/eslint-config-prettier": "^7.1.0",

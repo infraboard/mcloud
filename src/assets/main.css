@@ -8,6 +8,7 @@
 .sidebar {
   display: flex;
   height: calc(100vh - 46px);
+  overflow: scroll;
 }
 
 .sidebar-menu {
