@@ -41,7 +41,6 @@ onMounted(() => {
   QueryData()
 })
 
-
 // 处理操作
 const handleSelect = async (v, id) => {
   switch (v) {
@@ -49,9 +48,9 @@ const handleSelect = async (v, id) => {
       await DELETE_K8S_CLUSTER(id)
       Notification.success(`删除${id}成功`)
       QueryData()
-      break;
+      break
     default:
-      break;
+      break
   }
 }
 </script>
@@ -96,11 +95,11 @@ const handleSelect = async (v, id) => {
                 <a-button type="text"><icon-more-vertical /></a-button>
                 <template #content>
                   <a-doption value="delete">
-                        <template #icon>
-                          <icon-delete />
-                        </template>
-                        删除
-                    </a-doption>
+                    <template #icon>
+                      <icon-delete />
+                    </template>
+                    删除
+                  </a-doption>
                 </template>
               </a-dropdown>
             </template>

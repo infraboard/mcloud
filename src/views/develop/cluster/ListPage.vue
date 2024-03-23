@@ -1,9 +1,10 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_CLUSTER } from '@/api/mpaas/cluster'
+import { LIST_CLUSTER, DELETE_CLUSTER } from '@/api/mpaas/cluster'
 import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Notification } from '@arco-design/web-vue'
 
 const router = useRouter()
 
@@ -42,10 +43,23 @@ onMounted(() => {
   QueryData()
 })
 
-//
+// 处理操作
+const handleSelect = async (v, id) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_CLUSTER(id)
+      Notification.success(`删除${id}成功`)
+      QueryData()
+      break
+    default:
+      break
+  }
+}
+
+// 映射表
 const kindMap = {
-  'WORKLOAD': '工作负载',
-  'MIDDLEWARE': '中间件'
+  WORKLOAD: '工作负载',
+  MIDDLEWARE: '中间件'
 }
 </script>
 
@@ -53,7 +67,13 @@ const kindMap = {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op">
-      <a-button type="primary" @click="$router.push({ name: 'ServiceClusterCreate' })"  :size="app.size"> 创建集群 </a-button>
+      <a-button
+        type="primary"
+        @click="$router.push({ name: 'ServiceClusterCreate' })"
+        :size="app.size"
+      >
+        创建集群
+      </a-button>
     </div>
     <a-card class="table-data">
       <a-table
@@ -71,7 +91,12 @@ const kindMap = {
               }}</a-link>
             </template>
           </a-table-column>
-          <a-table-column title="类型" data-index="kind">
+          <a-table-column title="环境">
+            <template #cell="{ record }">
+              {{ record.labels.Env }}
+            </template>
+          </a-table-column>
+          <a-table-column title="类型">
             <template #cell="{ record }">
               {{ kindMap[record.kind] }}
             </template>
@@ -92,10 +117,15 @@ const kindMap = {
                 编辑
               </a-button>
               <a-divider direction="vertical" />
-              <a-dropdown>
+              <a-dropdown @select="handleSelect($event, record.id)">
                 <a-button type="text"><icon-more-vertical /></a-button>
                 <template #content>
-                  <a-doption>删除</a-doption>
+                  <a-doption value="delete">
+                    <template #icon>
+                      <icon-delete />
+                    </template>
+                    删除
+                  </a-doption>
                 </template>
               </a-dropdown>
             </template>

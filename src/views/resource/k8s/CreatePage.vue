@@ -10,7 +10,7 @@ const form = ref({
   region: '本地',
   name: '',
   kube_config: '',
-  description: '',
+  description: ''
 })
 
 let pageHeader = '添加集群'
@@ -27,11 +27,11 @@ const handleSubmit = async (data) => {
         case '添加集群':
           await CREATE_K8S_CLUSTER(data.values)
           Notification.success(`添加成功`)
-          break;
+          break
         default:
-          await UPDATE_K8S_CLUSTER(id,data.values)
+          await UPDATE_K8S_CLUSTER(id, data.values)
           Notification.success(`更新成功`)
-          break;
+          break
       }
       router.push({ name: 'K8sClusterList' })
     } catch (error) {
@@ -75,8 +75,13 @@ onBeforeMount(async () => {
         <a-form-item field="name" label="名称" help="集群名称" required>
           <a-input v-model="form.name"></a-input>
         </a-form-item>
-        <a-form-item field="kube_config" label="凭证" help="集群访问凭证: KubeConfig, 存储路径: ~/.kube/config" required>
-          <a-textarea v-model="form.kube_config" auto-size allow-clear/>
+        <a-form-item
+          field="kube_config"
+          label="凭证"
+          help="集群访问凭证: KubeConfig, 存储路径: ~/.kube/config"
+          required
+        >
+          <a-textarea v-model="form.kube_config" auto-size allow-clear />
         </a-form-item>
         <a-form-item field="description" label="描述" help="集群用途描述" required>
           <a-input v-model="form.description"></a-input>

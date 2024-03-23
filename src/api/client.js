@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { Modal } from '@arco-design/web-vue'
 import { app } from '@/stores/localstorage'
+import { Message } from '@arco-design/web-vue'
 
 var instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -58,6 +59,12 @@ instance.interceptors.response.use(
           return
       }
     }
+
+    // 提示异常
+    Message.error({
+      content: message,
+      duration: 2000
+    })
     return Promise.reject(new Error(message))
   }
 )
