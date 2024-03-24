@@ -86,8 +86,9 @@ export var GetTermSize = (term) => {
   const availableHeight = parentElementHeight - elementPaddingVer
   const availableWidth = parentElementWidth - elementPaddingHor - scrollbarWidth
   const geometry = {
-    cols: Math.max(MINIMUM_COLS, Math.floor(availableWidth / dims.css.cell.width)),
-    rows: Math.max(MINIMUM_ROWS, Math.floor(availableHeight / dims.css.cell.height))
+    // 避免 宽度益处
+    cols: Math.max(MINIMUM_COLS, Math.floor(availableWidth / dims.css.cell.width)) - 14,
+    rows: Math.max(MINIMUM_ROWS, Math.floor(availableHeight / dims.css.cell.height)) 
   }
   return geometry
 }

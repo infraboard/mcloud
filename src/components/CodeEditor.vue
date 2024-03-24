@@ -11,7 +11,7 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 const props = defineProps({
   theme: { type: String, default: 'vs' },
   width: { type: String, default: '100%' },
-  height: { type: String, default: '80px' },
+  height: { type: String, default: '100px' },
   fixedHeight: {type: Boolean, default: false},
   language: { type: String, default: 'json' },
   readOnly: { type: Boolean, default: false },
@@ -43,7 +43,7 @@ window.MonacoEnvironment = {
 const contentHeight = ref(props.height)
 const resetHeight = (editor) => {
   const height = editor.getContentHeight() + 10
-    if (!props.fixedHeight) {
+    if (!props.fixedHeight && height > 100) {
       contentHeight.value = `${height}px`
     }
 }
@@ -85,17 +85,6 @@ onMounted(() => {
     resetHeight(editor)
     emit('update:modelValue', value)
   })
-
-  // 监听编辑器滚动事件
-  editor.onDidScrollChange((e) => {
-      // 获取外部容器元素
-      console.log(e)
-      const externalContainer = document.getElementById('external-container');
-      console.log(e)
-      // 将编辑器的滚动位置应用到外部容器元素
-      externalContainer.scrollTop = e.scrollTop;
-      externalContainer.scrollLeft = e.scrollLeft;
-  });
 })
 </script>
 

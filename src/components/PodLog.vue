@@ -120,5 +120,5 @@ watch(
 </script>
 
 <template>
-  <div id="task-log-terminal" :style="{ height, width, backgroundColor: theme.background }"></div>
+    <div id="task-log-terminal" :style="{ paddingRight: '120px', height, width, backgroundColor: theme.background }"></div>
 </template>

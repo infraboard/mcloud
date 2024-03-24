@@ -51,7 +51,7 @@ watch(
 
 <template>
   <div class="page">
-    <div class="operate-header">
+    <div class="operate-header f12">
       <a-space>
         {{ deploy.name }}
         <span v-if="deploy.k8s_type_config">

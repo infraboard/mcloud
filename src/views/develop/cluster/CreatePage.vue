@@ -58,16 +58,12 @@ const GetK8sCluster = async () => {
 
 const queryLoading = ref(false)
 const envs = ref([])
-const group = ref([])
 const QueryEnv = async () => {
   try {
     queryLoading.value = true
-    var resp = await LIST_LABEL({ keys: 'Env,DeployGroup' })
+    var resp = await LIST_LABEL({ keys: 'Env' })
     resp.items.forEach(element => {
       switch (element.key) {
-        case 'DeployGroup':
-          group.value = element.enum_options
-          break;
         case 'Env':
           envs.value = element.enum_options
           break;
@@ -97,9 +93,6 @@ onBeforeMount(async () => {
         <a-form-item field="labels.Env" label="标签" help="集群所属环境与部署分组">
           <a-radio-group v-model="form.labels.Env" type="button">
             <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
-          </a-radio-group>
-          <a-radio-group style="margin-left: 12px;" v-model="form.labels.DeployGroup" type="button">
-            <a-radio :value="g.value" v-for="g in group" :key="g.label">{{ g.label }}</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item field="kind" label="类型" help="工作负载需要关联应用，中间件不需要关联" required>

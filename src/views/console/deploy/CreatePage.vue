@@ -26,6 +26,9 @@ const form = ref({
     service: '',
   },
   host_type_config: {},
+  labels: {
+    DeployGroup: 'green'
+  }
 })
 
 let pageHeader = '创建部署'
@@ -72,14 +75,18 @@ const GetK8sCluster = async () => {
 }
 
 const queryLoading = ref(false)
-const envs = ref([])
-const QueryEnv = async () => {
+const group = ref([])
+const QueryGroup = async () => {
   try {
     queryLoading.value = true
-    var resp = await LIST_LABEL({ keys: 'Env' })
-    if (resp.items.length > 0) {
-      envs.value = resp.items[0].enum_options
-    }
+    var resp = await LIST_LABEL({ keys: 'DeployGroup' })
+    resp.items.forEach(element => {
+      switch (element.key) {
+        case 'DeployGroup':
+          group.value = element.enum_options
+          break;
+      }
+    });
   } catch (error) {
     Message.error(`查询标签失败: ${error}`)
   } finally {
@@ -88,7 +95,7 @@ const QueryEnv = async () => {
 }
 
 onBeforeMount(async () => {
-  QueryEnv()
+  QueryGroup()
   GetK8sCluster()
 })
 </script>
@@ -110,6 +117,11 @@ onBeforeMount(async () => {
         </a-form-item>
         <a-form-item field="describe" label="描述" help="部署描述" required>
           <a-input v-model="form.describe"></a-input>
+        </a-form-item>
+        <a-form-item field="labels.DeployGroup" label="部署分组" help="部署组, 用于多版本部署, 比如蓝绿部署" required="">
+          <a-radio-group v-model="form.labels.DeployGroup" type="button">
+            <a-radio :value="g.value" v-for="g in group" :key="g.label">{{ g.label }}</a-radio>
+          </a-radio-group>
         </a-form-item>
         <a-form-item field="type" label="部署方式" help="容器部署, 需要关联k8s集群, 虚拟机部署需要关联主机" required>
           <a-radio-group type="button" v-model="form.type">
