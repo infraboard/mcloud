@@ -9,3 +9,9 @@ export var LIST_DEPLOY = (params) => {
 export var DESCRIBE_CLUSTER = (id, params) => {
   return instance.get(`/mpaas/api/v1/deploys/${id}`, { params })
 }
+
+// 创建部署
+export var CREATE_DEPLOY = (data) => {
+  return instance.post('/mpaas/api/v1/deploys', data)
+}
+

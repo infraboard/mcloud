@@ -155,7 +155,7 @@ const clickNode = (selectedKeys, data) => {
   <a-layout class="layout">
     <TopMenu />
     <a-layout>
-      <a-layout-sider breakpoint="xl" :width="380" class="sider">
+      <a-layout-sider breakpoint="xl" :width="381" class="sider">
         <!-- 环境 -->
         <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
           <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
@@ -195,7 +195,7 @@ const clickNode = (selectedKeys, data) => {
           <a-empty v-else />
         </div>
       </a-layout-sider>
-      <a-layout-content>
+      <a-layout-content class="main">
         <!-- 内容操作区 -->
         <router-view v-slot="{ Component }">
           <component :is="Component" />

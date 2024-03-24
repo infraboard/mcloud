@@ -96,6 +96,11 @@ const kindMap = {
               {{ record.labels.Env }}
             </template>
           </a-table-column>
+          <a-table-column title="部署组">
+            <template #cell="{ record }">
+              {{ record.labels.DeployGroup }}
+            </template>
+          </a-table-column>
           <a-table-column title="类型">
             <template #cell="{ record }">
               {{ kindMap[record.kind] }}

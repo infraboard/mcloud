@@ -11,7 +11,8 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 const props = defineProps({
   theme: { type: String, default: 'vs' },
   width: { type: String, default: '100%' },
-  height: { type: String, default: 'calc(100vh - 46px - 40px)' },
+  height: { type: String, default: '80px' },
+  fixedHeight: {type: Boolean, default: false},
   language: { type: String, default: 'json' },
   readOnly: { type: Boolean, default: false },
   modelValue: { type: String, default: '{}' }
@@ -39,6 +40,13 @@ window.MonacoEnvironment = {
   }
 }
 
+const contentHeight = ref(props.height)
+const resetHeight = (editor) => {
+  const height = editor.getContentHeight() + 10
+    if (!props.fixedHeight) {
+      contentHeight.value = `${height}px`
+    }
+}
 onMounted(() => {
   // 使用样例参考: https://microsoft.github.io/monaco-editor/playground.html
   // 更多属性请参考: https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IEditorOptions.html
@@ -50,10 +58,14 @@ onMounted(() => {
     theme: props.theme,
     scrollBeyondLastLine: false,
     automaticLayout: true,
+    scrollbar: {
+      alwaysConsumeMouseWheel: false,
+    },
     minimap: {
       enabled: false
     }
   })
+  resetHeight(editor)
 
   // 更新数据
   watch(
@@ -62,6 +74,7 @@ onMounted(() => {
       const v = editor.getValue()
       if (newV !== v) {
         editor.setValue(newV)
+        resetHeight(editor)
       }
     }
   )
@@ -69,13 +82,25 @@ onMounted(() => {
   // 监听值的变化
   editor.onDidChangeModelContent(() => {
     const value = editor.getValue()
+    resetHeight(editor)
     emit('update:modelValue', value)
   })
+
+  // 监听编辑器滚动事件
+  editor.onDidScrollChange((e) => {
+      // 获取外部容器元素
+      console.log(e)
+      const externalContainer = document.getElementById('external-container');
+      console.log(e)
+      // 将编辑器的滚动位置应用到外部容器元素
+      externalContainer.scrollTop = e.scrollTop;
+      externalContainer.scrollLeft = e.scrollLeft;
+  });
 })
 </script>
 
 <template>
-  <div class="view" ref="codeRef" :style="{ width, height }"></div>
+  <div class="view" id="external-container" ref="codeRef" :style="{ width, height:contentHeight }"></div>
 </template>
 
 <style scoped>

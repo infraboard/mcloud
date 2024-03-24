@@ -1,25 +1,35 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { DESCRIBE_CLUSTER, CREATE_CLUSTER, UPDATE_CLUSTER } from '@/api/mpaas/cluster'
+import { CREATE_DEPLOY } from '@/api/mpaas/deploy'
 import { Notification } from '@arco-design/web-vue'
 import { LIST_LABEL } from '@/api/mcenter/label'
 import { Message } from '@arco-design/web-vue'
 import  SearchService from '../../../components/SearchService.vue'
+import  SearchK8s from '../../../components/SearchK8s.vue'
 
 const router = useRouter()
 const form = ref({
   service_id: '',
+  service_name: '',
   type: 'KUBERNETES',
   name: '',
   describe: '',
   provider: 'default',
   region: 'default',
+  cluster: router.currentRoute.value.query.cluster_id,
   environment: 'default',
-  labels: {Env: '开发'},
+  k8s_type_config: {
+    cluster_id: '',
+    workload_kind: 'Deployment',
+    workload_config: '',
+    service: '',
+  },
+  host_type_config: {},
 })
 
 let pageHeader = '创建部署'
+let kind = router.currentRoute.value.query.kind
 const id = router.currentRoute.value.query.id
 const isCreate = id === undefined
 
@@ -30,13 +40,13 @@ const handleSubmit = async (data) => {
     try {
       submitLoading.value = true
       switch (pageHeader) {
-        case '创建集群':
-          await CREATE_CLUSTER(data.values)
+        case '创建部署':
+          await CREATE_DEPLOY(data.values)
           Notification.success(`创建成功`)
           break
         default:
-          await UPDATE_CLUSTER(id, data.values)
-          Notification.success(`更新成功`)
+          // await UPDATE_CLUSTER(id, data.values)
+          // Notification.success(`更新成功`)
           break
       }
       router.push({ name: 'ServiceClusterList' })
@@ -51,12 +61,12 @@ const handleSubmit = async (data) => {
 // 判断更新模式
 const GetK8sCluster = async () => {
   if (!isCreate) {
-    pageHeader = '编辑集群'
+    pageHeader = '编辑部署'
     try {
-      const resp = await DESCRIBE_CLUSTER(id)
-      form.value = resp
+      // const resp = await DESCRIBE_CLUSTER(id)
+      // form.value = resp
     } catch (error) {
-      Notification.error(`查询集群失败: ${error}`)
+      Notification.error(`查询部署失败: ${error}`)
     }
   }
 }
@@ -89,14 +99,11 @@ onBeforeMount(async () => {
     <a-page-header :title="pageHeader" @back="router.go(-1)"> </a-page-header>
     <a-card>
       <a-form :model="form" @submit="handleSubmit" auto-label-width>
-        <a-form-item field="service_id" label="服务" help="需要部署的服务, 请输入服务名称进行模糊搜索" required>
+        <a-form-item v-if="kind=='WORKLOAD'" field="service_id" label="服务" help="需要部署的服务, 请输入服务名称进行模糊搜索" required>
           <SearchService v-model="form.service_id" placeholder=""></SearchService>
         </a-form-item>
-        <a-form-item field="type" label="部署方式" help="容器部署, 需要关联k8s集群, 虚拟机部署需要关联主机" required>
-          <a-radio-group type="button" v-model="form.type">
-            <a-radio value="KUBERNETES">容器部署</a-radio>
-            <a-radio value="HOST">虚拟机部署</a-radio>
-          </a-radio-group>
+        <a-form-item v-if="kind=='MIDDLEWARE'" field="service_name" label="服务名称" help="服务名称" required>
+          <a-input v-model="form.service_name"></a-input>
         </a-form-item>
         <a-form-item field="name" label="名称" help="部署名称" required>
           <a-input v-model="form.name"></a-input>
@@ -104,6 +111,33 @@ onBeforeMount(async () => {
         <a-form-item field="describe" label="描述" help="部署描述" required>
           <a-input v-model="form.describe"></a-input>
         </a-form-item>
+        <a-form-item field="type" label="部署方式" help="容器部署, 需要关联k8s集群, 虚拟机部署需要关联主机" required>
+          <a-radio-group type="button" v-model="form.type">
+            <a-radio value="KUBERNETES">容器部署</a-radio>
+            <a-radio value="HOST">虚拟机部署</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <div v-if="form.type === 'KUBERNETES'">
+          <a-form-item field="k8s_type_config.cluster_id" label="部署集群" help="选择需要部署到那个k8s集群内" required>
+            <SearchK8s v-model="form.k8s_type_config.cluster_id" placeholder=""></SearchK8s>
+          </a-form-item>
+          <a-divider orientation="center" type="dotted">部署配置</a-divider>
+          <a-form-item field="k8s_type_config.workload_kind" label="部署类型" help="" required>
+            <a-radio-group type="button" v-model="form.k8s_type_config.workload_kind">
+              <a-radio value="Deployment">无状态部署</a-radio>
+              <a-radio value="StatefulSet">有状态部署</a-radio>
+              <a-radio value="DaemonSet">守护进程部署</a-radio>
+              <a-radio value="Job">一次性任务</a-radio>
+              <a-radio value="CronJob">定时任务</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item field="k8s_type_config.workload_config" label="部署配置" help="部署配置内容, YAML格式" required>
+            <CodeEditor v-model="form.k8s_type_config.workload_config" language="yaml"></CodeEditor>
+          </a-form-item>
+          <a-form-item field="k8s_type_config.service" label="服务配置" help="服务配置内容, YAML格式">
+            <CodeEditor v-model="form.k8s_type_config.service" language="yaml"></CodeEditor>
+          </a-form-item>
+        </div>
         <div class="form-submit">
           <a-space>
             <a-button @click="router.go(-1)">取消</a-button>

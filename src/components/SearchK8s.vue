@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { LIST_SERVICE } from '@/api/mcenter/service'
+import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
@@ -17,14 +17,14 @@ defineEmits(['update:modelValue'])
 var options = ref([])
 const queryLoading = ref(false)
 const queryParms = reactive({ keywords: '' })
-const ListService = async () => {
+const ListK8s = async () => {
   queryLoading.value = true
   options.value = []
   try {
-    const resp = await LIST_SERVICE(queryParms)
+    const resp = await LIST_K8S_CLUSTER(queryParms)
     options.value = resp.items
   } catch (error) {
-    Message.error(`查询服务失败: ${error}`)
+    Message.error(`查询k8s集群失败: ${error}`)
   } finally {
     queryLoading.value = false
   }
@@ -33,19 +33,11 @@ const ListService = async () => {
 // 模糊搜索用户
 const handleSearch = (v) => {
   queryParms.keywords = v
-  ListService()
-}
-
-const showAddr = (v) => {
-    const addr = v.image_repository.address
-    if (addr) {
-        return addr
-    }
-    return v.code_repository.ssh_url
+  ListK8s()
 }
 
 onMounted(() => {
-  ListService()
+  ListK8s()
 })
 </script>
 
@@ -59,6 +51,6 @@ onMounted(() => {
     allow-search
     :filter-option="false"
   >
-    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name">{{ item.name }} 【{{ showAddr(item) }}】</a-option>
+    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name">{{ item.name }}【{{ item.server_info.server }}】</a-option>
   </a-select>
 </template>
