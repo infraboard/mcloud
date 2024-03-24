@@ -10,6 +10,7 @@ const menuItemClickHandler = (routeName) => {
 }
 
 onMounted(() => {
+  app.value.system = 'DevelopPage'
   app.value.menu.develop = router.currentRoute.value.name
 })
 </script>

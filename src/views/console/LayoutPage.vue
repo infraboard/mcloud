@@ -5,6 +5,7 @@ import { computed, h, onBeforeMount, ref } from 'vue'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
 import BreatheLamp from '@/components/BreatheLamp.vue'
 import { useRouter } from 'vue-router'
+import { app } from '@/stores/localstorage'
 
 const router = useRouter()
 const selectedPod = ref([router.currentRoute.value.query.pod_name])
@@ -75,6 +76,7 @@ function initData(nodes) {
 }
 
 onBeforeMount(async () => {
+  app.value.system = 'ServiceConsole'
   await QueryEnv()
   await QueryCluster()
 })

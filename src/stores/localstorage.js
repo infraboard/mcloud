@@ -11,6 +11,7 @@ export var app = useStorage(
     system: 'HomePage',
     menu: {
       admin: 'SubUserList',
+      console: 'ServiceConsole',
       develop: 'ServiceList',
       resource: 'ResourceSearch',
       setting: 'NamespacePolicyList'
