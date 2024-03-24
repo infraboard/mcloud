@@ -27,6 +27,12 @@ export default {
       name: 'DeployDetail',
       component: () => import('@/views/console/deploy/DetailPage.vue'),
       meta: { label: '应用部署' }
-    }
+    },
+    {
+      path: 'deploys/create',
+      name: 'CreateDeploy',
+      component: () => import('@/views/console/deploy/CreatePage.vue'),
+      meta: { label: '创建部署' }
+    },
   ]
 }

@@ -41,7 +41,7 @@ watch(
     <div class="service-cluster">
       {{ cluster.name }}
       <span>创建于 <ShowTime :timestamp="cluster.create_at"></ShowTime></span>
-      <a-button type="text" size="mini">创建部署</a-button>
+      <a-button type="text" @click="$router.push({name: 'CreateDeploy', query: {cluser_id: $route.params.id}})" size="mini">创建部署</a-button>
     </div>
   </div>
 </template>
