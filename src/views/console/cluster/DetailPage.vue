@@ -1,8 +1,11 @@
 <script setup>
-import { Message } from '@arco-design/web-vue'
 import { onBeforeMount, ref, watch } from 'vue'
 import { DESCRIBE_CLUSTER } from '@/api/mpaas/cluster'
+import { DELETE_DEPLOY } from '@/api/mpaas/deploy'
+import { Notification } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
+import { parse } from 'yaml'
+import { app } from '@/stores/localstorage'
 
 const router = useRouter()
 
@@ -17,9 +20,17 @@ const GetCluster = async () => {
   try {
     queryLoading.value = true
     const id = router.currentRoute.value.params.id
-    cluster.value = await DESCRIBE_CLUSTER(id, {with_deploy: true})
+    const resp = await DESCRIBE_CLUSTER(id, {with_deploy: true})
+    resp.deployments.items.forEach(element => {
+    try {
+      element._service = parse(element.k8s_type_config.service)
+      } catch (error) {
+        console.log(error)
+      }
+    });
+    cluster.value = resp
   } catch (error) {
-    Message.error(`查询集群失败: ${error}`)
+    Notification.error(`查询集群失败: ${error}`)
   } finally {
     queryLoading.value = false
   }
@@ -37,6 +48,28 @@ watch(
     }
   }
 )
+
+// 处理操作
+const handleSelect = async (v, id) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_DEPLOY(id)
+      Notification.success(`删除${id}成功`)
+      GetCluster()
+      break
+    default:
+      break
+  }
+}
+
+const showAccessPort  = (service) => {
+  const ports = []
+  service.spec.ports.forEach((element) => {
+    ports.push(`${element.protocol} | ${element.port}`)
+  })
+  return ports
+}
+
 </script>
 
 <template>
@@ -50,26 +83,54 @@ watch(
       <!-- 部署列表 -->
       <a-table class="deployments" :bordered="true" :pagination="false" :data="cluster.deployments.items">
         <template #columns>
-        <a-table-column title="名称" data-index="name"></a-table-column>
-        <a-table-column title="服务版本" >
+        <a-table-column align="center" title="名称" data-index="name"></a-table-column>
+        <a-table-column align="center" title="服务版本" >
           <template #cell="{ record }">
             {{ record.service_name }}:{{ record.service_version }}
           </template>
         </a-table-column>
-        <a-table-column title="部署分组">
+        <a-table-column align="center" title="部署分组">
             <template #cell="{ record }">
               {{ record.labels.DeployGroup }}
             </template>
           </a-table-column>
-        <a-table-column title="状态" >
+        <a-table-column align="center" title="状态" >
           <template #cell="{ record }">
             {{ record.status.stage }}
             (<ShowTime :timestamp="record.status.update_at" />)
           </template>
         </a-table-column>
+        <a-table-column align="center" title="访问IP">
+            <template #cell="{ record }">
+              {{ record._service.spec.clusterIP }}
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="访问端口">
+            <template #cell="{ record }">
+              <a-tag v-for="(port, index) of showAccessPort(record._service)" :key="index" color="green" bordered>{{ port }}</a-tag>
+            </template>
+          </a-table-column>
         <a-table-column align="center" title="操作" :width="200">
           <template #cell="{ record }">
-            <a-button type="text"> {{ record.id }} </a-button>
+            <a-button
+                type="text"
+                :size="app.size"
+                @click="$router.push({ name: 'CreateDeploy', query: { id: record.id } })"
+              >
+                编辑
+              </a-button>
+              <a-divider direction="vertical" />
+              <a-dropdown @select="handleSelect($event, record.id)">
+                <a-button type="text"><icon-more-vertical /></a-button>
+                <template #content>
+                  <a-doption value="delete">
+                    <template #icon>
+                      <icon-delete />
+                    </template>
+                    删除
+                  </a-doption>
+                </template>
+              </a-dropdown>
           </template>
         </a-table-column>
       </template>

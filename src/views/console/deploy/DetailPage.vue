@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import { parse } from 'yaml'
-import { DESCRIBE_CLUSTER } from '@/api/mpaas/deploy'
+import { DESCRIBE_DEPLOY } from '@/api/mpaas/deploy'
 import { onBeforeMount } from 'vue'
 
 const router = useRouter()
@@ -15,7 +15,7 @@ const workload_obj = ref({})
 const pods = ref([])
 const GetDeploy = async () => {
   try {
-    deploy.value = await DESCRIBE_CLUSTER(router.currentRoute.value.params.id)
+    deploy.value = await DESCRIBE_DEPLOY(router.currentRoute.value.params.id)
     const kc = deploy.value.k8s_type_config
     workload_yaml.value = kc.workload_config
     try {

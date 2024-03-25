@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { CREATE_DEPLOY } from '@/api/mpaas/deploy'
+import { CREATE_DEPLOY, DESCRIBE_DEPLOY, UPDATE_DEPLOY } from '@/api/mpaas/deploy'
 import { Notification } from '@arco-design/web-vue'
 import { LIST_LABEL } from '@/api/mcenter/label'
 import { Message } from '@arco-design/web-vue'
@@ -48,8 +48,8 @@ const handleSubmit = async (data) => {
           Notification.success(`创建成功`)
           break
         default:
-          // await UPDATE_CLUSTER(id, data.values)
-          // Notification.success(`更新成功`)
+          await UPDATE_DEPLOY(id, data.values)
+          Notification.success(`更新成功`)
           break
       }
       router.push({ name: 'ServiceClusterList' })
@@ -66,8 +66,8 @@ const GetK8sCluster = async () => {
   if (!isCreate) {
     pageHeader = '编辑部署'
     try {
-      // const resp = await DESCRIBE_CLUSTER(id)
-      // form.value = resp
+      const resp = await DESCRIBE_DEPLOY(id)
+      form.value = resp
     } catch (error) {
       Notification.error(`查询部署失败: ${error}`)
     }
