@@ -88,7 +88,7 @@ export var GetTermSize = (term) => {
   const geometry = {
     // 避免 宽度益处
     cols: Math.max(MINIMUM_COLS, Math.floor(availableWidth / dims.css.cell.width)) - 14,
-    rows: Math.max(MINIMUM_ROWS, Math.floor(availableHeight / dims.css.cell.height)) 
+    rows: Math.max(MINIMUM_ROWS, Math.floor(availableHeight / dims.css.cell.height))
   }
   return geometry
 }

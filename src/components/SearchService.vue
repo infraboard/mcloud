@@ -5,11 +5,11 @@ import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
 defineProps({
-    modelValue: String,
-    placeholder: {
-      type: String,
-      default: "请输入服务名称进行模糊搜索"
-    }
+  modelValue: String,
+  placeholder: {
+    type: String,
+    default: '请输入服务名称进行模糊搜索'
+  }
 })
 defineEmits(['update:modelValue'])
 
@@ -37,11 +37,11 @@ const handleSearch = (v) => {
 }
 
 const showAddr = (v) => {
-    const addr = v.image_repository.address
-    if (addr) {
-        return addr
-    }
-    return v.code_repository.ssh_url
+  const addr = v.image_repository.address
+  if (addr) {
+    return addr
+  }
+  return v.code_repository.ssh_url
 }
 
 onMounted(() => {
@@ -59,6 +59,8 @@ onMounted(() => {
     allow-search
     :filter-option="false"
   >
-    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name">{{ item.name }} 【{{ showAddr(item) }}】</a-option>
+    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name"
+      >{{ item.name }} 【{{ showAddr(item) }}】</a-option
+    >
   </a-select>
 </template>

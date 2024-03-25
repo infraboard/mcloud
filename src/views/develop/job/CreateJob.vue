@@ -1,5 +1,4 @@
 <script setup>
-import { app } from '@/stores/localstorage'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_JOB, CREATE_JOB } from '@/api/mflow/job'
@@ -13,7 +12,11 @@ const form = ref({
   description: '',
   runner_type: 'K8S_JOB',
   runner_spec: '',
-  run_params: []
+  run_params: {
+    ignore_failed: false,
+    dry_run: false,
+    params: []
+  }
 })
 
 // 提交处理
@@ -51,6 +54,109 @@ const GetJob = async () => {
 onBeforeMount(async () => {
   await GetJob()
 })
+
+// 添加参数
+const addParam = (name = '') => {
+  form.value.run_params.params.push({
+    required: false,
+    usage_type: 'ENV',
+    name: name,
+    read_only: false,
+    name_desc: '',
+    value_type: 'TEXT',
+    enum_options: [],
+    http_enum_config: {},
+    example: '',
+    value: '',
+    value_desc: '',
+    param_scope: {},
+    search_label: false,
+    is_sensitive: false,
+    deprecate: false,
+    deprecate_desc: '',
+    extensions: {}
+  })
+}
+const paramColumns = [
+  {
+    title: '参数名称',
+    dataIndex: 'name',
+    slotName: 'name',
+    align: 'center'
+  },
+  {
+    title: '参数类型',
+    dataIndex: 'usage_type',
+    slotName: 'usage_type',
+    align: 'center'
+  },
+  {
+    title: '必填',
+    dataIndex: 'required',
+    slotName: 'required',
+    align: 'center'
+  },
+  {
+    title: '只读',
+    dataIndex: 'read_only',
+    slotName: 'read_only',
+    align: 'center'
+  },
+  {
+    title: '参数描述',
+    dataIndex: 'name_desc',
+    slotName: 'name_desc',
+    align: 'center'
+  },
+  {
+    title: '值类型',
+    dataIndex: 'value_type',
+    slotName: 'value_type',
+    align: 'center'
+  },
+  {
+    title: '值样例',
+    dataIndex: 'example',
+    slotName: 'example',
+    align: 'center'
+  },
+  {
+    title: '默认值',
+    dataIndex: 'value',
+    slotName: 'value',
+    align: 'center'
+  },
+  {
+    title: '值描述',
+    dataIndex: 'value_desc',
+    slotName: 'value_desc',
+    align: 'center'
+  },
+  {
+    title: '搜索',
+    dataIndex: 'search_label',
+    slotName: 'search_label',
+    align: 'center'
+  },
+  {
+    title: '加密',
+    dataIndex: 'is_sensitive',
+    slotName: 'is_sensitive',
+    align: 'center'
+  }
+]
+
+// 提取模版中的参数
+const changeJobDefine = () => {
+  if (runner_attr.value === 'run_params' && form.value.runner_spec) {
+    const regex = /\$\{([^}]+)\}/g
+    const variables = form.value.runner_spec.match(regex).map((match) => match.slice(2, -1))
+    form.value.run_params.params = []
+    variables.forEach((element) => {
+      addParam(element)
+    })
+  }
+}
 </script>
 
 <template>
@@ -65,18 +171,18 @@ onBeforeMount(async () => {
           label="名称"
           :disabled="!isCreate"
           required
-          help="创建后不允许修改"
+          help="Job名称, 创建后不允许修改"
         >
-          <a-input v-model="form.name" placeholder="请输入Job名称" />
+          <a-input v-model="form.name" />
         </a-form-item>
         <a-form-item field="display_name" label="展示名称" required>
-          <a-input v-model="form.display_name" placeholder="请输入Job展示名称" />
+          <a-input v-model="form.display_name" />
         </a-form-item>
         <a-form-item field="description" label="描述" required>
-          <a-input v-model="form.description" placeholder="请输入空间名称" />
+          <a-input v-model="form.description" />
         </a-form-item>
         <a-form-item label="定义" required>
-          <a-radio-group v-model="runner_attr" type="button">
+          <a-radio-group v-model="runner_attr" @change="changeJobDefine" type="button">
             <a-radio value="runner_spec">Job定义</a-radio>
             <a-radio value="run_params">Job参数</a-radio>
           </a-radio-group>
@@ -96,32 +202,52 @@ onBeforeMount(async () => {
           required
         >
           <a-space direction="vertical" fill style="width: 100%">
-            <a-list :size="app.size" style="width: 100%">
-              <a-list-item v-for="item in form.run_params.params" :key="item.name">
-                <a-row class="grid-demo" :gutter="{ md: 8, lg: 24, xl: 32 }">
-                  <a-col :span="4">
-                    <div style="display: flex">
-                      <span style="width: 12px">
-                        <span v-if="item.required" class="arco-form-item-label-required-symbol"
-                          >*</span
-                        >
-                        <span v-else></span>
-                      </span>
-                      <span>{{ item.name }}</span>
-                    </div>
-                  </a-col>
-                  <a-col :span="20">
-                    <div>{{ item.name_desc }}</div>
-                  </a-col>
-                </a-row>
-
-                <template #actions>
-                  <icon-edit />
-                  <icon-delete />
-                </template>
-              </a-list-item>
-            </a-list>
-            <a-button type="outline">
+            <a-table :columns="paramColumns" :pagination="false" :data="form.run_params.params">
+              <template #name="{ rowIndex }">
+                <a-input v-model="form.run_params.params[rowIndex].name"></a-input>
+              </template>
+              <template #required="{ rowIndex }">
+                <a-checkbox v-model="form.run_params.params[rowIndex].required"></a-checkbox>
+              </template>
+              <template #usage_type="{ rowIndex }">
+                <a-select v-model="form.run_params.params[rowIndex].usage_type">
+                  <a-option value="ENV">环境变量</a-option>
+                  <a-option value="TEMPLATE">模版变量</a-option>
+                </a-select>
+              </template>
+              <template #read_only="{ rowIndex }">
+                <a-checkbox v-model="form.run_params.params[rowIndex].read_only"></a-checkbox>
+              </template>
+              <template #name_desc="{ rowIndex }">
+                <a-input v-model="form.run_params.params[rowIndex].name_desc"></a-input>
+              </template>
+              <template #value_type="{ rowIndex }">
+                <a-select v-model="form.run_params.params[rowIndex].value_type">
+                  <a-option value="TEXT">文本</a-option>
+                  <a-option value="BOOLEAN">布尔值</a-option>
+                  <a-option value="ENUM">枚举</a-option>
+                  <a-option value="HTTP_ENUM">HTTP 访问</a-option>
+                  <a-option value="K8S_CONFIG_MAP">k8s configmap</a-option>
+                  <a-option value="K8S_SECRET">k8s Secret</a-option>
+                </a-select>
+              </template>
+              <template #example="{ rowIndex }">
+                <a-input v-model="form.run_params.params[rowIndex].example"></a-input>
+              </template>
+              <template #value="{ rowIndex }">
+                <a-input v-model="form.run_params.params[rowIndex].value"></a-input>
+              </template>
+              <template #value_desc="{ rowIndex }">
+                <a-input v-model="form.run_params.params[rowIndex].value_desc"></a-input>
+              </template>
+              <template #search_label="{ rowIndex }">
+                <a-checkbox v-model="form.run_params.params[rowIndex].search_label"></a-checkbox>
+              </template>
+              <template #is_sensitive="{ rowIndex }">
+                <a-checkbox v-model="form.run_params.params[rowIndex].is_sensitive"></a-checkbox>
+              </template>
+            </a-table>
+            <a-button @click="addParam" type="outline">
               <template #icon>
                 <icon-plus />
               </template>

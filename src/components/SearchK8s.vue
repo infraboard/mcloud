@@ -5,11 +5,11 @@ import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
 defineProps({
-    modelValue: String,
-    placeholder: {
-      type: String,
-      default: "请输入服务名称进行模糊搜索"
-    }
+  modelValue: String,
+  placeholder: {
+    type: String,
+    default: '请输入服务名称进行模糊搜索'
+  }
 })
 defineEmits(['update:modelValue'])
 
@@ -51,6 +51,8 @@ onMounted(() => {
     allow-search
     :filter-option="false"
   >
-    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name">{{ item.name }}【{{ item.server_info.server }}】</a-option>
+    <a-option v-for="item of options" :key="item.id" :value="item.id" :label="item.name"
+      >{{ item.name }}【{{ item.server_info.server }}】</a-option
+    >
   </a-select>
 </template>

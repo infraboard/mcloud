@@ -178,5 +178,8 @@ watch(
 </script>
 
 <template>
-  <div id="task-debug-terminal" :style="{ paddingRight: '120px', height, width, backgroundColor: theme.background }"></div>
+  <div
+    id="task-debug-terminal"
+    :style="{ paddingRight: '120px', height, width, backgroundColor: theme.background }"
+  ></div>
 </template>

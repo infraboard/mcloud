@@ -12,7 +12,7 @@ const props = defineProps({
   theme: { type: String, default: 'vs' },
   width: { type: String, default: '100%' },
   height: { type: String, default: '100px' },
-  fixedHeight: {type: Boolean, default: false},
+  fixedHeight: { type: Boolean, default: false },
   language: { type: String, default: 'json' },
   readOnly: { type: Boolean, default: false },
   modelValue: { type: String, default: '{}' }
@@ -43,9 +43,9 @@ window.MonacoEnvironment = {
 const contentHeight = ref(props.height)
 const resetHeight = (editor) => {
   const height = editor.getContentHeight() + 10
-    if (!props.fixedHeight && height > 100) {
-      contentHeight.value = `${height}px`
-    }
+  if (!props.fixedHeight && height > 100) {
+    contentHeight.value = `${height}px`
+  }
 }
 onMounted(() => {
   // 使用样例参考: https://microsoft.github.io/monaco-editor/playground.html
@@ -59,7 +59,7 @@ onMounted(() => {
     scrollBeyondLastLine: false,
     automaticLayout: true,
     scrollbar: {
-      alwaysConsumeMouseWheel: false,
+      alwaysConsumeMouseWheel: false
     },
     minimap: {
       enabled: false
@@ -89,7 +89,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="view" id="external-container" ref="codeRef" :style="{ width, height:contentHeight }"></div>
+  <div
+    class="view"
+    id="external-container"
+    ref="codeRef"
+    :style="{ width, height: contentHeight }"
+  ></div>
 </template>
 
 <style scoped>

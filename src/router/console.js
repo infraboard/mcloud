@@ -33,6 +33,6 @@ export default {
       name: 'CreateDeploy',
       component: () => import('@/views/console/deploy/CreatePage.vue'),
       meta: { label: '创建部署' }
-    },
+    }
   ]
 }

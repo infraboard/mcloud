@@ -46,9 +46,12 @@ const menuItemClickHandler = (routeName) => {
 
 // 监听URL变化
 const isAdminPage = ref(router.currentRoute.value.fullPath.indexOf('/admin') === 0)
-watch(() => router.currentRoute.value.fullPath, (value) => {
-  isAdminPage.value = value.indexOf('/admin') === 0
-})
+watch(
+  () => router.currentRoute.value.fullPath,
+  (value) => {
+    isAdminPage.value = value.indexOf('/admin') === 0
+  }
+)
 
 // 查询空间列表
 const currentNamespace = ref(app.value.token.namespace)

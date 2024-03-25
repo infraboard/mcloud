@@ -11,7 +11,7 @@ const form = ref({
   kind: 'WORKLOAD',
   name: '',
   describe: '',
-  labels: {Env: '开发', DeployGroup: 'green'},
+  labels: { Env: '开发', DeployGroup: 'green' }
 })
 
 let pageHeader = '创建集群'
@@ -62,13 +62,13 @@ const QueryEnv = async () => {
   try {
     queryLoading.value = true
     var resp = await LIST_LABEL({ keys: 'Env' })
-    resp.items.forEach(element => {
+    resp.items.forEach((element) => {
       switch (element.key) {
         case 'Env':
           envs.value = element.enum_options
-          break;
+          break
       }
-    });
+    })
   } catch (error) {
     Message.error(`查询标签失败: ${error}`)
   } finally {
@@ -92,10 +92,17 @@ onBeforeMount(async () => {
         <!-- 环境 -->
         <a-form-item field="labels.Env" label="标签" help="集群所属环境与部署分组">
           <a-radio-group v-model="form.labels.Env" type="button">
-            <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
+            <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{
+              env.label
+            }}</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item field="kind" label="类型" help="工作负载需要关联应用，中间件不需要关联" required>
+        <a-form-item
+          field="kind"
+          label="类型"
+          help="工作负载需要关联应用，中间件不需要关联"
+          required
+        >
           <a-radio-group type="button" v-model="form.kind">
             <a-radio value="WORKLOAD">工作负载</a-radio>
             <a-radio value="MIDDLEWARE">中间件</a-radio>
