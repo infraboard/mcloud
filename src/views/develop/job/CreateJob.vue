@@ -27,7 +27,7 @@ const handleSubmit = async (data) => {
       submitLoading.value = true
       let resp = await CREATE_JOB(data.values)
       console.log(resp)
-      router.push({ name: 'NamespaceList' })
+      router.push({ name: 'DomainJobList' })
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
     } finally {
@@ -57,12 +57,37 @@ onBeforeMount(async () => {
 
 // 添加参数
 const addParam = (name = '') => {
-  form.value.run_params.params.push({
-    required: false,
+  // 判断有没有该值, 如果没有则添加
+  const hasObject = form.value.run_params.params.some((obj) => obj.name === name)
+  if (!hasObject) {
+    form.value.run_params.params.push({
+      required: false,
+      usage_type: 'ENV',
+      name: name,
+      read_only: false,
+      name_desc: '',
+      value_type: 'TEXT',
+      enum_options: [],
+      http_enum_config: {},
+      example: '',
+      value: '',
+      value_desc: '',
+      param_scope: {},
+      search_label: false,
+      is_sensitive: false,
+      deprecate: false,
+      deprecate_desc: '',
+      extensions: {}
+    })
+  }
+}
+const k8sRunnerParams = [
+  {
+    required: true,
     usage_type: 'ENV',
-    name: name,
+    name: 'kube_config',
     read_only: false,
-    name_desc: '',
+    name_desc: '用于运行k8s job的访问配置',
     value_type: 'TEXT',
     enum_options: [],
     http_enum_config: {},
@@ -71,18 +96,39 @@ const addParam = (name = '') => {
     value_desc: '',
     param_scope: {},
     search_label: false,
+    is_sensitive: true,
+    deprecate: false,
+    deprecate_desc: '',
+    extensions: {}
+  },
+  {
+    required: true,
+    usage_type: 'ENV',
+    name: 'namespace',
+    read_only: false,
+    name_desc: 'job运行时的namespace',
+    value_type: 'TEXT',
+    enum_options: [],
+    http_enum_config: {},
+    example: '',
+    value: 'default',
+    value_desc: '',
+    param_scope: {},
+    search_label: true,
     is_sensitive: false,
     deprecate: false,
     deprecate_desc: '',
     extensions: {}
-  })
-}
+  }
+]
 const paramColumns = [
   {
     title: '参数名称',
     dataIndex: 'name',
     slotName: 'name',
-    align: 'center'
+    align: 'center',
+    fixed: 'left',
+    width: 300
   },
   {
     title: '参数类型',
@@ -106,7 +152,8 @@ const paramColumns = [
     title: '参数描述',
     dataIndex: 'name_desc',
     slotName: 'name_desc',
-    align: 'center'
+    align: 'center',
+    width: 300
   },
   {
     title: '值类型',
@@ -115,22 +162,25 @@ const paramColumns = [
     align: 'center'
   },
   {
+    title: '值描述',
+    dataIndex: 'value_desc',
+    slotName: 'value_desc',
+    align: 'center',
+    width: 300
+  },
+  {
     title: '值样例',
     dataIndex: 'example',
     slotName: 'example',
-    align: 'center'
+    align: 'center',
+    width: 300
   },
   {
     title: '默认值',
     dataIndex: 'value',
     slotName: 'value',
-    align: 'center'
-  },
-  {
-    title: '值描述',
-    dataIndex: 'value_desc',
-    slotName: 'value_desc',
-    align: 'center'
+    align: 'center',
+    width: 300
   },
   {
     title: '搜索',
@@ -146,12 +196,12 @@ const paramColumns = [
   }
 ]
 
-// 提取模版中的参数
+//
 const changeJobDefine = () => {
   if (runner_attr.value === 'run_params' && form.value.runner_spec) {
     const regex = /\$\{([^}]+)\}/g
     const variables = form.value.runner_spec.match(regex).map((match) => match.slice(2, -1))
-    form.value.run_params.params = []
+    form.value.run_params.params = k8sRunnerParams
     variables.forEach((element) => {
       addParam(element)
     })
