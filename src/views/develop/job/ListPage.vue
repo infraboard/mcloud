@@ -1,6 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_JOB } from '@/api/mflow/job'
+import { LIST_JOB, DELETE_JOB } from '@/api/mflow/job'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -50,6 +50,26 @@ const showRunJobHandler = (v) => {
   showRunJob.value = true
   currentRunJob.value = v
 }
+
+// 状态映射表
+const statusMapping = {
+  DRAFT: '准备中',
+  PUBLISHED: '已发布',
+  DEPRECATED: '已废弃'
+}
+
+// 处理操作
+const handleSelect = async (v, id) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_JOB(id)
+      Notification.success(`删除${id}成功`)
+      QueryData()
+      break
+    default:
+      break
+  }
+}
 </script>
 
 <template>
@@ -77,10 +97,14 @@ const showRunJobHandler = (v) => {
               >
             </template>
           </a-table-column>
-
+          <a-table-column title="图标">
+            <template #cell="{ record }">
+              <SvgIcon v-if="record.icon" :svgCode="record.icon" />
+            </template>
+          </a-table-column>
           <a-table-column title="状态">
             <template #cell="{ record }">
-              <span v-if="record.status">{{ record.status.stage }}</span>
+              <span v-if="record.status">{{ statusMapping[record.status.stage] }}</span>
             </template>
           </a-table-column>
           <a-table-column title="版本">
@@ -110,10 +134,28 @@ const showRunJobHandler = (v) => {
                 运行
               </a-button>
               <a-divider direction="vertical" />
-              <a-dropdown>
+              <a-dropdown @select="handleSelect($event, record.id)">
                 <a-button type="text"><icon-more-vertical /></a-button>
                 <template #content>
-                  <a-doption>归档</a-doption>
+                  <a-doption value="archive" v-if="record.status.stage === 'PUBLISHED'">
+                    <template #icon>
+                      <icon-archive />
+                    </template>
+                    归档
+                  </a-doption>
+                  <a-doption value="publish" v-if="record.status.stage === 'DRAFT'">
+                    <template #icon>
+                      <icon-send />
+                    </template>
+                    发布
+                  </a-doption>
+                  <a-doption value="delete" v-if="record.status.stage === 'DRAFT'">
+                    <template #icon>
+                      <icon-delete />
+                    </template>
+                    删除
+                  </a-doption>
+
                 </template>
               </a-dropdown>
             </template>

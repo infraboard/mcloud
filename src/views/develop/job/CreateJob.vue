@@ -1,13 +1,14 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { GET_JOB, CREATE_JOB } from '@/api/mflow/job'
+import { GET_JOB, CREATE_JOB, UPDATE_JOB } from '@/api/mflow/job'
 import { Notification } from '@arco-design/web-vue'
 
 const router = useRouter()
 const runner_attr = ref('runner_spec')
 const form = ref({
   name: '',
+  icon: '',
   display_name: '',
   description: '',
   runner_type: 'K8S_JOB',
@@ -16,17 +17,31 @@ const form = ref({
     ignore_failed: false,
     dry_run: false,
     params: []
+  },
+  labels: {
+    "Language": "*"
   }
 })
 
 // 提交处理
+let pageHeader = '创建Job'
+const id = router.currentRoute.value.query.id
+const isCreate = id === undefined
 const submitLoading = ref(false)
 const handleSubmit = async (data) => {
   if (!data.errors) {
     try {
       submitLoading.value = true
-      let resp = await CREATE_JOB(data.values)
-      console.log(resp)
+      switch (pageHeader) {
+        case '创建Job':
+          await CREATE_JOB(data.values)
+          Notification.success(`创建成功`)
+          break
+        default:
+          await UPDATE_JOB(id, data.values)
+          Notification.success(`更新成功`)
+          break
+      }
       router.push({ name: 'DomainJobList' })
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
@@ -37,9 +52,6 @@ const handleSubmit = async (data) => {
 }
 
 // 判断更新模式
-let pageHeader = '创建Job'
-const id = router.currentRoute.value.query.id
-const isCreate = id === undefined
 const GetJob = async () => {
   if (!isCreate) {
     pageHeader = '编辑Job'
@@ -56,11 +68,8 @@ onBeforeMount(async () => {
 })
 
 // 添加参数
-const addParam = (name = '') => {
-  // 判断有没有该值, 如果没有则添加
-  const hasObject = form.value.run_params.params.some((obj) => obj.name === name)
-  if (!hasObject) {
-    form.value.run_params.params.push({
+const newParam = (name = '') => {
+  return {
       required: false,
       usage_type: 'ENV',
       name: name,
@@ -78,7 +87,13 @@ const addParam = (name = '') => {
       deprecate: false,
       deprecate_desc: '',
       extensions: {}
-    })
+    }
+}
+const addParam = (param) => {
+  // 判断有没有该值, 如果没有则添加
+  const hasObject = form.value.run_params.params.some((obj) => obj.name === param.name)
+  if (!hasObject) {
+    form.value.run_params.params.push(param)
   }
 }
 const k8sRunnerParams = [
@@ -87,7 +102,7 @@ const k8sRunnerParams = [
     usage_type: 'ENV',
     name: 'kube_config',
     read_only: false,
-    name_desc: '用于运行k8s job的访问配置',
+    name_desc: '用于运行k8s job的访问配置, 默认存储于: ~/.kube/config',
     value_type: 'TEXT',
     enum_options: [],
     http_enum_config: {},
@@ -99,7 +114,7 @@ const k8sRunnerParams = [
     is_sensitive: true,
     deprecate: false,
     deprecate_desc: '',
-    extensions: {}
+    extensions: {"format": "yaml"}
   },
   {
     required: true,
@@ -128,7 +143,7 @@ const paramColumns = [
     slotName: 'name',
     align: 'center',
     fixed: 'left',
-    width: 300
+    width: 220
   },
   {
     title: '参数类型',
@@ -162,16 +177,16 @@ const paramColumns = [
     align: 'center'
   },
   {
-    title: '值描述',
-    dataIndex: 'value_desc',
-    slotName: 'value_desc',
+    title: '值样例',
+    dataIndex: 'example',
+    slotName: 'example',
     align: 'center',
     width: 300
   },
   {
-    title: '值样例',
-    dataIndex: 'example',
-    slotName: 'example',
+    title: '值描述',
+    dataIndex: 'value_desc',
+    slotName: 'value_desc',
     align: 'center',
     width: 300
   },
@@ -198,12 +213,15 @@ const paramColumns = [
 
 //
 const changeJobDefine = () => {
+  console.log(runner_attr.value)
   if (runner_attr.value === 'run_params' && form.value.runner_spec) {
     const regex = /\$\{([^}]+)\}/g
     const variables = form.value.runner_spec.match(regex).map((match) => match.slice(2, -1))
-    form.value.run_params.params = k8sRunnerParams
-    variables.forEach((element) => {
+    k8sRunnerParams.forEach((element) => {
       addParam(element)
+    })
+    variables.forEach((element) => {
+      addParam(newParam(element))
     })
   }
 }
@@ -225,13 +243,16 @@ const changeJobDefine = () => {
         >
           <a-input v-model="form.name" />
         </a-form-item>
-        <a-form-item field="display_name" label="展示名称" required>
+        <a-form-item field="icon" label="图标" help="任务Svg图标" required>
+          <a-input v-model="form.icon" />
+        </a-form-item>
+        <a-form-item field="display_name" label="展示名称" help="暂时名称" required>
           <a-input v-model="form.display_name" />
         </a-form-item>
-        <a-form-item field="description" label="描述" required>
+        <a-form-item field="description" label="描述" help="描述" required>
           <a-input v-model="form.description" />
         </a-form-item>
-        <a-form-item label="定义" required>
+        <a-form-item label="定义" help="定义和参数都需要填写" required>
           <a-radio-group v-model="runner_attr" @change="changeJobDefine" type="button">
             <a-radio value="runner_spec">Job定义</a-radio>
             <a-radio value="run_params">Job参数</a-radio>
@@ -297,12 +318,6 @@ const changeJobDefine = () => {
                 <a-checkbox v-model="form.run_params.params[rowIndex].is_sensitive"></a-checkbox>
               </template>
             </a-table>
-            <a-button @click="addParam" type="outline">
-              <template #icon>
-                <icon-plus />
-              </template>
-              添加参数
-            </a-button>
           </a-space>
         </a-form-item>
         <div class="form-submit">
