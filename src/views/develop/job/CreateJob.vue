@@ -148,7 +148,26 @@ const k8sRunnerParams = [
     deprecate: false,
     deprecate_desc: '',
     extensions: {}
-  }
+  },
+  {
+    required: false,
+    usage_type: 'RUNNER',
+    name: '_inject_kubeconf',
+    read_only: false,
+    name_desc: '是否将kube config 配置文件注入到k8s job中',
+    value_type: 'BOOLEAN',
+    enum_options: [],
+    http_enum_config: {},
+    example: 'false',
+    value: 'false',
+    value_desc: '',
+    param_scope: {},
+    search_label: false,
+    is_sensitive: true,
+    deprecate: false,
+    deprecate_desc: '',
+    extensions: { format: 'yaml' }
+  },
 ]
 const paramColumns = [
   {
@@ -239,6 +258,10 @@ const changeJobDefine = () => {
     })
   }
 }
+
+const handleChange = (_data) => {
+      form.value.run_params.params = _data
+    }
 </script>
 
 <template>
@@ -294,7 +317,13 @@ const changeJobDefine = () => {
           required
         >
           <a-space direction="vertical" fill style="width: 100%">
-            <a-table :columns="paramColumns" :pagination="false" :data="form.run_params.params">
+            <a-table 
+            :draggable="{ type: 'handle', width: 40 }" 
+            @change="handleChange" 
+            :columns="paramColumns" 
+            :pagination="false" 
+            :data="form.run_params.params"
+            >
               <template #name="{ rowIndex }">
                 <a-input v-model="form.run_params.params[rowIndex].name"></a-input>
               </template>
