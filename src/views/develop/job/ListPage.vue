@@ -5,6 +5,8 @@ import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import RunJob from './components/RunJob.vue'
+import PublishJob from './components/PublishJob.vue'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 
@@ -44,11 +46,12 @@ onMounted(() => {
 })
 
 // 当前运行的Job对象
-const currentRunJob = ref(null)
+const selectedJob = ref(null)
+const showPublishJob = ref(false)
 const showRunJob = ref(false)
 const showRunJobHandler = (v) => {
   showRunJob.value = true
-  currentRunJob.value = v
+  selectedJob.value = v
 }
 
 // 状态映射表
@@ -59,12 +62,16 @@ const statusMapping = {
 }
 
 // 处理操作
-const handleSelect = async (v, id) => {
+const handleSelect = async (v, record) => {
   switch (v) {
     case 'delete':
-      await DELETE_JOB(id)
-      Notification.success(`删除${id}成功`)
+      await DELETE_JOB(record.id)
+      Notification.success(`删除${record.id}成功`)
       QueryData()
+      break
+    case 'publish':
+      showPublishJob.value = true
+      selectedJob.value = record
       break
     default:
       break
@@ -89,7 +96,7 @@ const handleSelect = async (v, id) => {
         @page-size-change="pageSizeChange"
       >
         <template #columns>
-          <a-table-column title="名称">
+          <a-table-column align="center" title="名称">
             <template #cell="{ record }">
               <a-link
                 @click="router.push({ name: 'DomainJobDetail', params: { id: record.id } })"
@@ -97,30 +104,34 @@ const handleSelect = async (v, id) => {
               >
             </template>
           </a-table-column>
-          <a-table-column title="图标">
+          <a-table-column align="center" title="图标">
             <template #cell="{ record }">
               <SvgIcon v-if="record.icon" :svgCode="record.icon" />
             </template>
           </a-table-column>
-          <a-table-column title="状态">
+          <a-table-column align="center" title="状态">
             <template #cell="{ record }">
               <span v-if="record.status">{{ statusMapping[record.status.stage] }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="版本">
+          <a-table-column align="center" title="版本">
             <template #cell="{ record }">
               <span v-if="record.status">{{ record.status.version }}</span>
               <span v-else>无</span>
             </template>
           </a-table-column>
-          <a-table-column title="访问范围">
+          <a-table-column align="center" title="访问范围">
             <template #cell="{ record }">
-              <span >{{ record.visiable_mode }}</span>
+              <span >{{ mapping[record.visiable_mode] }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="执行方式" data-index="runner_type"></a-table-column>
-          <a-table-column title="创建人" data-index="create_by"></a-table-column>
-          <a-table-column title="创建时间">
+          <a-table-column align="center" title="执行方式">
+            <template #cell="{ record }">
+              <span >{{ mapping[record.runner_type] }}</span>
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>
+          <a-table-column align="center" title="创建时间">
             <template #cell="{ record }">
               <ShowTime :timestamp="record.create_at"></ShowTime>
             </template>
@@ -139,7 +150,7 @@ const handleSelect = async (v, id) => {
                 运行
               </a-button>
               <a-divider direction="vertical" />
-              <a-dropdown @select="handleSelect($event, record.id)">
+              <a-dropdown @select="handleSelect($event, record)">
                 <a-button type="text"><icon-more-vertical /></a-button>
                 <template #content>
                   <a-doption value="archive" v-if="record.status.stage === 'PUBLISHED'">
@@ -168,7 +179,8 @@ const handleSelect = async (v, id) => {
       </a-table>
     </a-card>
 
-    <RunJob :job="currentRunJob" v-model:visible="showRunJob"></RunJob>
+    <RunJob :job="selectedJob" v-model:visible="showRunJob"></RunJob>
+    <PublishJob :job="selectedJob" v-model:visible="showPublishJob" @ok="QueryData()"></PublishJob>
   </div>
 </template>
 

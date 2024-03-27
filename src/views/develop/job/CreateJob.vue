@@ -3,11 +3,13 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_JOB, CREATE_JOB, UPDATE_JOB } from '@/api/mflow/job'
 import { Notification } from '@arco-design/web-vue'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 const runner_attr = ref('runner_spec')
 const form = ref({
   name: '',
+  visiable_mode: 'NAMESPACE',
   icon: '',
   display_name: '',
   description: '',
@@ -255,11 +257,18 @@ const changeJobDefine = () => {
         >
           <a-input v-model="form.name" />
         </a-form-item>
-        <a-form-item field="icon" label="图标" help="任务Svg图标" required>
-          <a-input v-model="form.icon" />
+        <a-form-item field="visiable_mode" label="访问范围" help="访问范围" required>
+          <a-radio-group v-model="form.visiable_mode" type="button">
+            <a-radio value="NAMESPACE">{{ mapping['NAMESPACE'] }}</a-radio>
+            <a-radio value="DOMAIN">{{ mapping['DOMAIN'] }}</a-radio>
+            <a-radio value="GLOBAL">{{ mapping['GLOBAL'] }}</a-radio>
+          </a-radio-group>
         </a-form-item>
         <a-form-item field="display_name" label="展示名称" help="暂时名称" required>
           <a-input v-model="form.display_name" />
+        </a-form-item>
+        <a-form-item field="icon" label="图标" help="任务Svg图标" required>
+          <a-input v-model="form.icon" />
         </a-form-item>
         <a-form-item field="description" label="描述" help="描述" required>
           <a-input v-model="form.description" />
@@ -343,3 +352,11 @@ const changeJobDefine = () => {
     </a-card>
   </div>
 </template>
+
+<style scoped>
+
+.page :deep(.arco-scrollbar-thumb-direction-horizontal .arco-scrollbar-thumb-bar) {
+  height: 0px;
+  margin: 0px;
+}
+</style>
