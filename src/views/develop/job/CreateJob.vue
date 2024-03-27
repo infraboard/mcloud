@@ -19,7 +19,7 @@ const form = ref({
     params: []
   },
   labels: {
-    "Language": "*"
+    Language: '*'
   }
 })
 
@@ -70,37 +70,49 @@ onBeforeMount(async () => {
 // 添加参数
 const newParam = (name = '') => {
   return {
-      required: false,
-      usage_type: 'ENV',
-      name: name,
-      read_only: false,
-      name_desc: '',
-      value_type: 'TEXT',
-      enum_options: [],
-      http_enum_config: {},
-      example: '',
-      value: '',
-      value_desc: '',
-      param_scope: {},
-      search_label: false,
-      is_sensitive: false,
-      deprecate: false,
-      deprecate_desc: '',
-      extensions: {}
-    }
+    required: false,
+    usage_type: 'ENV',
+    name: name,
+    read_only: false,
+    name_desc: '',
+    value_type: 'TEXT',
+    enum_options: [],
+    http_enum_config: {},
+    example: '',
+    value: '',
+    value_desc: '',
+    param_scope: {},
+    search_label: false,
+    is_sensitive: false,
+    deprecate: false,
+    deprecate_desc: '',
+    extensions: {}
+  }
 }
 const addParam = (param) => {
   // 判断有没有该值, 如果没有则添加
   const hasObject = form.value.run_params.params.some((obj) => obj.name === param.name)
   if (!hasObject) {
+    if (isFirstLetterLowerCase(param.name)) {
+      param.usage_type = 'TEMPLATE'
+    }
     form.value.run_params.params.push(param)
   }
+  // 
+}
+
+const isFirstLetterLowerCase = (str) => {
+  const char = str[0]
+  if (char === '_') {
+    return false
+  }
+  return char === char.toLowerCase()
 }
 const k8sRunnerParams = [
   {
     required: true,
-    usage_type: 'ENV',
-    name: 'kube_config',
+    usage_type: 'RUNNER',
+    name: '_kube_config',
     read_only: false,
     name_desc: '用于运行k8s job的访问配置, 默认存储于: ~/.kube/config',
     value_type: 'TEXT',
@@ -114,12 +126,12 @@ const k8sRunnerParams = [
     is_sensitive: true,
     deprecate: false,
     deprecate_desc: '',
-    extensions: {"format": "yaml"}
+    extensions: { format: 'yaml' }
   },
   {
     required: true,
-    usage_type: 'ENV',
-    name: 'namespace',
+    usage_type: 'RUNNER',
+    name: '_namespace',
     read_only: false,
     name_desc: 'job运行时的namespace',
     value_type: 'TEXT',
@@ -284,6 +296,7 @@ const changeJobDefine = () => {
                 <a-select v-model="form.run_params.params[rowIndex].usage_type">
                   <a-option value="ENV">环境变量</a-option>
                   <a-option value="TEMPLATE">模版变量</a-option>
+                  <a-option value="RUNNER">执行器变量</a-option>
                 </a-select>
               </template>
               <template #read_only="{ rowIndex }">

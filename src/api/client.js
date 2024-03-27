@@ -63,7 +63,9 @@ instance.interceptors.response.use(
     // 提示异常
     Message.error({
       content: message,
-      duration: 2000
+      resetOnHover: true,
+      duration: 5000,
+      closable: true
     })
     return Promise.reject(new Error(message))
   }

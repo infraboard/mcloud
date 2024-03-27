@@ -113,6 +113,11 @@ const handleSelect = async (v, id) => {
               <span v-else>无</span>
             </template>
           </a-table-column>
+          <a-table-column title="访问范围">
+            <template #cell="{ record }">
+              <span >{{ record.visiable_mode }}</span>
+            </template>
+          </a-table-column>
           <a-table-column title="执行方式" data-index="runner_type"></a-table-column>
           <a-table-column title="创建人" data-index="create_by"></a-table-column>
           <a-table-column title="创建时间">
@@ -155,7 +160,6 @@ const handleSelect = async (v, id) => {
                     </template>
                     删除
                   </a-doption>
-
                 </template>
               </a-dropdown>
             </template>

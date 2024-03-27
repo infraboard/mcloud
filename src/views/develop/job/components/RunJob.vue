@@ -88,7 +88,11 @@ const handleSubmit = async () => {
         :help="showHelp(param.name_desc, param.example)"
         :required="param.required"
       >
-        <a-textarea :auto-size="{maxRows:5}" v-model="form[param.name]" :disabled="param.read_only" />
+        <a-textarea
+          :auto-size="{ maxRows: 5 }"
+          v-model="form[param.name]"
+          :disabled="param.read_only"
+        />
       </a-form-item>
     </a-form>
     <template #footer>

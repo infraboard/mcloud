@@ -52,7 +52,7 @@ const handleSubmit = async (data) => {
           Notification.success(`更新成功`)
           break
       }
-      router.push({ name: 'ServiceClusterList' })
+      router.push({ name: 'ClusterDetail', params: {id: form.value.cluster} })
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
     } finally {
