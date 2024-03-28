@@ -23,7 +23,7 @@
           <a-input v-model="enum_options[rowIndex].value"></a-input>
         </template>
         <template #operate="{ rowIndex }">
-          <a-button @click="deleteOption(rowIndex)" status="danger">
+          <a-button type="text" @click="deleteOption(rowIndex)" status="danger">
             <template #icon>
               <icon-delete />
             </template>
