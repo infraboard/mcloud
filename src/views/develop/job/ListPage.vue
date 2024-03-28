@@ -122,12 +122,12 @@ const handleSelect = async (v, record) => {
           </a-table-column>
           <a-table-column align="center" title="访问范围">
             <template #cell="{ record }">
-              <span >{{ mapping[record.visiable_mode] }}</span>
+              <span>{{ mapping[record.visiable_mode] }}</span>
             </template>
           </a-table-column>
           <a-table-column align="center" title="执行方式">
             <template #cell="{ record }">
-              <span >{{ mapping[record.runner_type] }}</span>
+              <span>{{ mapping[record.runner_type] }}</span>
             </template>
           </a-table-column>
           <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>

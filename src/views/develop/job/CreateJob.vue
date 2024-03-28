@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { GET_JOB, CREATE_JOB, UPDATE_JOB } from '@/api/mflow/job'
 import { Notification } from '@arco-design/web-vue'
 import mapping from '@/stores/mapping'
+import ParamSetting from './components/ParamSetting.vue'
 
 const router = useRouter()
 const runner_attr = ref('runner_spec')
@@ -100,7 +101,6 @@ const addParam = (param) => {
     }
     form.value.run_params.params.push(param)
   }
-  // 
 }
 
 const isFirstLetterLowerCase = (str) => {
@@ -167,7 +167,7 @@ const k8sRunnerParams = [
     deprecate: false,
     deprecate_desc: '',
     extensions: { format: 'yaml' }
-  },
+  }
 ]
 const paramColumns = [
   {
@@ -217,13 +217,6 @@ const paramColumns = [
     width: 300
   },
   {
-    title: '值描述',
-    dataIndex: 'value_desc',
-    slotName: 'value_desc',
-    align: 'center',
-    width: 300
-  },
-  {
     title: '默认值',
     dataIndex: 'value',
     slotName: 'value',
@@ -244,9 +237,8 @@ const paramColumns = [
   }
 ]
 
-//
+// 自动提取Job模版中的变量
 const changeJobDefine = () => {
-  console.log(runner_attr.value)
   if (runner_attr.value === 'run_params' && form.value.runner_spec) {
     const regex = /\$\{([^}]+)\}/g
     const variables = form.value.runner_spec.match(regex).map((match) => match.slice(2, -1))
@@ -259,9 +251,15 @@ const changeJobDefine = () => {
   }
 }
 
+// 处理拖拽数据变更
 const handleChange = (_data) => {
-      form.value.run_params.params = _data
-    }
+  form.value.run_params.params = _data
+}
+
+// 处理值类型的配置
+const showParamSetting = (param) => {
+  param._show_setting_modal = true
+}
 </script>
 
 <template>
@@ -317,12 +315,12 @@ const handleChange = (_data) => {
           required
         >
           <a-space direction="vertical" fill style="width: 100%">
-            <a-table 
-            :draggable="{ type: 'handle', width: 40 }" 
-            @change="handleChange" 
-            :columns="paramColumns" 
-            :pagination="false" 
-            :data="form.run_params.params"
+            <a-table
+              :draggable="{ type: 'handle', width: 40 }"
+              @change="handleChange"
+              :columns="paramColumns"
+              :pagination="false"
+              :data="form.run_params.params"
             >
               <template #name="{ rowIndex }">
                 <a-input v-model="form.run_params.params[rowIndex].name"></a-input>
@@ -352,12 +350,40 @@ const handleChange = (_data) => {
                   <a-option value="K8S_CONFIG_MAP">k8s configmap</a-option>
                   <a-option value="K8S_SECRET">k8s Secret</a-option>
                 </a-select>
+                <icon-settings
+                  class="settings"
+                  v-if="form.run_params.params[rowIndex].value_type === 'ENUM'"
+                  @click="showParamSetting(form.run_params.params[rowIndex])"
+                />
+                <ParamSetting
+                  v-model:visible="form.run_params.params[rowIndex]._show_setting_modal"
+                  v-model:options="form.run_params.params[rowIndex].enum_options"
+                  @changed="
+                    (v) => {
+                      form.run_params.params[rowIndex].enum_options = v
+                    }
+                  "
+                >
+                </ParamSetting>
               </template>
               <template #example="{ rowIndex }">
                 <a-input v-model="form.run_params.params[rowIndex].example"></a-input>
               </template>
               <template #value="{ rowIndex }">
-                <a-input v-model="form.run_params.params[rowIndex].value"></a-input>
+                <a-select
+                  v-model="form.run_params.params[rowIndex].value"
+                  v-if="form.run_params.params[rowIndex].value_type === 'BOOLEAN'"
+                >
+                  <a-option value="true">是</a-option>
+                  <a-option value="false">否</a-option>
+                </a-select>
+                <a-select
+                  v-model="form.run_params.params[rowIndex].value"
+                  v-else-if="form.run_params.params[rowIndex].value_type === 'ENUM'"
+                >
+                  <a-option v-for="item in form.run_params.params[rowIndex].enum_options" :key="item.value" :value="item.value">{{ item.label }}</a-option>
+                </a-select>
+                <a-input v-else v-model="form.run_params.params[rowIndex].value"> </a-input>
               </template>
               <template #value_desc="{ rowIndex }">
                 <a-input v-model="form.run_params.params[rowIndex].value_desc"></a-input>
@@ -383,9 +409,21 @@ const handleChange = (_data) => {
 </template>
 
 <style scoped>
-
 .page :deep(.arco-scrollbar-thumb-direction-horizontal .arco-scrollbar-thumb-bar) {
   height: 0px;
   margin: 0px;
+}
+
+.page :deep(.arco-table-td-content) {
+  display: flex;
+  align-items: center;
+}
+
+.settings {
+  margin-left: 4px;
+  width: 1.5em;
+  height: 1.5em;
+  color: rgb(var(--arcoblue-6));
+  cursor: pointer;
 }
 </style>
