@@ -80,7 +80,7 @@ const handleClick = () => {
 }
 
 const deleteOption = (idx) => {
-    enum_options.value.splice(idx, 1)
+  enum_options.value.splice(idx, 1)
 }
 
 // 处理ok

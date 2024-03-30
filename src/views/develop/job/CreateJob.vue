@@ -381,7 +381,12 @@ const showParamSetting = (param) => {
                   v-model="form.run_params.params[rowIndex].value"
                   v-else-if="form.run_params.params[rowIndex].value_type === 'ENUM'"
                 >
-                  <a-option v-for="item in form.run_params.params[rowIndex].enum_options" :key="item.value" :value="item.value">{{ item.label }}</a-option>
+                  <a-option
+                    v-for="item in form.run_params.params[rowIndex].enum_options"
+                    :key="item.value"
+                    :value="item.value"
+                    >{{ item.label }}</a-option
+                  >
                 </a-select>
                 <a-input v-else v-model="form.run_params.params[rowIndex].value"> </a-input>
               </template>

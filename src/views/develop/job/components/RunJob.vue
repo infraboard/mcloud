@@ -88,7 +88,22 @@ const handleSubmit = async () => {
         :help="showHelp(param.name_desc, param.example)"
         :required="param.required"
       >
+        <a-select
+          v-model="form[param.name]"
+          :disabled="param.read_only"
+          v-if="param.value_type === 'BOOLEAN'"
+        >
+          <a-option value="true">是</a-option>
+          <a-option value="false">否</a-option>
+        </a-select>
+
+        <a-select v-model="form[param.name]" v-else-if="param.value_type === 'ENUM'">
+          <a-option v-for="item in param.enum_options" :key="item.value" :value="item.value">{{
+            item.label
+          }}</a-option>
+        </a-select>
         <a-textarea
+          v-else
           :auto-size="{ maxRows: 5 }"
           v-model="form[param.name]"
           :disabled="param.read_only"
