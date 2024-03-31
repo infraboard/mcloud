@@ -64,9 +64,12 @@ const handleSelect = async (v, id) => {
 
 const showAccessPort = (service) => {
   const ports = []
-  service.spec.ports.forEach((element) => {
-    ports.push(`${element.protocol} | ${element.port}`)
-  })
+  if (service) {
+    service.spec.ports.forEach((element) => {
+      ports.push(`${element.protocol} | ${element.port}`)
+    })
+  }
+
   return ports
 }
 </script>
@@ -113,12 +116,12 @@ const showAccessPort = (service) => {
               (<ShowTime :timestamp="record.status.update_at" />)
             </template>
           </a-table-column>
-          <a-table-column align="center" title="访问IP">
+          <a-table-column align="center" title="访问IP" :width="160">
             <template #cell="{ record }">
-              {{ record._service.spec.clusterIP }}
+              <span v-if="record._service"> {{ record._service.spec.clusterIP }}</span>
             </template>
           </a-table-column>
-          <a-table-column align="center" title="访问端口">
+          <a-table-column align="center" title="访问端口" :width="160">
             <template #cell="{ record }">
               <a-tag
                 v-for="(port, index) of showAccessPort(record._service)"

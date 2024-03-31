@@ -12,6 +12,7 @@ const router = useRouter()
 const deploy = ref({})
 const workload_yaml = ref('')
 const workload_obj = ref({})
+const service = ref({ spec: { ports: [] } })
 const pods = ref([])
 const GetDeploy = async () => {
   try {
@@ -20,6 +21,7 @@ const GetDeploy = async () => {
     workload_yaml.value = kc.workload_config
     try {
       workload_obj.value = parse(kc.workload_config)
+      service.value = parse(kc.service)
     } catch (error) {
       console.log(error)
     }
@@ -32,6 +34,17 @@ const GetDeploy = async () => {
   } catch (error) {
     Message.error(`查询部署失败: ${error}`)
   }
+}
+const showAccessPort = () => {
+  const ports = []
+  console.log(service.value)
+  if (service.value) {
+    service.value.spec.ports.forEach((element) => {
+      ports.push(`${element.protocol} | ${service.value.spec.clusterIP}:${element.port}`)
+    })
+  }
+
+  return ports
 }
 
 // 加载数据
@@ -60,6 +73,10 @@ watch(
         <span v-if="deploy.status">
           状态: {{ deploy.status.stage }}(<ShowTime :timestamp="deploy.status.update_at" />)
         </span>
+        <span v-if="service"> 服务访问地址: </span>
+        <a-tag v-for="(port, index) of showAccessPort()" :key="index" color="green" bordered>{{
+          port
+        }}</a-tag>
       </a-space>
       <a-space>
         <a-link>YAML</a-link>

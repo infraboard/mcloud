@@ -87,6 +87,7 @@ const handleSubmit = async () => {
         :label="param.name"
         :help="showHelp(param.name_desc, param.example)"
         :required="param.required"
+        v-show="!param.deprecate"
       >
         <a-select
           v-model="form[param.name]"
