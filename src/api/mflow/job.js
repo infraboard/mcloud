@@ -10,7 +10,7 @@ export var GET_JOB = (id, params) => {
   return instance.get(`/mflow/api/v1/jobs/${id}`, { params })
 }
 
-// 创建Job
+// 创建任务
 export var CREATE_JOB = (data) => {
   return instance.post('/mflow/api/v1/jobs', data)
 }

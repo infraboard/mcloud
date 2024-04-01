@@ -84,7 +84,7 @@ const handleSelect = async (v, record) => {
     <BreadcrumbMenu />
     <div class="table-op">
       <a-button type="primary" :size="app.size" @click="router.push({ name: 'DomainJobCreate' })">
-        创建Job
+        创建任务
       </a-button>
     </div>
     <a-card class="table-data">

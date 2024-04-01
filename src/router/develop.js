@@ -90,7 +90,7 @@ export default {
           path: 'job/list',
           name: 'DomainJobList',
           component: () => import('@/views/develop/job/ListPage.vue'),
-          meta: { label: '任务管理' }
+          meta: { label: '任务模版' }
         },
         {
           path: 'job_task/console/:id',
@@ -102,7 +102,7 @@ export default {
           path: 'job/create',
           name: 'DomainJobCreate',
           component: () => import('@/views/develop/job/CreateJob.vue'),
-          meta: { label: '创建Job' }
+          meta: { label: '创建任务' }
         },
         {
           path: 'job/detail/:id',

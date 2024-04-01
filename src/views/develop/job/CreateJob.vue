@@ -28,7 +28,7 @@ const form = ref({
 })
 
 // 提交处理
-let pageHeader = '创建Job'
+let pageHeader = '创建任务'
 const id = router.currentRoute.value.query.id
 const isCreate = id === undefined
 const submitLoading = ref(false)
@@ -37,7 +37,7 @@ const handleSubmit = async (data) => {
     try {
       submitLoading.value = true
       switch (pageHeader) {
-        case '创建Job':
+        case '创建任务':
           await CREATE_JOB(data.values)
           Notification.success(`创建成功`)
           break
@@ -58,7 +58,7 @@ const handleSubmit = async (data) => {
 // 判断更新模式
 const GetJob = async () => {
   if (!isCreate) {
-    pageHeader = '编辑Job'
+    pageHeader = '编辑任务'
     try {
       form.value = await GET_JOB(id)
     } catch (error) {
