@@ -352,14 +352,14 @@ const GetK8sEnumOption = async (kc) => {
         </a-form-item>
         <a-form-item label="定义" help="定义和参数都需要填写" required>
           <a-radio-group v-model="runner_attr" @change="changeJobDefine" type="button">
-            <a-radio value="runner_spec">Job定义</a-radio>
-            <a-radio value="run_params">Job参数</a-radio>
+            <a-radio value="runner_spec">任务定义</a-radio>
+            <a-radio value="run_params">任务参数</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item
           v-show="runner_attr === 'runner_spec'"
           field="runner_spec"
-          label="Job定义"
+          label="任务定义"
           required
         >
           <CodeEditor v-model="form.runner_spec" language="yaml"></CodeEditor>
@@ -367,7 +367,7 @@ const GetK8sEnumOption = async (kc) => {
         <a-form-item
           v-show="runner_attr === 'run_params'"
           field="run_params"
-          label="Job参数"
+          label="任务参数"
           required
         >
           <a-space direction="vertical" fill style="width: 100%">

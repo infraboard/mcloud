@@ -12,7 +12,7 @@ const pagination = reactive(app.value.pagination)
 const queryParams = reactive({
   page_number: pagination.current,
   page_size: pagination.pageSize,
-  job_id: router.currentRoute.value.params.id,
+  job_id: router.currentRoute.value.params.id
 })
 
 const pageChange = (v) => {

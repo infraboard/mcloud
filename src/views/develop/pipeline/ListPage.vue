@@ -53,7 +53,7 @@ onMounted(() => {
         :size="app.size"
         @click="router.push({ name: 'DomainPipelineCreate' })"
       >
-        创建模版
+        创建流水线
       </a-button>
     </div>
     <a-card class="table-data">
