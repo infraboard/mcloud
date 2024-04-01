@@ -2,6 +2,7 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_JOB, CREATE_JOB, UPDATE_JOB } from '@/api/mflow/job'
+import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Notification } from '@arco-design/web-vue'
 import mapping from '@/stores/mapping'
 import ParamSetting from './components/ParamSetting.vue'
@@ -68,6 +69,7 @@ const GetJob = async () => {
 
 onBeforeMount(async () => {
   await GetJob()
+  await fiilK8SClusterEnumOption()
 })
 
 // 添加参数
@@ -111,6 +113,28 @@ const isFirstLetterLowerCase = (str) => {
   return char === char.toLowerCase()
 }
 const k8sRunnerParams = [
+  {
+    required: true,
+    usage_type: 'RUNNER',
+    name: '_kube_config_from',
+    read_only: true,
+    name_desc: '手动填写还是通过mpaas k8s cluster id 引用',
+    value_type: 'ENUM',
+    enum_options: [
+      { value: 'MPAAS_K8S_CLUSTER_REF', label: '选择集群' },
+      { value: 'MANUAL', label: '手动填写' }
+    ],
+    http_enum_config: {},
+    example: 'docker-desktop',
+    value: 'MPAAS_K8S_CLUSTER_REF',
+    value_desc: '',
+    param_scope: {},
+    search_label: false,
+    is_sensitive: false,
+    deprecate: false,
+    deprecate_desc: '',
+    extensions: {}
+  },
   {
     required: true,
     usage_type: 'RUNNER',
@@ -247,6 +271,49 @@ const handleChange = (_data) => {
 const showParamSetting = (param) => {
   param._show_setting_modal = true
 }
+
+// 自动补充默认值
+const getParam = (name) => {
+  for (const element of form.value.run_params.params) {
+    if (element.name === name) {
+      return element
+    }
+  }
+}
+
+const fiilK8SClusterEnumOption = async () => {
+  const kcFrom = getParam('_kube_config_from')
+  if (!kcFrom) {
+    return
+  }
+
+  const kc = getParam('_kube_config')
+  if (!kc) {
+    return
+  }
+
+  switch (kcFrom.value) {
+    case 'MANUAL':
+      kc.enum_options = []
+      kc.value = ''
+      break
+    case 'MPAAS_K8S_CLUSTER_REF':
+      await GetK8sEnumOption(kc)
+      break
+  }
+}
+
+const GetK8sEnumOption = async (kc) => {
+  const options = []
+  const resp = await LIST_K8S_CLUSTER()
+  resp.items.forEach((cluster) => {
+    options.push({
+      value: cluster.id,
+      label: `${cluster.name}【${cluster.server_info.server}】`
+    })
+  })
+  kc.enum_options = options
+}
 </script>
 
 <template>
@@ -320,6 +387,7 @@ const showParamSetting = (param) => {
                   <a-option value="ENV">环境变量</a-option>
                   <a-option value="TEMPLATE">模版变量</a-option>
                   <a-option value="RUNNER">执行器变量</a-option>
+                  <a-option value="SYSTEM">系统变量</a-option>
                 </a-select>
               </template>
               <template #deprecate="{ rowIndex }">
@@ -362,14 +430,8 @@ const showParamSetting = (param) => {
               <template #value="{ rowIndex }">
                 <a-select
                   v-model="form.run_params.params[rowIndex].value"
-                  v-if="form.run_params.params[rowIndex].value_type === 'BOOLEAN'"
-                >
-                  <a-option value="true">是</a-option>
-                  <a-option value="false">否</a-option>
-                </a-select>
-                <a-select
-                  v-model="form.run_params.params[rowIndex].value"
-                  v-else-if="form.run_params.params[rowIndex].value_type === 'ENUM'"
+                  @change="fiilK8SClusterEnumOption"
+                  v-if="form.run_params.params[rowIndex].enum_options.length > 0"
                 >
                   <a-option
                     v-for="item in form.run_params.params[rowIndex].enum_options"
