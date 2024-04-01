@@ -118,10 +118,10 @@ const k8sRunnerParams = [
     usage_type: 'RUNNER',
     name: '_kube_config_from',
     read_only: true,
-    name_desc: '手动填写还是通过mpaas k8s cluster id 引用',
+    name_desc: 'kubeconf配置文件录入方式, 手动填写或者选择已有的k8s集群',
     value_type: 'ENUM',
     enum_options: [
-      { value: 'MPAAS_K8S_CLUSTER_REF', label: '选择集群' },
+      { value: 'MPAAS_K8S_CLUSTER_REF', label: '已有集群' },
       { value: 'MANUAL', label: '手动填写' }
     ],
     http_enum_config: {},
