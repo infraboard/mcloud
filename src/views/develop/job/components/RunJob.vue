@@ -16,28 +16,12 @@ const props = defineProps({
 
 // 定义事件 v-models
 const emit = defineEmits(['update:visible'])
-
 const router = useRouter()
 
 // 表单
 const form = ref({})
 const _job = ref(props.job)
 const runJobReq = {}
-watch(
-  () => props.job,
-  (newV) => {
-    if (newV) {
-      _job.value = newV
-      newV.run_params.params.forEach((item) => {
-        form.value[item.name] = item.value
-      })
-      runJobReq.job_name = `#${newV.id}`
-      runJobReq.run_params = newV.run_params
-      fiilK8SClusterEnumOption()
-    }
-  },
-  { immediate: true }
-)
 
 const showHelp = (text, example) => {
   let v = text
@@ -115,6 +99,22 @@ const GetK8sEnumOption = async (kc) => {
   })
   kc.enum_options = options
 }
+
+watch(
+  () => props.job,
+  (newV) => {
+    if (newV) {
+      _job.value = newV
+      newV.run_params.params.forEach((item) => {
+        form.value[item.name] = item.value
+      })
+      runJobReq.job_name = `#${newV.id}`
+      runJobReq.run_params = newV.run_params
+      fiilK8SClusterEnumOption()
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
@@ -135,6 +135,7 @@ const GetK8sEnumOption = async (kc) => {
         v-show="!param.deprecate && param.usage_type !== 'SYSTEM'"
       >
         <a-select
+          :disabled="param.read_only"
           v-if="param.enum_options.length > 0"
           v-model="form[param.name]"
           @change="fiilK8SClusterEnumOption"

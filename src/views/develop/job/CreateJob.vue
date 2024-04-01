@@ -296,8 +296,10 @@ const fiilK8SClusterEnumOption = async () => {
     case 'MANUAL':
       kc.enum_options = []
       kc.value = ''
+      kc.is_sensitive = true
       break
     case 'MPAAS_K8S_CLUSTER_REF':
+      kc.is_sensitive = false
       await GetK8sEnumOption(kc)
       break
   }
