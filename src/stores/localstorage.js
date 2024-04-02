@@ -29,6 +29,9 @@ export var app = useStorage(
     },
     xterm: {
       theme: 'Solarized_Darcula'
+    },
+    serviceTree: {
+      selected: ''
     }
   },
   localStorage,

@@ -20,13 +20,19 @@ export default {
       path: 'cluster/:id',
       name: 'ClusterDetail',
       component: () => import('@/views/console/cluster/DetailPage.vue'),
-      meta: { label: '应用集群' }
+      meta: { label: '集群详情' }
+    },
+    {
+      path: 'service/:id',
+      name: 'ServiceNodeDetail',
+      component: () => import('@/views/console/service/DetailPage.vue'),
+      meta: { label: '服务详情' }
     },
     {
       path: 'deploy/:id',
       name: 'DeployDetail',
       component: () => import('@/views/console/deploy/DetailPage.vue'),
-      meta: { label: '应用部署' }
+      meta: { label: '部署详情' }
     },
     {
       path: 'deploys/create',

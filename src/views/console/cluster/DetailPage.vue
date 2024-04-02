@@ -125,7 +125,7 @@ const showAccessPort = (service) => {
             <template #cell="{ record }">
               <a-tag
                 v-for="(port, index) of showAccessPort(record._service)"
-                :key="index"
+                :key="'service_port' + index"
                 color="green"
                 bordered
                 >{{ port }}</a-tag

@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
 
 const router = useRouter()
-const selectedPod = ref([router.currentRoute.value.query.pod_name])
+const selectedKeys = ref([app.value.serviceTree.selected])
 
 // 查询环境标签
 const queryLoading = ref(false)
@@ -114,13 +114,21 @@ function getMatchIndex(title) {
   return title.toLowerCase().indexOf(searchKey.value.toLowerCase())
 }
 
-const clickNode = (selectedKeys, data) => {
-  const e = data.node.extra
-  selectedPod.value = selectedKeys
+const clickNode = (keys, data) => {
+  app.value.serviceTree.selected = data.node.key
+  selectedKeys.value = keys
   switch (data.node.type) {
     case 'cluster':
       router.push({
         name: 'ClusterDetail',
+        params: {
+          id: data.node.key
+        }
+      })
+      return
+    case 'service':
+      router.push({
+        name: 'ServiceNodeDetail',
         params: {
           id: data.node.key
         }
@@ -135,6 +143,7 @@ const clickNode = (selectedKeys, data) => {
       })
       return
     case 'pod':
+      var e = data.node.extra
       if (e) {
         console.log(e.pod_name)
         router.push({
@@ -177,7 +186,7 @@ const clickNode = (selectedKeys, data) => {
             :blockNode="true"
             :show-line="true"
             :data="treeData"
-            :selected-keys="selectedPod"
+            :selected-keys="selectedKeys"
             @select="clickNode"
           >
             <template #title="nodeData">

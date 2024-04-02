@@ -23,13 +23,28 @@ const ChangeSystem = () => {
 
   switch (app.value.system) {
     case 'SettingPage':
-      router.push({ name: app.value.menu.setting })
+      try {
+        router.push({ name: app.value.menu.setting })
+      } catch (error) {
+        console.log(error);
+        router.push({ name: 'NamespacePolicyList'})
+      }
       break
     case 'ResourcePage':
-      router.push({ name: app.value.menu.resource })
+      try {
+        router.push({ name: app.value.menu.resource })
+      } catch (error) {
+        console.log(error);
+        router.push({ name: 'ResourceSearch'})
+      }
       break
     case 'DevelopPage':
-      router.push({ name: app.value.menu.develop })
+      try {
+        router.push({ name: app.value.menu.develop })
+      } catch (error) {
+        console.log(error);
+        router.push({ name: 'BaseDevelop'})
+      }
       break
     default:
       router.push({ name: app.value.system })

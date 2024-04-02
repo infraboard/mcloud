@@ -37,7 +37,6 @@ const GetDeploy = async () => {
 }
 const showAccessPort = () => {
   const ports = []
-  console.log(service.value)
   if (service.value) {
     service.value.spec.ports.forEach((element) => {
       ports.push(`${element.protocol} | ${service.value.spec.clusterIP}:${element.port}`)
@@ -74,9 +73,13 @@ watch(
           状态: {{ deploy.status.stage }}(<ShowTime :timestamp="deploy.status.update_at" />)
         </span>
         <span v-if="service"> 服务访问地址: </span>
-        <a-tag v-for="(port, index) of showAccessPort()" :key="index" color="green" bordered>{{
-          port
-        }}</a-tag>
+        <a-tag
+          v-for="(port, index) of showAccessPort()"
+          :key="'service_port' + index"
+          color="green"
+          bordered
+          >{{ port }}</a-tag
+        >
       </a-space>
       <a-space>
         <a-link>YAML</a-link>
