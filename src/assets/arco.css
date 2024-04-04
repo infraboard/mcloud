@@ -86,3 +86,23 @@
 .arco-modal-footer {
   text-align: center;
 }
+
+/* 定制字体 */
+
+.arco-btn-text {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.arco-btn-primary {
+  font-size: 13px;
+}
+.arco-table-th-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-neutral-6);
+}
+
+.arco-table-td-content {
+  font-size: 12px;
+}

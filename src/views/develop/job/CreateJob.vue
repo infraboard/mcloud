@@ -6,6 +6,7 @@ import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Notification } from '@arco-design/web-vue'
 import mapping from '@/stores/mapping'
 import ParamSetting from './components/ParamSetting.vue'
+import { app } from '@/stores/localstorage'
 
 const router = useRouter()
 const runner_attr = ref('runner_spec')
@@ -324,7 +325,7 @@ const GetK8sEnumOption = async (kc) => {
     <a-page-header :title="pageHeader" @back="router.go(-1)"> </a-page-header>
 
     <a-card>
-      <a-form :model="form" @submit="handleSubmit" auto-label-width>
+      <a-form :size="app.size" :model="form" @submit="handleSubmit" auto-label-width>
         <a-form-item
           field="name"
           label="名称"
@@ -376,6 +377,7 @@ const GetK8sEnumOption = async (kc) => {
               @change="handleChange"
               :columns="paramColumns"
               :pagination="false"
+              :size="app.size"
               :data="form.run_params.params"
             >
               <template #name="{ rowIndex }">
@@ -458,8 +460,12 @@ const GetK8sEnumOption = async (kc) => {
         </a-form-item>
         <div class="form-submit">
           <a-space>
-            <a-button @click="router.push({ name: 'DomainJobList' })">取消</a-button>
-            <a-button type="primary" html-type="submit" :loading="submitLoading">保存</a-button>
+            <a-button :size="app.size" @click="router.push({ name: 'DomainJobList' })"
+              >取消</a-button
+            >
+            <a-button :size="app.size" type="primary" html-type="submit" :loading="submitLoading"
+              >保存</a-button
+            >
           </a-space>
         </div>
       </a-form>

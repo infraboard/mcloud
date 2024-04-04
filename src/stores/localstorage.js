@@ -18,6 +18,7 @@ export var app = useStorage(
     },
     size: 'small',
     pagination: {
+      size: 'small',
       total: 0,
       current: 1,
       pageSize: 20,

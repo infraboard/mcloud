@@ -98,7 +98,7 @@ const syncChanged = async (v, record) => {
       <!-- 步骤条内容显示 -->
       <div class="step-content">
         <div v-show="current === 1">
-          <a-form ref="gitlabForm" :model="queryParams" auto-label-width>
+          <a-form :size="app.size" ref="gitlabForm" :model="queryParams" auto-label-width>
             <a-form-item
               field="address"
               label="服务地址"
@@ -119,7 +119,7 @@ const syncChanged = async (v, record) => {
                 >
               </template>
 
-              <a-input v-model="queryParams.token" placeholder="请输入Gitlab Private Token" />
+              <a-input v-model="queryParams.token" placeholder="" />
             </a-form-item>
           </a-form>
         </div>
@@ -149,13 +149,20 @@ const syncChanged = async (v, record) => {
         </div>
 
         <a-space :size="app.size">
-          <a-button type="secondary" :disabled="current <= 1" @click="onPrev">
+          <a-button :size="app.size" type="secondary" :disabled="current <= 1" @click="onPrev">
             <IconLeft /> 上一步
           </a-button>
-          <a-button type="primary" :loading="nextLoading" v-show="current < 2" @click="onNext">
+          <a-button
+            :size="app.size"
+            type="primary"
+            :loading="nextLoading"
+            v-show="current < 2"
+            @click="onNext"
+          >
             下一步 <IconRight />
           </a-button>
           <a-button
+            :size="app.size"
             type="primary"
             v-show="current >= 2"
             @click="router.push({ name: 'ServiceList' })"

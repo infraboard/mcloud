@@ -77,6 +77,14 @@ const handleSelect = async (v, record) => {
       break
   }
 }
+
+// 处理选中操作
+const selectedKeys = ref([])
+const rowSelection = {
+  type: 'checkbox',
+  showCheckedAll: true,
+  onlyCurrent: false
+}
 </script>
 
 <template>
@@ -86,12 +94,24 @@ const handleSelect = async (v, record) => {
       <a-button type="primary" :size="app.size" @click="router.push({ name: 'DomainJobCreate' })">
         创建任务
       </a-button>
+      <div style="margin-left: auto">
+        <a-button type="text" :size="app.size">
+          <template #icon>
+            <icon-download />
+          </template>
+          导出
+        </a-button>
+      </div>
     </div>
     <a-card class="table-data">
       <a-table
+        :size="app.size"
         :data="data.items"
         :loading="queryLoading"
         :pagination="pagination"
+        rowKey="id"
+        :row-selection="rowSelection"
+        v-model:selectedKeys="selectedKeys"
         @page-change="pageChange"
         @page-size-change="pageSizeChange"
       >

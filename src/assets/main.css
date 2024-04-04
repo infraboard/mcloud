@@ -28,6 +28,7 @@
 
 .table-op {
   margin-top: 8px;
+  display: flex;
 }
 
 .table-data {

@@ -65,6 +65,7 @@ const handleSelect = async (v, id) => {
     </div>
     <a-card class="table-data">
       <a-table
+        :size="app.size"
         :data="data.items"
         :loading="queryLoading"
         :pagination="pagination"
