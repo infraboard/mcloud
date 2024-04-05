@@ -31,7 +31,7 @@ onMounted(() => {
       >
         <a-sub-menu key="PermissionManage">
           <template #icon><icon-lock /></template>
-          <template #title>权限管理</template>
+          <template #title><span class="menu-title">权限管理</span></template>
           <a-menu-item key="DomainDetail">登录设置</a-menu-item>
           <a-menu-item key="SubUserList">用户列表</a-menu-item>
           <a-menu-item key="NamespaceList">空间列表</a-menu-item>
@@ -40,7 +40,7 @@ onMounted(() => {
         </a-sub-menu>
         <a-sub-menu key="AuditManage">
           <template #icon><icon-eye /></template>
-          <template #title>审计管理</template>
+          <template #title><span class="menu-title">审计管理</span></template>
           <a-menu-item key="AuditLoginLog">登录日志</a-menu-item>
           <a-menu-item key="AuditOperateLog">操作日志</a-menu-item>
         </a-sub-menu>

@@ -32,7 +32,7 @@ onMounted(() => {
       >
         <a-sub-menu key="NamespacePermission">
           <template #icon><icon-lock /></template>
-          <template #title>权限管理</template>
+          <template #title><span class="menu-title">权限管理</span></template>
           <a-menu-item key="NamespacePolicyList">访问策略</a-menu-item>
         </a-sub-menu>
       </a-menu>

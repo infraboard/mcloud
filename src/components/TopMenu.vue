@@ -218,6 +218,8 @@ onBeforeMount(() => {
   justify-content: center;
   height: 100%;
   width: 193px !important;
+  font-size: 12px;
+  color: var(--color-text-2);
   border-right: 1px solid rgb(229, 230, 235);
 }
 

@@ -32,22 +32,22 @@ onMounted(() => {
       >
         <a-menu-item key="ResourceSearch">
           <template #icon><icon-search /></template>
-          资源检索
+          <span class="menu-title">资源检索</span>
         </a-menu-item>
         <a-sub-menu key="IaaSResourceList">
           <template #icon><icon-storage /></template>
-          <template #title>基础资源</template>
+          <template #title><span class="menu-title">基础资源</span></template>
           <a-menu-item key="HostList">主机</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="PaaSResourceList">
           <template #icon><icon-layers /></template>
-          <template #title>平台资源</template>
+          <template #title><span class="menu-title">平台资源</span></template>
           <a-menu-item key="K8sClusterList">K8s集群</a-menu-item>
           <a-menu-item key="GatewayList">网关</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="ResourceSync">
           <template #icon><icon-relation /></template>
-          <template #title>资源同步</template>
+          <template #title><span class="menu-title">资源同步</span></template>
           <a-menu-item key="ResourceTaskList">任务列表</a-menu-item>
           <a-menu-item key="ResourceSecretList">账号管理</a-menu-item>
         </a-sub-menu>

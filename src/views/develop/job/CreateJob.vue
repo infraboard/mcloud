@@ -377,7 +377,6 @@ const GetK8sEnumOption = async (kc) => {
               @change="handleChange"
               :columns="paramColumns"
               :pagination="false"
-              :size="app.size"
               :data="form.run_params.params"
             >
               <template #name="{ rowIndex }">

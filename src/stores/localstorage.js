@@ -8,7 +8,7 @@ export var app = useStorage(
   {
     isLogin: false,
     token: {},
-    system: 'HomePage',
+    system: 'ServiceDashboard',
     menu: {
       admin: 'SubUserList',
       console: 'ServiceConsole',
@@ -16,9 +16,9 @@ export var app = useStorage(
       resource: 'ResourceSearch',
       setting: 'NamespacePolicyList'
     },
-    size: 'small',
+    size: 'medium',
     pagination: {
-      size: 'small',
+      size: 'medium',
       total: 0,
       current: 1,
       pageSize: 20,

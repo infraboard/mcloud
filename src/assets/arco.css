@@ -89,14 +89,25 @@
 
 /* 定制字体 */
 
+.arco-menu {
+  font-size: 12px;
+}
+
 .arco-btn-text {
   font-size: 12px;
   font-weight: 600;
 }
 
 .arco-btn-primary {
-  font-size: 13px;
+  font-size: 12px;
 }
+
+.arco-form-item-label-col > .arco-form-item-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-neutral-6);
+}
+
 .arco-table-th-title {
   font-size: 12px;
   font-weight: 500;
@@ -104,5 +115,37 @@
 }
 
 .arco-table-td-content {
+  font-size: 12px;
+}
+
+.arco-input-wrapper .arco-input.arco-input-size-medium {
+  font-size: 12px;
+}
+
+.arco-select-view-single.arco-select-view-size-medium .arco-select-view-value {
+  font-size: 12px;
+}
+
+.arco-select-dropdown .arco-select-option {
+  font-size: 12px;
+}
+
+.arco-radio-button {
+  font-size: 12px;
+}
+
+.arco-textarea {
+  font-size: 12px;
+}
+
+.arco-alert {
+  font-size: 12px;
+}
+
+.arco-drawer-header .arco-drawer-title {
+  font-size: 12px;
+}
+
+.arco-breadcrumb {
   font-size: 12px;
 }

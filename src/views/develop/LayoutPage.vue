@@ -33,20 +33,20 @@ onMounted(() => {
       >
         <a-sub-menu key="DevelopPage">
           <template #icon><icon-apps /></template>
-          <template #title>服务管理</template>
+          <template #title> <span class="menu-title">服务管理</span></template>
           <a-menu-item key="ServiceList">服务列表</a-menu-item>
           <a-menu-item key="ServiceClusterList">部署集群</a-menu-item>
           <a-menu-item key="ApprovalList">上线申请</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="DevToolManage">
           <template #icon><icon-common /></template>
-          <template #title>研发工具</template>
+          <template #title><span class="menu-title">研发工具</span></template>
           <a-menu-item key="DomainPipelineList">流水线模版</a-menu-item>
           <a-menu-item key="DomainJobList">任务模版</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="ConsoleAudit">
           <template #icon><icon-video-camera /></template>
-          <template #title>登录审计</template>
+          <template #title><span class="menu-title">登录审计</span></template>
           <a-menu-item key="PodAudit">容器登录</a-menu-item>
         </a-sub-menu>
       </a-menu>

@@ -4,6 +4,8 @@ import { RUN_JOB_TASK } from '@/api/mflow/task'
 import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { Notification } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
+import { app } from '@/stores/localstorage'
+
 // job对象
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -123,7 +125,7 @@ watch(
     <template #title>
       <span>运行 {{ job.display_name }}</span>
     </template>
-    <a-form ref="runJobForm" :model="form" auto-label-width>
+    <a-form :size="app.size" ref="runJobForm" :model="form" auto-label-width>
       <a-alert style="margin-bottom: 12px">{{ job.description }}</a-alert>
       <!-- 系统变量和废弃的变量不展示 -->
       <a-form-item
