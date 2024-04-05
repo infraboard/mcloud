@@ -41,6 +41,38 @@ const QueryData = async () => {
     queryLoading.value = false
   }
 }
+
+// 下载操作
+const downloadJobs = () => {
+  console.log(selectedKeys.value)
+  if (selectedKeys.value.length === 0) {
+    Notification.warning({
+      content: `请勾选需要导出的任务`,
+      closable: true,
+      duration: 5000
+    })
+    return
+  }
+
+  // 创建一个虚拟的URL，可以是任何文件的URL
+  var fileUrl = `${location.origin}/mflow/api/v1/jobs?ids=${selectedKeys.value.join(',')}`
+
+  // 创建一个<a>标签
+  var link = document.createElement('a')
+  link.href = fileUrl
+
+  // 设置下载属性，指定下载文件的名称
+  link.download = 'export_jobs.json'
+
+  // 将<a>标签添加到页面中
+  document.body.appendChild(link)
+
+  // 模拟点击<a>标签，触发下载
+  link.click()
+
+  // 下载完成后移除<a>标签
+  document.body.removeChild(link)
+}
 onMounted(() => {
   QueryData()
 })
@@ -91,11 +123,17 @@ const rowSelection = {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op">
-      <a-button type="primary" :size="app.size" @click="router.push({ name: 'DomainJobCreate' })">
+      <a-button type="primary" @click="router.push({ name: 'DomainJobCreate' })">
         创建任务
       </a-button>
       <div style="margin-left: auto">
-        <a-button type="text" :size="app.size">
+        <a-button type="text" style="padding: 6px">
+          <template #icon>
+            <icon-upload />
+          </template>
+          导入
+        </a-button>
+        <a-button type="text" @click="downloadJobs" style="padding: 6px">
           <template #icon>
             <icon-download />
           </template>

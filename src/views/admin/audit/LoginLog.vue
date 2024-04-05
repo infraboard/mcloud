@@ -48,26 +48,26 @@ onMounted(() => {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op"></div>
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="令牌" data-index="access_token"></a-table-column>
-          <a-table-column title="用户Id" data-index="user_id"></a-table-column>
-          <a-table-column title="用户类型" data-index="user_type"></a-table-column>
-          <a-table-column title="授权类型" data-index="grant_type"></a-table-column>
-          <a-table-column title="用途" data-index="platform"></a-table-column>
-          <a-table-column title="颁发时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.issue_at"></ShowTime>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="令牌" data-index="access_token"></a-table-column>
+        <a-table-column title="用户Id" data-index="user_id"></a-table-column>
+        <a-table-column title="用户类型" data-index="user_type"></a-table-column>
+        <a-table-column title="授权类型" data-index="grant_type"></a-table-column>
+        <a-table-column title="用途" data-index="platform"></a-table-column>
+        <a-table-column title="颁发时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.issue_at"></ShowTime>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 
