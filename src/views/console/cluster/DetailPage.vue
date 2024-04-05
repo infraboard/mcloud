@@ -177,8 +177,4 @@ const showAccessPort = (service) => {
 .cluster-item {
   margin-bottom: 12px;
 }
-
-.deployments :deep(.arco-table-th) {
-  background-color: var(--color-neutral-2);
-}
 </style>

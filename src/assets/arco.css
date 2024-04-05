@@ -43,6 +43,7 @@
 }
 
 .arco-table-th {
+  height: 48px;
   background-color: var(--color-neutral-2);
 }
 
@@ -163,5 +164,9 @@
 }
 
 .arco-pagination-jumper > span {
+  font-size: 12px;
+}
+
+.arco-tabs-tab {
   font-size: 12px;
 }

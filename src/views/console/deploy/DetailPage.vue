@@ -141,7 +141,4 @@ watch(
 </template>
 
 <style scoped>
-.pods :deep(.arco-table-th) {
-  background-color: var(--color-neutral-2);
-}
 </style>
