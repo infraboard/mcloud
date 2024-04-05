@@ -55,43 +55,41 @@ onMounted(async () => {
         创建空间
       </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="名称" data-index="name"></a-table-column>
-          <a-table-column title="描述" data-index="description"></a-table-column>
-          <a-table-column title="创建时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.create_at"></ShowTime>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="操作" :width="200">
-            <template #cell="{ record }">
-              <a-button
-                type="text"
-                :size="app.size"
-                @click="router.push({ name: 'CreateNamespace', query: { id: record.id } })"
-              >
-                编辑
-              </a-button>
-              <a-divider direction="vertical" />
-              <a-dropdown>
-                <a-button type="text"><icon-more-vertical /></a-button>
-                <template #content>
-                  <a-doption>删除</a-doption>
-                </template>
-              </a-dropdown>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="名称" data-index="name"></a-table-column>
+        <a-table-column title="描述" data-index="description"></a-table-column>
+        <a-table-column title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'CreateNamespace', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown>
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption>删除</a-doption>
+              </template>
+            </a-dropdown>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 

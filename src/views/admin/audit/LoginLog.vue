@@ -48,7 +48,6 @@ onMounted(() => {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op"></div>
-    <a-card class="table-data">
       <a-table
         :data="data.items"
         :loading="queryLoading"
@@ -69,7 +68,6 @@ onMounted(() => {
           </a-table-column>
         </template>
       </a-table>
-    </a-card>
   </div>
 </template>
 

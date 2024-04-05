@@ -73,44 +73,42 @@ onMounted(() => {
         创建用户
       </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="用户名" data-index="username"></a-table-column>
-          <a-table-column title="类型" data-index="type"></a-table-column>
-          <a-table-column title="状态" data-index="status.locked"></a-table-column>
-          <a-table-column title="创建时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.create_at"></ShowTime>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="操作" :width="200">
-            <template #cell="{ record }">
-              <a-button
-                type="text"
-                :size="app.size"
-                @click="router.push({ name: 'CreateSubUser', query: { id: record.id } })"
-              >
-                编辑
-              </a-button>
-              <a-divider direction="vertical" />
-              <a-dropdown>
-                <a-button type="text"><icon-more-vertical /></a-button>
-                <template #content>
-                  <a-doption @click="selectAction(record, '重置密码')">重置密码</a-doption>
-                </template>
-              </a-dropdown>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="用户名" data-index="username"></a-table-column>
+        <a-table-column title="类型" data-index="type"></a-table-column>
+        <a-table-column title="状态" data-index="status.locked"></a-table-column>
+        <a-table-column title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'CreateSubUser', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown>
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption @click="selectAction(record, '重置密码')">重置密码</a-doption>
+              </template>
+            </a-dropdown>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
 
     <a-drawer
       :width="340"

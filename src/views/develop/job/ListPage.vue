@@ -103,101 +103,98 @@ const rowSelection = {
         </a-button>
       </div>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :size="app.size"
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        rowKey="id"
-        :row-selection="rowSelection"
-        v-model:selectedKeys="selectedKeys"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column align="center" title="名称">
-            <template #cell="{ record }">
-              <a-link
-                @click="router.push({ name: 'DomainJobDetail', params: { id: record.id } })"
-                >{{ record.name }}</a-link
-              >
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="图标">
-            <template #cell="{ record }">
-              <SvgIcon v-if="record.icon" :svgCode="record.icon" />
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="状态">
-            <template #cell="{ record }">
-              <span v-if="record.status">{{ statusMapping[record.status.stage] }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="版本">
-            <template #cell="{ record }">
-              <span v-if="record.status">{{ record.status.version }}</span>
-              <span v-else>无</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="访问范围">
-            <template #cell="{ record }">
-              <span>{{ mapping[record.visiable_mode] }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="执行方式">
-            <template #cell="{ record }">
-              <span>{{ mapping[record.runner_type] }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>
-          <a-table-column align="center" title="创建时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.create_at"></ShowTime>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="操作" :width="200">
-            <template #cell="{ record }">
-              <a-button
-                type="text"
-                :size="app.size"
-                @click="router.push({ name: 'DomainJobCreate', query: { id: record.id } })"
-              >
-                编辑
-              </a-button>
-              <a-divider direction="vertical" />
-              <a-button type="text" :size="app.size" @click="showRunJobHandler(record)">
-                运行
-              </a-button>
-              <a-divider direction="vertical" />
-              <a-dropdown @select="handleSelect($event, record)">
-                <a-button type="text"><icon-more-vertical /></a-button>
-                <template #content>
-                  <a-doption value="archive" v-if="record.status.stage === 'PUBLISHED'">
-                    <template #icon>
-                      <icon-archive />
-                    </template>
-                    归档
-                  </a-doption>
-                  <a-doption value="publish" v-if="record.status.stage === 'DRAFT'">
-                    <template #icon>
-                      <icon-send />
-                    </template>
-                    发布
-                  </a-doption>
-                  <a-doption value="delete" v-if="record.status.stage === 'DRAFT'">
-                    <template #icon>
-                      <icon-delete />
-                    </template>
-                    删除
-                  </a-doption>
-                </template>
-              </a-dropdown>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :size="app.size"
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      rowKey="id"
+      :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column align="center" title="名称">
+          <template #cell="{ record }">
+            <a-link @click="router.push({ name: 'DomainJobDetail', params: { id: record.id } })">{{
+              record.name
+            }}</a-link>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="图标">
+          <template #cell="{ record }">
+            <SvgIcon v-if="record.icon" :svgCode="record.icon" />
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="状态">
+          <template #cell="{ record }">
+            <span v-if="record.status">{{ statusMapping[record.status.stage] }}</span>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="版本">
+          <template #cell="{ record }">
+            <span v-if="record.status">{{ record.status.version }}</span>
+            <span v-else>无</span>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="访问范围">
+          <template #cell="{ record }">
+            <span>{{ mapping[record.visiable_mode] }}</span>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="执行方式">
+          <template #cell="{ record }">
+            <span>{{ mapping[record.runner_type] }}</span>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>
+        <a-table-column align="center" title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'DomainJobCreate', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-button type="text" :size="app.size" @click="showRunJobHandler(record)">
+              运行
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown @select="handleSelect($event, record)">
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption value="archive" v-if="record.status.stage === 'PUBLISHED'">
+                  <template #icon>
+                    <icon-archive />
+                  </template>
+                  归档
+                </a-doption>
+                <a-doption value="publish" v-if="record.status.stage === 'DRAFT'">
+                  <template #icon>
+                    <icon-send />
+                  </template>
+                  发布
+                </a-doption>
+                <a-doption value="delete" v-if="record.status.stage === 'DRAFT'">
+                  <template #icon>
+                    <icon-delete />
+                  </template>
+                  删除
+                </a-doption>
+              </template>
+            </a-dropdown>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
 
     <RunJob :job="selectedJob" v-model:visible="showRunJob"></RunJob>
     <PublishJob :job="selectedJob" v-model:visible="showPublishJob" @ok="QueryData()"></PublishJob>

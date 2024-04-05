@@ -56,28 +56,26 @@ onMounted(() => {
         添加策略
       </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="空间" data-index="namespace"></a-table-column>
-          <a-table-column title="用户" data-index="username"></a-table-column>
-          <a-table-column title="角色">
-            <template #cell="{ record }">
-              <a-link @click="router.push({ name: 'RoleDetail', query: { id: record.role.id } })">{{
-                record.role.name
-              }}</a-link>
-            </template>
-          </a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="空间" data-index="namespace"></a-table-column>
+        <a-table-column title="用户" data-index="username"></a-table-column>
+        <a-table-column title="角色">
+          <template #cell="{ record }">
+            <a-link @click="router.push({ name: 'RoleDetail', query: { id: record.role.id } })">{{
+              record.role.name
+            }}</a-link>
+          </template>
+        </a-table-column>
+        <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 

@@ -46,22 +46,20 @@ onMounted(() => {
     <div class="table-op">
       <a-button type="primary" :size="app.size"> 创建申请 </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="名称" data-index="name"></a-table-column>
-          <a-table-column title="类型" data-index="type"></a-table-column>
-          <a-table-column title="仓库" data-index="code_repository.ssh_url"></a-table-column>
-          <a-table-column title="创建时间" data-index="create_at"></a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="名称" data-index="name"></a-table-column>
+        <a-table-column title="类型" data-index="type"></a-table-column>
+        <a-table-column title="仓库" data-index="code_repository.ssh_url"></a-table-column>
+        <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 

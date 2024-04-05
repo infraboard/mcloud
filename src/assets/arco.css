@@ -42,6 +42,10 @@
   color: var(--color-text-2);
 }
 
+.arco-table-th {
+  background-color: var(--color-neutral-2);
+}
+
 /* 修改详情页Title字体大小 */
 .arco-descriptions-title {
   font-size: 12px;
@@ -147,5 +151,17 @@
 }
 
 .arco-breadcrumb {
+  font-size: 12px;
+}
+
+.arco-pagination-total {
+  font-size: 12px;
+}
+
+.arco-pagination-item {
+  font-size: 12px;
+}
+
+.arco-pagination-jumper > span {
   font-size: 12px;
 }

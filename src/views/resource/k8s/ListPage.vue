@@ -63,51 +63,49 @@ const handleSelect = async (v, id) => {
         添加集群
       </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :size="app.size"
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="名称" data-index="name"></a-table-column>
-          <a-table-column title="地址" data-index="server_info.server"></a-table-column>
-          <a-table-column title="版本" data-index="server_info.version"></a-table-column>
-          <a-table-column title="认证用户" data-index="server_info.auth_user"></a-table-column>
-          <a-table-column title="创建时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.create_at"></ShowTime>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="操作" :width="200">
-            <template #cell="{ record }">
-              <a-button
-                type="text"
-                :size="app.size"
-                @click="$router.push({ name: 'K8sClusterCreate', query: { id: record.id } })"
-              >
-                编辑
-              </a-button>
-              <a-divider direction="vertical" />
-              <a-dropdown @select="handleSelect($event, record.id)">
-                <a-button type="text"><icon-more-vertical /></a-button>
-                <template #content>
-                  <a-doption value="delete">
-                    <template #icon>
-                      <icon-delete />
-                    </template>
-                    删除
-                  </a-doption>
-                </template>
-              </a-dropdown>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :size="app.size"
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="名称" data-index="name"></a-table-column>
+        <a-table-column title="地址" data-index="server_info.server"></a-table-column>
+        <a-table-column title="版本" data-index="server_info.version"></a-table-column>
+        <a-table-column title="认证用户" data-index="server_info.auth_user"></a-table-column>
+        <a-table-column title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="$router.push({ name: 'K8sClusterCreate', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown @select="handleSelect($event, record.id)">
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption value="delete">
+                  <template #icon>
+                    <icon-delete />
+                  </template>
+                  删除
+                </a-doption>
+              </template>
+            </a-dropdown>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 

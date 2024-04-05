@@ -28,11 +28,8 @@
 
 .table-op {
   margin-top: 8px;
+  margin-bottom: 8px;
   display: flex;
-}
-
-.table-data {
-  margin-top: 4px;
 }
 
 .form-submit {

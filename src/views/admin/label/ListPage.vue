@@ -50,25 +50,23 @@ onMounted(() => {
     <div class="table-op">
       <a-button type="primary" :size="app.size"> 创建标签 </a-button>
     </div>
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="名称" data-index="key"></a-table-column>
-          <a-table-column title="描述" data-index="value_desc"></a-table-column>
-          <a-table-column title="创建时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.create_at"></ShowTime>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="名称" data-index="key"></a-table-column>
+        <a-table-column title="描述" data-index="value_desc"></a-table-column>
+        <a-table-column title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 
