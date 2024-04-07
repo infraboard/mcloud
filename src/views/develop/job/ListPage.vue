@@ -1,6 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_JOB, DELETE_JOB } from '@/api/mflow/job'
+import { LIST_JOB, DELETE_JOB, CREATE_JOB } from '@/api/mflow/job'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -117,6 +117,27 @@ const rowSelection = {
   showCheckedAll: true,
   onlyCurrent: false
 }
+
+const customRequest = (option) => {
+  console.log(option)
+
+  const reader = new FileReader()
+  reader.onload = async (e) => {
+    try {
+      var jobs = JSON.parse(e.target.result)
+    } catch (error) {
+      Notification.error(`导入失败，${error}`)
+      return
+    }
+
+    for (const element of jobs.items) {
+      await CREATE_JOB(element)
+      Notification.success(`导入任务${element.name}成功`)
+    }
+    QueryData()
+  }
+  reader.readAsText(option.fileItem.file)
+}
 </script>
 
 <template>
@@ -126,13 +147,18 @@ const rowSelection = {
       <a-button type="primary" @click="router.push({ name: 'DomainJobCreate' })">
         创建任务
       </a-button>
-      <div style="margin-left: auto">
-        <a-button type="text" style="padding: 6px">
-          <template #icon>
-            <icon-upload />
+      <div class="table-op-right">
+        <a-upload :show-file-list="false" :custom-request="customRequest">
+          <template #upload-button>
+            <a-button type="text" style="padding: 6px">
+              <template #icon>
+                <icon-upload />
+              </template>
+              导入
+            </a-button>
           </template>
-          导入
-        </a-button>
+        </a-upload>
+
         <a-button type="text" @click="downloadJobs" style="padding: 6px">
           <template #icon>
             <icon-download />
@@ -239,4 +265,9 @@ const rowSelection = {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.table-op-right {
+  margin-left: auto;
+  display: flex;
+}
+</style>
