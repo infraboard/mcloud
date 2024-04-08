@@ -3,15 +3,19 @@ import { ref, watch } from 'vue'
 
 // 定义v-model:visible
 const props = defineProps(['visible', 'stage', 'maxNumber'])
-const emit = defineEmits(['update:visible', 'change', 'delete'])
+const emit = defineEmits(['update:visible', 'changed'])
 
 const handleCancel = () => {
   emit('update:visible', false)
   cleanForm()
 }
 
+// form
+const updateStageForm = ref()
+const form = ref({})
+
 const handleOk = () => {
-  emit('change', form.value)
+  emit('changed', form.value)
   emit('update:visible', false)
   cleanForm()
 }
@@ -19,10 +23,6 @@ const handleOk = () => {
 const cleanForm = () => {
   updateStageForm.value.resetFields()
 }
-
-// form
-const updateStageForm = ref()
-const form = ref({})
 
 watch(
   () => props.visible,
@@ -32,44 +32,30 @@ watch(
     }
   }
 )
-
-// 通知外层删除
-const deleteStage = () => {
-  emit('delete', props.stage)
-  emit('update:visible', false)
-}
 </script>
 
 <template>
   <div>
     <a-drawer
-      :width="'80%'"
+      :width="'40%'"
       :visible="visible"
       @ok="handleOk"
       @cancel="handleCancel"
       :header="false"
-      :footer="false"
+      :footer="true"
       unmountOnClose
     >
       <a-form ref="updateStageForm" :model="form" auto-label-width>
         <a-tabs default-active-key="base">
-          <template #extra>
-            <a-button size="mini" type="text" status="danger" @click="deleteStage">
-              <template #icon>
-                <icon-delete />
-              </template>
-              删除
-            </a-button>
-          </template>
           <a-tab-pane key="base" title="基本信息">
             <div class="page">
               <a-form-item
                 field="number"
                 label="编号"
                 required
-                :help="`步骤编号, 如果阶段是串行执行, 通过步骤编号可以调整步骤执行的先后顺序, 最大值${maxNumber}`"
+                :help="`步骤编号, 如果阶段是串行执行, 通过步骤编号可以调整步骤执行的先后顺序`"
               >
-                <a-input-number v-model="form.number" :min="1" :max="maxNumber" />
+                <a-input-number disabled="" v-model="form.number" />
               </a-form-item>
               <a-form-item field="name" label="描述" required help="阶段描述信息">
                 <a-input v-model="form.name" />

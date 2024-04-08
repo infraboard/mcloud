@@ -6,7 +6,7 @@ import { onMounted, reactive, ref } from 'vue'
 
 // 定义v-model:visible
 defineProps(['visible'])
-const emit = defineEmits(['update:visible', 'change'])
+const emit = defineEmits(['update:visible', 'changed'])
 const handleCancel = () => {
   emit('update:visible', false)
 }
@@ -49,7 +49,7 @@ onMounted(() => {
 
 const choiceJob = (e, job) => {
   e.stopPropagation()
-  emit('change', job)
+  emit('changed', job)
   emit('update:visible', false)
 }
 

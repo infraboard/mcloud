@@ -13,7 +13,7 @@
         label=""
       >
         <!-- 为什么使用v-model 这是一个输入组件, 把用户输入的值 绑定到 form的username属性, -->
-        <a-input v-model="form.username" placeholder="请输入用户名...">
+        <a-input size="large" v-model="form.username" placeholder="请输入用户名...">
           <template #prefix>
             <icon-user />
           </template>
@@ -29,14 +29,19 @@
         hide-asterisk
         label=""
       >
-        <a-input-password v-model="form.password" placeholder="请输入密码..." allow-clear>
+        <a-input-password
+          size="large"
+          v-model="form.password"
+          placeholder="请输入密码..."
+          allow-clear
+        >
           <template #prefix>
             <icon-lock />
           </template>
         </a-input-password>
       </a-form-item>
       <a-form-item>
-        <a-button style="width: 100%" html-type="submit">登录</a-button>
+        <a-button size="large" style="width: 100%" html-type="submit">登录</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -104,7 +109,9 @@ const handleSubmit = async (data) => {
   display: flex;
   justify-content: center;
   width: 100%;
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: 600;
   color: #555a65;
+  margin-top: 12px;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
-import { GET_PIPELINE, UPDATE_PIPELINE } from '@/api/mflow/pipeline'
+import { UPDATE_PIPELINE } from '@/api/mflow/pipeline'
 import { Notification } from '@arco-design/web-vue'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import AddStage from './components/AddStage.vue'
 import UpdateStep from './components/UpdateStep.vue'
@@ -9,8 +9,7 @@ import UpdateStage from './components/UpdateStage.vue'
 import ChoiceJob from '../job/components/ChoiceJob.vue'
 
 const router = useRouter()
-const id = router.currentRoute.value.query.id
-const pipeline = ref({
+const pipeline = reactive({
   name: '',
   description: '',
   logo: '',
@@ -25,21 +24,54 @@ const pipeline = ref({
   next_pipeline: '',
   labels: {}
 })
-const GetPipeline = async () => {
-  try {
-    if (id) {
-      let resp = await GET_PIPELINE(id)
-      pipeline.value = resp
+
+/*
+阶段管理
+*/
+const showAddStage = ref(false)
+const handleAddStage = (v) => {
+  v.number = pipeline.stages.length + 1
+  pipeline.stages.push(v)
+}
+
+// 删除Stage
+const handleDeleteStage = (stageIndex) => {
+  pipeline.stages.splice(stageIndex, 1)
+}
+
+// Stage更新
+const showUpdateStage = ref(-1)
+const handleUpdateStage = (stageIndex) => {
+  showUpdateStage.value = stageIndex
+}
+const updateStage = (v) => {
+  showUpdateStage.value = -1
+  pipeline.stages.forEach((stage) => {
+    if (stage.number === v.number) {
+      stage.name = v.name
+      stage.is_parallel = v.is_parallel
     }
-  } catch (error) {
-    Notification.error(`查询Pipeline详情失败: ${error}`)
-  }
+  })
+}
+
+/*
+步骤管理
+*/
+const choicedStage = ref()
+const showAddStep = ref(false)
+
+// Step弹窗
+const clickAddStep = (stageIndex) => {
+  showAddStep.value = true
+  choicedStage.value = stageIndex
+}
+
+const handlePipelineChanged = (v) => {
+  pipeline.stages = v.stages
 }
 
 // 清理状态
-onBeforeMount(async () => {
-  await GetPipeline()
-})
+onBeforeMount(async () => {})
 
 // 变量
 const stepItemKeyStyle = {
@@ -50,46 +82,6 @@ const stepItemKeyStyle = {
 const stepItemValueStyle = {
   height: '40px',
   width: '220px'
-}
-
-// 弹窗变量
-const showAddStage = ref(false)
-const showAddStep = ref(false)
-const choicedStage = ref()
-
-// Stage更新
-const showUpdateStage = ref(false)
-const currentUpdateStage = ref(null)
-const currentStageMaxNumber = ref(0)
-const handleUpdateStage = (stage, maxNumber) => {
-  showUpdateStage.value = true
-  currentUpdateStage.value = stage
-  currentStageMaxNumber.value = maxNumber
-}
-const updateStage = (v) => {
-  console.log(v)
-}
-
-// Step删除
-const deleteStage = async (v) => {
-  let req = JSON.parse(JSON.stringify(pipeline.value))
-  // 从列表中清除需要删除的stage
-  let stages = []
-  for (let element of req.stages) {
-    if (element.name != v.name) {
-      stages.push(element)
-      req.stages = stages
-    }
-  }
-
-  // 更新Pipeline
-  await updatePipeline(req)
-}
-
-// Step弹窗
-const clickAddStep = (stageIndex) => {
-  showAddStep.value = true
-  choicedStage.value = stageIndex
 }
 
 // Step添加
@@ -159,7 +151,7 @@ const updatePipeline = async (req) => {
     Notification.success(`更新成功`)
 
     // 更新页面数据
-    await GetPipeline()
+    handlePipelineChanged()
   } catch (error) {
     Notification.error(`更新失败: ${error}`)
   } finally {
@@ -181,7 +173,6 @@ const updatePipeline = async (req) => {
       <template #title>
         <span>【{{ pipeline.name }}】</span>
         <span>{{ pipeline.create_by }}</span>
-        <span>创建于</span><ShowTime :timestamp="pipeline.create_at"></ShowTime>
       </template>
       <template #extra>
         <a-button size="mini" type="text">Web Hooks</a-button>
@@ -193,7 +184,6 @@ const updatePipeline = async (req) => {
           v-for="(stage, stageIndex) in pipeline.stages"
           :key="'stage_' + stageIndex"
           class="stage-card"
-          :loading="updatePipelineLoading && choicedStage === stageIndex"
         >
           <!-- 阶段标题 -->
           <template #title>
@@ -208,9 +198,28 @@ const updatePipeline = async (req) => {
             <a-button
               size="mini"
               type="text"
-              @click="handleUpdateStage(stage, pipeline.stages.length + 1)"
-              >配置</a-button
+              status="danger"
+              @click="handleDeleteStage(stageIndex)"
             >
+              <template #icon>
+                <icon-delete />
+              </template>
+              删除
+            </a-button>
+            <a-button size="mini" type="text" @click="handleUpdateStage(stageIndex)">
+              <template #icon>
+                <icon-edit />
+              </template>
+              修改
+            </a-button>
+            <!-- 修改弹窗 -->
+            <UpdateStage
+              :visible="showUpdateStage === stageIndex"
+              @update:visible="showUpdateStage = -1"
+              :stage="stage"
+              @changed="updateStage"
+            >
+            </UpdateStage>
           </template>
 
           <!-- 步骤列表显示 -->
@@ -253,30 +262,18 @@ const updatePipeline = async (req) => {
           <span style="margin-left: 8px">添加阶段</span>
         </div>
         <!-- stage修改 -->
-        <AddStage
-          @change="GetPipeline"
-          v-model:visible="showAddStage"
-          :pipeline="pipeline"
-        ></AddStage>
+        <AddStage @changed="handleAddStage" v-model:visible="showAddStage"></AddStage>
+        <!-- step修改 -->
+        <ChoiceJob @changed="AddStep($event, choicedStage)" v-model:visible="showAddStep">
+        </ChoiceJob>
         <UpdateStep
+          @change="updateStep"
           v-model:visible="showUpdateStep"
           :step="currentUpdateStep"
           :maxNumber="currentStepMaxNumber"
-          @change="updateStep"
           @delete="deleteStep"
         >
         </UpdateStep>
-        <!-- step修改 -->
-        <ChoiceJob @change="AddStep($event, choicedStage)" v-model:visible="showAddStep">
-        </ChoiceJob>
-        <UpdateStage
-          v-model:visible="showUpdateStage"
-          :stage="currentUpdateStage"
-          :maxNumber="currentStageMaxNumber"
-          @change="updateStage"
-          @delete="deleteStage"
-        >
-        </UpdateStage>
       </div>
     </a-card>
   </div>
