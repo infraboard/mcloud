@@ -182,7 +182,7 @@ const customRequest = (option) => {
         <a-table-column align="center" title="名称">
           <template #cell="{ record }">
             <a-link @click="router.push({ name: 'DomainJobDetail', params: { id: record.id } })">{{
-              record.name
+              record.display_name
             }}</a-link>
           </template>
         </a-table-column>

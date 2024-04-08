@@ -107,7 +107,7 @@ const jumpToDetail = (e) => {
             <template #extra>
               <a-link @click="jumpToDetail">详情</a-link>
             </template>
-            {{ job.description }}
+            <span class="job-content">{{ job.description }}</span>
           </a-card>
         </div>
       </div>
@@ -139,5 +139,9 @@ const jumpToDetail = (e) => {
 
 .list-params {
   display: flex;
+}
+
+.job-content {
+  font-size: 12px;
 }
 </style>

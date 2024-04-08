@@ -14,7 +14,8 @@ const handleCancel = () => {
 const fromRef = ref(undefined)
 const form = ref({
   name: '',
-  is_parallel: false
+  is_parallel: false,
+  with: []
 })
 
 // 提交处理

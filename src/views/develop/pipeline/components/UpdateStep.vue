@@ -4,7 +4,7 @@ import { GET_JOB } from '@/api/mflow/job'
 import JobParam from '@/components/JobParam.vue'
 
 // 定义v-model:visible
-const props = defineProps(['visible', 'step', 'maxNumber'])
+const props = defineProps(['visible', 'step'])
 const emit = defineEmits(['update:visible', 'change', 'delete'])
 
 const handleCancel = () => {
@@ -112,7 +112,7 @@ const deleteStep = () => {
                 required
                 :help="`步骤编号, 如果阶段是串行执行, 通过步骤编号可以调整步骤执行的先后顺序, 最大值${maxNumber}`"
               >
-                <a-input-number v-model="form.number" :min="1" :max="maxNumber" />
+                <a-input-number disabled v-model="form.number" />
               </a-form-item>
               <a-form-item field="task_name" label="名称" required help="步骤名称或者描述">
                 <a-input v-model="form.task_name" />

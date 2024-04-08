@@ -31,6 +31,7 @@ const pipeline = reactive({
 const showAddStage = ref(false)
 const handleAddStage = (v) => {
   v.number = pipeline.stages.length + 1
+  v.jobs = []
   pipeline.stages.push(v)
 }
 
@@ -57,13 +58,30 @@ const updateStage = (v) => {
 /*
 步骤管理
 */
-const choicedStage = ref()
-const showAddStep = ref(false)
-
+const showAddStep = ref(-1)
+var currentAddStepStage = null
 // Step弹窗
 const clickAddStep = (stageIndex) => {
-  showAddStep.value = true
-  choicedStage.value = stageIndex
+  showAddStep.value = stageIndex
+  currentAddStepStage = pipeline.stages[showAddStep.value]
+}
+// Step添加
+const AddStep = async (job) => {
+  showAddStep.value = -1
+  pipeline.stages.forEach((stage) => {
+    if (stage.number === currentAddStepStage.number) {
+      stage.tasks.push({
+        job_name: job.extension.uniq_name,
+        task_name: job.display_name,
+        run_params: { ignore_failed: false, dry_run: false, params: [] },
+        rollback_params: { ignore_failed: false, dry_run: false, params: [] },
+        webhooks: [],
+        mention_users: [],
+        labels: {},
+        extension: { job_icon: job.icon, job_display_name: job.display_name }
+      })
+    }
+  })
 }
 
 const handlePipelineChanged = (v) => {
@@ -82,21 +100,6 @@ const stepItemKeyStyle = {
 const stepItemValueStyle = {
   height: '40px',
   width: '220px'
-}
-
-// Step添加
-const AddStep = async (job, stageIndex) => {
-  let req = JSON.parse(JSON.stringify(pipeline.value))
-  for (let i = 0; i < req.stages.length; i++) {
-    if (i === stageIndex) {
-      req.stages[i].jobs.push({
-        job_name: job.extension.uniq_name,
-        task_name: job.name,
-        extension: { job_icon: job.icon }
-      })
-      await updatePipeline(req)
-    }
-  }
 }
 
 // Step更新
@@ -212,7 +215,7 @@ const updatePipeline = async (req) => {
               </template>
               修改
             </a-button>
-            <!-- 修改弹窗 -->
+            <!-- 修改Stage弹窗 -->
             <UpdateStage
               :visible="showUpdateStage === stageIndex"
               @update:visible="showUpdateStage = -1"
@@ -220,6 +223,13 @@ const updatePipeline = async (req) => {
               @changed="updateStage"
             >
             </UpdateStage>
+            <!-- 添加step弹窗 -->
+            <ChoiceJob
+              :visible="showAddStep === stageIndex"
+              @update:visible="showAddStep = -1"
+              @changed="AddStep"
+            >
+            </ChoiceJob>
           </template>
 
           <!-- 步骤列表显示 -->
@@ -243,7 +253,7 @@ const updatePipeline = async (req) => {
               <a-button
                 :style="stepItemValueStyle"
                 @click="handleUpdateStep(job, stage.jobs.length + 1)"
-                >{{ job.task_name }}</a-button
+                >{{ job.extension.job_display_name }}</a-button
               >
             </a-button-group>
             <!-- 步骤添加按钮 -->
@@ -252,20 +262,17 @@ const updatePipeline = async (req) => {
                 <template #icon>
                   <icon-plus />
                 </template>
-                添加步骤
+                <span class="add-button">添加步骤</span>
               </a-button>
             </div>
           </div>
         </a-card>
         <div class="add-stage" @click="showAddStage = true">
           <icon-plus />
-          <span style="margin-left: 8px">添加阶段</span>
+          <span class="add-button" style="margin-left: 8px">添加阶段</span>
         </div>
-        <!-- stage修改 -->
+        <!-- 添加阶段 -->
         <AddStage @changed="handleAddStage" v-model:visible="showAddStage"></AddStage>
-        <!-- step修改 -->
-        <ChoiceJob @changed="AddStep($event, choicedStage)" v-model:visible="showAddStep">
-        </ChoiceJob>
         <UpdateStep
           @change="updateStep"
           v-model:visible="showUpdateStep"
@@ -334,6 +341,10 @@ const updatePipeline = async (req) => {
 
 .job-title {
   display: flex;
+  font-size: 12px;
+}
+
+.add-button {
   font-size: 12px;
 }
 </style>
