@@ -3,7 +3,11 @@
 }
 
 .arco-page-header-title {
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.arco-page-header-header {
+  margin-top: 8px;
 }
 
 .arco-page-header {

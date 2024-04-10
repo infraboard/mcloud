@@ -156,8 +156,18 @@ const updatePipeline = async (req) => {
 <template>
   <!-- 页头 -->
   <a-page-header title="创建流水线" @back="router.push({ name: 'DomainPipelineList' })">
+    <template #extra>
+        <a-space>
+          <a-button size="small" type="primary">
+            <template #icon>
+              <icon-save />
+            </template>
+            保存
+          </a-button>
+        </a-space>
+      </template>
   </a-page-header>
-  <div class="page">
+  <div class="page" style="padding-top: 0px;">
     <a-card
       :header-style="{ height: '36px' }"
       :body-style="{ padding: '0px 8px 8px 8px' }"
