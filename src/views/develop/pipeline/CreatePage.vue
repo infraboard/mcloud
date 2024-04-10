@@ -10,7 +10,7 @@ import ChoiceJob from '../job/components/ChoiceJob.vue'
 
 const router = useRouter()
 const pipeline = reactive({
-  name: '',
+  name: '默认',
   description: '',
   logo: '',
   required_approval: false,
@@ -164,13 +164,16 @@ const updatePipeline = async (req) => {
       :loading="updatePipelineLoading"
     >
       <template #title>
-        <span>【{{ pipeline.name }}】</span>
-        <span>{{ pipeline.create_by }}</span>
+        <span style="font-weight: 600; color: var(--color-neutral-6)">名称: </span>
+        <span>{{ pipeline.name }}</span>
       </template>
       <template #extra>
-        <a-button size="mini" type="text">Web Hooks</a-button>
-        <a-button size="mini" type="text">关注人</a-button>
-        <a-button size="mini" type="text">变量</a-button>
+        <a-button size="mini" type="text" @click="handleUpdateStage(stageIndex)">
+          <template #icon>
+            <icon-edit />
+          </template>
+          修改
+        </a-button>
       </template>
       <div class="stage">
         <a-card

@@ -29,7 +29,6 @@ const showParams = computed(() => {
 watch(
   () => props.params,
   (newV) => {
-    console.log(newV)
     if (newV) {
       newV.forEach((element) => {
         form.value[element.name] = element.value
