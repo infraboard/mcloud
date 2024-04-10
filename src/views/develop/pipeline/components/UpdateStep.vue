@@ -1,11 +1,10 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { GET_JOB } from '@/api/mflow/job'
 import JobParam from '@/components/JobParam.vue'
 
 // 定义v-model:visible
 const props = defineProps(['visible', 'step'])
-const emit = defineEmits(['update:visible', 'change', 'delete'])
+const emit = defineEmits(['update:visible', 'changed', 'delete'])
 
 const handleCancel = () => {
   emit('update:visible', false)
@@ -13,7 +12,7 @@ const handleCancel = () => {
 }
 
 const handleOk = () => {
-  emit('change', form.value)
+  emit('changed', form.value)
   emit('update:visible', false)
   cleanForm()
 }
@@ -22,9 +21,9 @@ const cleanForm = () => {
   updateStepForm.value.resetFields()
 }
 
-onMounted(async () => {
+onMounted(() => {
   if (props.step) {
-    GetJob(props.step.job_name)
+    GetJob()
   }
 })
 
@@ -36,44 +35,38 @@ watch(
   (newV) => {
     if (newV) {
       form.value = JSON.parse(JSON.stringify(props.step))
-      GetJob(props.step.job_name)
-      console.log(form.value.run_params.params)
+      GetJob()
     }
   }
 )
 
 // 查询Job详情
-const GetJobError = ref('')
-const GetJob = async (jobName) => {
-  try {
-    const resp = await GET_JOB(jobName, { describe_by: 'JOB_UNIQ_NAME' })
-    resp.run_params.params.forEach((param) => {
-      let isExist = false
-      form.value.run_params.params.forEach((item) => {
-        if (item.name === param.name) {
-          item.name_desc = param.name_desc
-          item.value_desc = param.value_desc
-          item.example = param.example
-          if (item.value === '') {
-            item.value = param.value
-          }
-          isExist = true
+const GetJob = () => {
+  props.step.extension.job.run_params.params.forEach((param) => {
+    let isExist = false
+    form.value.run_params.params.forEach((item) => {
+      if (item.name === param.name) {
+        item.name_desc = param.name_desc
+        item.value_desc = param.value_desc
+        item.example = param.example
+        if (item.value === '') {
+          item.value = param.value
         }
-      })
-      if (!isExist) {
-        form.value.run_params.params.push(param)
+        isExist = true
       }
     })
-    GetJobError.value = ''
-  } catch (error) {
-    GetJobError.value = `查询Job失败: ${error}`
-  }
+    if (!isExist) {
+      form.value.run_params.params.push(param)
+    }
+  })
 }
 
-const updateJobParams = (params) => {
-  form.value.run_params = { params: params }
-  emit('change', form.value)
-  emit('update:visible', false)
+const handleParamsValueChange = (k, v) => {
+  form.value.run_params.params.forEach((element) => {
+    if (element.name === k) {
+      element.value = v
+    }
+  })
 }
 
 // 通知外层删除
@@ -86,16 +79,16 @@ const deleteStep = () => {
 <template>
   <div>
     <a-drawer
-      :width="'80%'"
+      :width="'40%'"
       :visible="visible"
       @ok="handleOk"
       @cancel="handleCancel"
       :header="false"
-      :footer="false"
+      :footer="true"
       unmountOnClose
     >
       <a-form ref="updateStepForm" :model="form" auto-label-width>
-        <a-tabs default-active-key="base">
+        <a-tabs class="tab-container" default-active-key="params">
           <template #extra>
             <a-button size="mini" type="text" status="danger" @click="deleteStep">
               <template #icon>
@@ -110,7 +103,7 @@ const deleteStep = () => {
                 field="number"
                 label="编号"
                 required
-                :help="`步骤编号, 如果阶段是串行执行, 通过步骤编号可以调整步骤执行的先后顺序, 最大值${maxNumber}`"
+                :help="`步骤编号, 如果阶段是串行执行, 通过步骤编号可以调整步骤执行的先后顺序`"
               >
                 <a-input-number disabled v-model="form.number" />
               </a-form-item>
@@ -124,12 +117,9 @@ const deleteStep = () => {
           </a-tab-pane>
           <a-tab-pane key="params" title="任务参数">
             <div class="page">
-              <a-alert v-if="GetJobError" type="error">{{ GetJobError }}</a-alert>
               <JobParam
-                v-else
                 :params="form.run_params.params"
-                @change="updateJobParams"
-                @cancel="handleCancel"
+                @change="handleParamsValueChange"
               ></JobParam>
             </div>
           </a-tab-pane>
@@ -146,3 +136,9 @@ const deleteStep = () => {
     </a-drawer>
   </div>
 </template>
+
+<style scoped>
+.tab-container {
+  position: relative;
+}
+</style>

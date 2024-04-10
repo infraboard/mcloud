@@ -14,7 +14,8 @@ const router = useRouter()
 const pagination = reactive(app.value.pagination)
 const queryParams = reactive({
   page_number: pagination.current,
-  page_size: pagination.pageSize
+  page_size: pagination.pageSize,
+  inject_k8s_cluster: true
 })
 
 const pageChange = (v) => {
