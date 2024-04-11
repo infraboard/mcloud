@@ -79,6 +79,33 @@ onMounted(() => {
             <ShowTime :timestamp="record.create_at"></ShowTime>
           </template>
         </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'DomainPipelineCreate', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-button type="text" :size="app.size" @click="showRunJobHandler(record)">
+              运行
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown @select="handleSelect($event, record)">
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption value="delete">
+                  <template #icon>
+                    <icon-delete />
+                  </template>
+                  删除
+                </a-doption>
+              </template>
+            </a-dropdown>
+          </template>
+        </a-table-column>
       </template>
     </a-table>
   </div>

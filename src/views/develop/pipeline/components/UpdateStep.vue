@@ -12,7 +12,7 @@ const handleCancel = () => {
 }
 
 const handleOk = () => {
-  emit('changed', form.value)
+  emit('changed', JSON.parse(JSON.stringify(form.value)))
   emit('update:visible', false)
   cleanForm()
 }
@@ -42,7 +42,7 @@ watch(
 
 // 查询Job详情
 const GetJob = () => {
-  props.step.extension.job.run_params.params.forEach((param) => {
+  props.step.job.run_params.params.forEach((param) => {
     let isExist = false
     form.value.run_params.params.forEach((item) => {
       if (item.name === param.name) {

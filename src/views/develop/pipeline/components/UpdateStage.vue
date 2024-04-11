@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 
 // 定义v-model:visible
-const props = defineProps(['visible', 'stage', 'maxNumber'])
+const props = defineProps(['visible', 'stage'])
 const emit = defineEmits(['update:visible', 'changed'])
 
 const handleCancel = () => {

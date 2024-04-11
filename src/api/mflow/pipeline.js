@@ -5,9 +5,14 @@ export var LIST_PIPELINE = (params) => {
   return instance.get('/mflow/api/v1/pipelines', { params })
 }
 
+// 创建流水线
+export var CREATE_PIPELINE = (data) => {
+  return instance.post(`/mflow/api/v1/pipelines/`, data)
+}
+
 // 查询流水线详情
-export var GET_PIPELINE = (id) => {
-  return instance.get(`/mflow/api/v1/pipelines/${id}`)
+export var GET_PIPELINE = (id, params) => {
+  return instance.get(`/mflow/api/v1/pipelines/${id}`, { params })
 }
 
 // 更新流水线详情

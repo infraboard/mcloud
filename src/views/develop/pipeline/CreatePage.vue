@@ -1,15 +1,16 @@
 <script setup>
-import { UPDATE_PIPELINE } from '@/api/mflow/pipeline'
-import { Notification } from '@arco-design/web-vue'
-import { onBeforeMount, ref, reactive } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import UpdatePipeline from './components/UpdatePipeline.vue'
 import AddStage from './components/AddStage.vue'
 import UpdateStep from './components/UpdateStep.vue'
 import UpdateStage from './components/UpdateStage.vue'
 import ChoiceJob from '../job/components/ChoiceJob.vue'
+import { Notification } from '@arco-design/web-vue'
+import { CREATE_PIPELINE, GET_PIPELINE, UPDATE_PIPELINE } from '@/api/mflow/pipeline.js'
 
 const router = useRouter()
-const pipeline = reactive({
+const pipeline = ref({
   name: '默认',
   description: '',
   logo: '',
@@ -25,19 +26,46 @@ const pipeline = reactive({
   labels: {}
 })
 
+const title = ref('创建流水线')
+const pid = router.currentRoute.value.query.id
+const GetPipeline = async () => {
+  if (pid) {
+    title.value = '编辑流水线'
+    const resp = await GET_PIPELINE(pid, { with_job: true })
+    pipeline.value = resp
+  }
+}
+
+onBeforeMount(() => {
+  GetPipeline()
+})
+
 /*
-阶段管理
+基本信息
+*/
+const showUpdatePipeline = ref(false)
+const handleUpdatePipeline = () => {
+  showUpdatePipeline.value = true
+}
+
+const updatePipeline = (v) => {
+  pipeline.value.name = v.name
+  pipeline.value.description = v.description
+}
+
+/*
+阶段
 */
 const showAddStage = ref(false)
 const handleAddStage = (v) => {
-  v.number = pipeline.stages.length + 1
+  v.number = pipeline.value.stages.length + 1
   v.tasks = []
-  pipeline.stages.push(v)
+  pipeline.value.stages.push(v)
 }
 
 // 删除Stage
 const handleDeleteStage = (stageIndex) => {
-  pipeline.stages.splice(stageIndex, 1)
+  pipeline.value.stages.splice(stageIndex, 1)
 }
 
 // Stage更新
@@ -47,7 +75,7 @@ const handleUpdateStage = (stageIndex) => {
 }
 const updateStage = (v) => {
   showUpdateStage.value = -1
-  pipeline.stages.forEach((stage) => {
+  pipeline.value.stages.forEach((stage) => {
     if (stage.number === v.number) {
       stage.name = v.name
       stage.is_parallel = v.is_parallel
@@ -56,56 +84,79 @@ const updateStage = (v) => {
 }
 
 /*
-步骤管理
+步骤
 */
 const showAddStep = ref(-1)
 var currentAddStepStage = null
 // Step弹窗
 const clickAddStep = (stageIndex) => {
   showAddStep.value = stageIndex
-  currentAddStepStage = pipeline.stages[showAddStep.value]
+  currentAddStepStage = pipeline.value.stages[showAddStep.value]
 }
-// Step添加
+// 添加步骤
 const AddTask = async (job) => {
   showAddStep.value = -1
-  pipeline.stages.forEach((stage) => {
+  pipeline.value.stages.forEach((stage) => {
     if (stage.number === currentAddStepStage.number) {
       stage.tasks.push({
         number: stage.tasks.length + 1,
         job_name: job.extension.uniq_name,
+        job_id: job.id,
         task_name: job.display_name,
         run_params: { ignore_failed: false, dry_run: false, params: [] },
         rollback_params: { ignore_failed: false, dry_run: false, params: [] },
         webhooks: [],
         mention_users: [],
         labels: {},
-        extension: { job }
+        job: job,
+        extension: {}
       })
     }
   })
 }
 
-// Step更新
+// 更新步骤
 const showUpdateStep = ref(-1)
-const currentUpdateStep = ref(null)
+var currentUpdateStepIndex = []
 const handleUpdateStep = (stageIndex, taskIndex) => {
   showUpdateStep.value = `${stageIndex}.${taskIndex}`
-  currentUpdateStep.value = pipeline.stages[stageIndex].tasks[taskIndex]
+  currentUpdateStepIndex = [stageIndex, taskIndex]
 }
 
 const updateStep = async (v) => {
-  console.log(v)
-  let req = JSON.parse(JSON.stringify(pipeline.value))
-  // 找到当前被更新的ste, 然后更新
-  req.stages.forEach((stage) => {
-    if (stage.name === v.stage_name) {
-      stage.tasks[v.number - 1] = v
-    }
-  })
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  step.task_name = v.task_name
+  step.run_params = v.run_params
+  step.webhooks = v.webhooks
+  step.mention_users = v.mention_users
 }
 
-// 清理状态
-onBeforeMount(async () => {})
+// 删除步骤
+const deleteStep = async () => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  pipeline.value.stages[stageIndex].tasks.splice(taskIndex, 1)
+}
+
+/*
+保存或者更新
+*/
+const saveOrUpdateLoading = ref(false)
+const saveOrUpdate = async () => {
+  saveOrUpdateLoading.value = true
+  try {
+    if (pid) {
+      await UPDATE_PIPELINE(pid, pipeline.value)
+    } else {
+      await CREATE_PIPELINE(pipeline.value)
+    }
+    router.push({ name: 'DomainPipelineList' })
+  } catch (error) {
+    Notification.error(`保存流水线失败: ${error}`)
+  } finally {
+    saveOrUpdateLoading.value = false
+  }
+}
 
 // 变量
 const stepItemKeyStyle = {
@@ -117,73 +168,39 @@ const stepItemValueStyle = {
   height: '40px',
   width: '220px'
 }
-
-// Step删除
-const deleteStep = async (v) => {
-  let req = JSON.parse(JSON.stringify(pipeline.value))
-  // 从列表中清除
-  for (let element of req.stages) {
-    if (element.name == v.stage_name) {
-      let tasks = []
-      for (let task of element.tasks) {
-        if (task.number != v.number) {
-          tasks.push(task)
-        }
-      }
-      element.tasks = tasks
-    }
-  }
-
-  // 更新Pipeline
-  await updatePipeline(req)
-}
-
-// 更新Pipeline
-const updatePipelineLoading = ref(false)
-const updatePipeline = async (req) => {
-  try {
-    updatePipelineLoading.value = true
-    await UPDATE_PIPELINE(pipeline.value.id, req)
-    Notification.success(`更新成功`)
-  } catch (error) {
-    Notification.error(`更新失败: ${error}`)
-  } finally {
-    updatePipelineLoading.value = false
-  }
-}
 </script>
 
 <template>
   <!-- 页头 -->
-  <a-page-header title="创建流水线" @back="router.push({ name: 'DomainPipelineList' })">
+  <a-page-header :title="title" @back="router.push({ name: 'DomainPipelineList' })">
     <template #extra>
-        <a-space>
-          <a-button size="small" type="primary">
-            <template #icon>
-              <icon-save />
-            </template>
-            保存
-          </a-button>
-        </a-space>
-      </template>
+      <a-space>
+        <a-button :loading="saveOrUpdateLoading" @click="saveOrUpdate" size="small" type="primary">
+          <template #icon>
+            <icon-save />
+          </template>
+          保存
+        </a-button>
+      </a-space>
+    </template>
   </a-page-header>
-  <div class="page" style="padding-top: 0px;">
-    <a-card
-      :header-style="{ height: '36px' }"
-      :body-style="{ padding: '0px 8px 8px 8px' }"
-      :loading="updatePipelineLoading"
-    >
+  <div class="page" style="padding-top: 0px">
+    <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <template #title>
-        <span style="font-weight: 600; color: var(--color-neutral-6)">名称: </span>
         <span>{{ pipeline.name }}</span>
       </template>
       <template #extra>
-        <a-button size="mini" type="text" @click="handleUpdateStage(stageIndex)">
+        <a-button size="mini" type="text" @click="handleUpdatePipeline()">
           <template #icon>
             <icon-edit />
           </template>
           修改
         </a-button>
+        <UpdatePipeline
+          v-model:visible="showUpdatePipeline"
+          :pipeline="pipeline"
+          @change="updatePipeline"
+        ></UpdatePipeline>
       </template>
       <div class="stage">
         <a-card
@@ -246,10 +263,7 @@ const updatePipeline = async (req) => {
               <a-button-group>
                 <a-button :style="stepItemKeyStyle" @click="router.push({ name: '' })">
                   <template #icon>
-                    <SvgIcon
-                      v-if="task.extension && task.extension.job.icon"
-                      :svgCode="task.extension.job.icon"
-                    ></SvgIcon>
+                    <SvgIcon v-if="task.job && task.job.icon" :svgCode="task.job.icon"></SvgIcon>
                     <span v-else>{{ task.job_name.slice(0, 3) }}</span>
                   </template>
                 </a-button>
@@ -257,10 +271,9 @@ const updatePipeline = async (req) => {
                 <a-button
                   :style="stepItemValueStyle"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
-                  >{{ task.extension.job.display_name }}</a-button
+                  >{{ task.task_name }}</a-button
                 >
               </a-button-group>
-
               <UpdateStep
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
