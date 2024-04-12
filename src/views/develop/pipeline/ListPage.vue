@@ -1,6 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_PIPELINE } from '@/api/mflow/pipeline'
+import { LIST_PIPELINE, DELETE_PIPELINE } from '@/api/mflow/pipeline'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -39,9 +39,23 @@ const QueryData = async () => {
     queryLoading.value = false
   }
 }
+
 onMounted(() => {
   QueryData()
 })
+
+// 处理操作
+const handleSelect = async (v, record) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_PIPELINE(record.id)
+      Notification.success(`删除${record.id}成功`)
+      QueryData()
+      break
+    default:
+      break
+  }
+}
 </script>
 
 <template>
@@ -79,7 +93,7 @@ onMounted(() => {
             <ShowTime :timestamp="record.create_at"></ShowTime>
           </template>
         </a-table-column>
-        <a-table-column align="center" title="操作" :width="200">
+        <a-table-column align="center" title="操作" :width="220">
           <template #cell="{ record }">
             <a-button
               type="text"
@@ -90,7 +104,7 @@ onMounted(() => {
             </a-button>
             <a-divider direction="vertical" />
             <a-button type="text" :size="app.size" @click="showRunJobHandler(record)">
-              运行
+              执行记录
             </a-button>
             <a-divider direction="vertical" />
             <a-dropdown @select="handleSelect($event, record)">

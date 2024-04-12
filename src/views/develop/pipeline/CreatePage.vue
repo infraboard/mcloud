@@ -278,6 +278,7 @@ const stepItemValueStyle = {
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
                 @changed="updateStep"
+                :edit="true"
                 :step="task"
                 @delete="deleteStep"
               >

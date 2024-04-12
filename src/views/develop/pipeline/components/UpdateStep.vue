@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
 
 // 定义v-model:visible
-const props = defineProps(['visible', 'step'])
+const props = defineProps(['visible', 'step', 'edit'])
 const emit = defineEmits(['update:visible', 'changed', 'delete'])
 
 const handleCancel = () => {
@@ -90,7 +90,7 @@ const deleteStep = () => {
       <a-form ref="updateStepForm" :model="form" auto-label-width>
         <a-tabs class="tab-container" default-active-key="params">
           <template #extra>
-            <a-button size="mini" type="text" status="danger" @click="deleteStep">
+            <a-button v-if="edit" size="mini" type="text" status="danger" @click="deleteStep">
               <template #icon>
                 <icon-delete />
               </template>
@@ -108,7 +108,7 @@ const deleteStep = () => {
                 <a-input-number disabled v-model="form.number" />
               </a-form-item>
               <a-form-item field="task_name" label="名称" required help="步骤名称或者描述">
-                <a-input v-model="form.task_name" />
+                <a-input :disabled="!edit" v-model="form.task_name" />
               </a-form-item>
               <a-form-item field="job_name" label="关联任务" required help="任务的名称">
                 <a-input disabled v-model="form.job_name" />
@@ -117,6 +117,7 @@ const deleteStep = () => {
           </a-tab-pane>
           <a-tab-pane key="params" title="任务参数">
             <div class="page">
+              <a-alert style="margin-bottom: 12px">{{ step.job.description }}</a-alert>
               <JobParam
                 :params="form.run_params.params"
                 @change="handleParamsValueChange"

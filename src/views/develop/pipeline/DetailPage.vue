@@ -2,6 +2,8 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_PIPELINE } from '@/api/mflow/pipeline.js'
+import { RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
+import UpdateStep from './components/UpdateStep.vue'
 
 const router = useRouter()
 const pipeline = ref({
@@ -20,11 +22,52 @@ const pipeline = ref({
   labels: {}
 })
 
+// 更新步骤
+const showUpdateStep = ref(-1)
+var currentUpdateStepIndex = []
+const handleUpdateStep = (stageIndex, taskIndex) => {
+  showUpdateStep.value = `${stageIndex}.${taskIndex}`
+  currentUpdateStepIndex = [stageIndex, taskIndex]
+}
+
+const updateStep = async (v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  step.task_name = v.task_name
+  step.run_params = v.run_params
+  step.webhooks = v.webhooks
+  step.mention_users = v.mention_users
+}
+
 onBeforeMount(async () => {
   const pid = router.currentRoute.value.params.id
   const resp = await GET_PIPELINE(pid, { with_job: true })
   pipeline.value = resp
 })
+
+// 运行Pipeline
+const runPipelineLoading = ref(false)
+
+const runPipeline = async () => {
+  var runPipelineReq = {
+    pipeline_id: pipeline.value.id,
+    run_params: []
+  }
+  pipeline.value.stages.forEach((stage) => {
+    stage.tasks.forEach((task) => {
+      task.run_params.params.forEach((param) => {
+        if (!param.deprecate && param.usage_type !== 'SYSTEM') {
+          param.param_scope = {
+            stage: stage.number,
+            task: task.number
+          }
+          runPipelineReq.run_params.push(param)
+        }
+      })
+    })
+  })
+  await RUN_PIPELINE_TASK(runPipelineReq)
+}
 
 // 变量
 const stepItemKeyStyle = {
@@ -43,7 +86,7 @@ const stepItemValueStyle = {
   <a-page-header title="流水线详情" @back="router.push({ name: 'DomainPipelineList' })">
     <template #extra>
       <a-space>
-        <a-button :loading="saveOrUpdateLoading" @click="saveOrUpdate" size="small" type="primary">
+        <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
           <template #icon>
             <icon-send />
           </template>
@@ -93,6 +136,14 @@ const stepItemValueStyle = {
                   >{{ task.task_name }}</a-button
                 >
               </a-button-group>
+              <!-- 修改Stage弹窗 -->
+              <UpdateStep
+                :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
+                @update:visible="showUpdateStep = -1"
+                @changed="updateStep"
+                :step="task"
+              >
+              </UpdateStep>
             </a-button-group>
           </div>
         </a-card>

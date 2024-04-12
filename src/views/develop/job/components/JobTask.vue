@@ -46,54 +46,52 @@ onMounted(() => {
 
 <template>
   <div class="page">
-    <a-card class="table-data">
-      <a-table
-        :data="data.items"
-        :loading="queryLoading"
-        :pagination="pagination"
-        @page-change="pageChange"
-        @page-size-change="pageSizeChange"
-      >
-        <template #columns>
-          <a-table-column title="开始时间">
-            <template #cell="{ record }">
-              <ShowTime :timestamp="record.status.start_at"></ShowTime>
-            </template>
-          </a-table-column>
-          <a-table-column title="模式" data-index="run_mode"></a-table-column>
-          <a-table-column title="调试模式" data-index="dry_run"></a-table-column>
-          <a-table-column title="状态">
-            <template #cell="{ record }">
-              <span>{{ record.status.stage }}</span>
-            </template>
-          </a-table-column>
-          <a-table-column title="耗时">
-            <template #cell="{ record }">
-              <ShowTime
-                v-if="record.status.end_at"
-                :timestamp="record.status.end_at - record.status.start_at"
-                isDuration
-              ></ShowTime>
-              <span v-else>-</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="操作" :width="200">
-            <template #cell="{ record }">
-              <a-button
-                type="text"
-                :size="app.size"
-                @click="router.push({ name: 'JobTaskConsole', params: { id: record.task_id } })"
-              >
-                <template #icon>
-                  <icon-file />
-                </template>
-                日志
-              </a-button>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <a-table
+      :data="data.items"
+      :loading="queryLoading"
+      :pagination="pagination"
+      @page-change="pageChange"
+      @page-size-change="pageSizeChange"
+    >
+      <template #columns>
+        <a-table-column title="开始时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.status.start_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column title="模式" data-index="run_mode"></a-table-column>
+        <a-table-column title="调试模式" data-index="dry_run"></a-table-column>
+        <a-table-column title="状态">
+          <template #cell="{ record }">
+            <span>{{ record.status.stage }}</span>
+          </template>
+        </a-table-column>
+        <a-table-column title="耗时">
+          <template #cell="{ record }">
+            <ShowTime
+              v-if="record.status.end_at"
+              :timestamp="record.status.end_at - record.status.start_at"
+              isDuration
+            ></ShowTime>
+            <span v-else>-</span>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'JobTaskConsole', params: { id: record.task_id } })"
+            >
+              <template #icon>
+                <icon-file />
+              </template>
+              日志
+            </a-button>
+          </template>
+        </a-table-column>
+      </template>
+    </a-table>
   </div>
 </template>
 

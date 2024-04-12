@@ -19,3 +19,8 @@ export var GET_JOB_TASK = (id) => {
 export var LIST_PIPELINE_TASK = (params) => {
   return instance.get('/mflow/api/v1/pipeline_tasks', { params })
 }
+
+// 执行Pipeline任务
+export var RUN_PIPELINE_TASK = (data) => {
+  return instance.post('/mflow/api/v1/pipeline_tasks', data)
+}
