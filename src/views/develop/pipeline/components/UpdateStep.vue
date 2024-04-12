@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
 
 // 定义v-model:visible
-const props = defineProps(['visible', 'step', 'edit'])
+const props = defineProps(['visible', 'step', 'edit', 'validate'])
 const emit = defineEmits(['update:visible', 'changed', 'delete'])
 
 const handleCancel = () => {
@@ -120,6 +120,7 @@ const deleteStep = () => {
               <a-alert style="margin-bottom: 12px">{{ step.job.description }}</a-alert>
               <JobParam
                 :params="form.run_params.params"
+                :validate="validate"
                 @change="handleParamsValueChange"
               ></JobParam>
             </div>

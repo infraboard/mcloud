@@ -1,26 +1,13 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { GET_PIPELINE } from '@/api/mflow/pipeline.js'
-import { RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
-import UpdateStep from './components/UpdateStep.vue'
+import { GET_PIPELINE_TASK, RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
+import mapping from '@/stores/mapping'
+import UpdateStep from '../pipeline/components/UpdateStep.vue'
 
 const router = useRouter()
-const pipeline = ref({
-  name: '默认',
-  description: '',
-  logo: '',
-  required_approval: false,
-  is_parallel: false,
-  is_template: true,
-  visiable_mode: 'NAMESPACE',
-  with: [],
-  stages: [],
-  webhooks: [],
-  mention_users: [],
-  next_pipeline: '',
-  labels: {}
-})
+const pipeline = ref({})
+const pipelineTask = ref({})
 
 // 更新步骤
 const showUpdateStep = ref(-1)
@@ -41,8 +28,21 @@ const updateStep = async (v) => {
 
 onBeforeMount(async () => {
   const pid = router.currentRoute.value.params.id
-  const resp = await GET_PIPELINE(pid, { with_job: true })
-  pipeline.value = resp
+  const resp = await GET_PIPELINE_TASK(pid)
+  pipeline.value = resp.pipeline
+  resp.pipeline = null
+  pipelineTask.value = resp
+
+  // 补充 Task Status
+  for (let stageIndex = 0; stageIndex < resp.stage_status.length; stageIndex++) {
+    const stage = resp.stage_status[stageIndex]
+    for (let taskIndex = 0; taskIndex < stage.tasks.length; taskIndex++) {
+      const task = stage.tasks[taskIndex]
+      const target = pipeline.value.stages[stageIndex].tasks[taskIndex]
+      target.status = task.status
+      target.calss = [task.status.stage.toLowerCase()]
+    }
+  }
 })
 
 // 运行Pipeline
@@ -66,6 +66,7 @@ const runPipeline = async () => {
       })
     })
   })
+
   const resp = await RUN_PIPELINE_TASK(runPipelineReq)
   router.push({ name: 'PipelineTaskDetail', params: { id: resp.id } })
 }
@@ -78,29 +79,40 @@ const stepItemKeyStyle = {
 }
 const stepItemValueStyle = {
   height: '40px',
-  width: '220px'
+  width: '220px',
+  fontSize: '12px',
+  fontWeight: '600'
 }
 </script>
 
 <template>
   <!-- 页头 -->
-  <a-page-header title="流水线详情" @back="router.push({ name: 'DomainPipelineList' })">
+  <a-page-header title="任务详情" @back="router.go(-1)">
     <template #extra>
       <a-space>
         <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
           <template #icon>
-            <icon-send />
+            <icon-refresh />
           </template>
-          运行
+          重新运行
         </a-button>
       </a-space>
     </template>
   </a-page-header>
   <div class="page" style="padding-top: 0px">
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
-      <template #title>
-        <span>{{ pipeline.name }}</span>
-      </template>
+      <div style="margin: 10px 0px">
+        <a-alert :type="mapping.statusAlert[pipelineTask.stage]">
+          运行【{{ mapping.status[pipelineTask.stage] }}】: {{ pipelineTask.message }}
+        </a-alert>
+      </div>
+      <div style="padding: 0 2px">
+        <a-space>
+          <span>{{ pipeline.name }}</span>
+          <ShowTime :timestamp="pipelineTask.create_at"></ShowTime>
+          <span>{{ pipelineTask.run_by }}</span>
+        </a-space>
+      </div>
       <div class="stage">
         <a-card
           v-for="(stage, stageIndex) in pipeline.stages"
@@ -133,6 +145,7 @@ const stepItemValueStyle = {
                 <!-- 步骤名称 -->
                 <a-button
                   :style="stepItemValueStyle"
+                  :class="task.calss"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
                   >{{ task.task_name }}</a-button
                 >
@@ -143,7 +156,6 @@ const stepItemValueStyle = {
                 @update:visible="showUpdateStep = -1"
                 @changed="updateStep"
                 :step="task"
-                :validate="true"
               >
               </UpdateStep>
             </a-button-group>

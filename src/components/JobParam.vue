@@ -2,7 +2,7 @@
 import { ref, watch, computed } from 'vue'
 
 // 定义v-model
-const props = defineProps(['params', 'required'])
+const props = defineProps(['params', 'validate'])
 const emit = defineEmits(['change'])
 
 // 查询Job详情
@@ -53,7 +53,7 @@ const handleUpdateValue = (vaule, key) => {
       :field="param.name"
       :label="param.name"
       :help="showHelp(param.name_desc, param.example)"
-      :required="param.required && required"
+      :required="param.required && validate"
     >
       <a-select
         :disabled="param.read_only"

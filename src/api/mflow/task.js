@@ -15,7 +15,7 @@ export var GET_JOB_TASK = (id) => {
   return instance.get(`/mflow/api/v1/job_tasks/${id}`)
 }
 
-// 查询Pipeline执行记录
+// 查询Pipeline执行列表
 export var LIST_PIPELINE_TASK = (params) => {
   return instance.get('/mflow/api/v1/pipeline_tasks', { params })
 }
@@ -23,4 +23,9 @@ export var LIST_PIPELINE_TASK = (params) => {
 // 执行Pipeline任务
 export var RUN_PIPELINE_TASK = (data) => {
   return instance.post('/mflow/api/v1/pipeline_tasks', data)
+}
+
+// 查询Pipeline执行详情
+export var GET_PIPELINE_TASK = (id, params) => {
+  return instance.get(`/mflow/api/v1/pipeline_tasks/${id}`, { params })
 }

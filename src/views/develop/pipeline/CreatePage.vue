@@ -109,7 +109,7 @@ const AddTask = async (job) => {
         mention_users: [],
         labels: {},
         job: job,
-        extension: {}
+        extension: { job_icon: job.icon }
       })
     }
   })
