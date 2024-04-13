@@ -82,6 +82,10 @@
   background-color: var(--color-danger-light-1) !important;
 }
 
-.success {
-  background-color: var(--success-1) !important;
+.succeeded {
+  background-color: rgb(var(--green-2)) !important;
+}
+
+.active {
+  background-color: rgb(var(--arcoblue-2)) !important;
 }

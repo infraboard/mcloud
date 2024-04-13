@@ -6,10 +6,12 @@ export default {
   ENUM: '枚举',
   statusAlert: {
     FAILED: 'error',
-    SUCCESS: 'success'
+    ACTIVE: 'info',
+    SUCCEEDED: 'success'
   },
   status: {
-    FAILED: '失败',
-    SUCCESS: '成功'
+    FAILED: '运行失败',
+    SUCCEEDED: '运行成功',
+    ACTIVE: '运行中'
   }
 }

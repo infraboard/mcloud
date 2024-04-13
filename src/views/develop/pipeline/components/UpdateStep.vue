@@ -3,7 +3,14 @@ import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
 
 // 定义v-model:visible
-const props = defineProps(['visible', 'step', 'edit', 'validate'])
+['visible', 'step', 'edit', 'validate']
+const props = defineProps({
+  visible: {type: Boolean, default: false},
+  step: {type: Object},
+  edit: {type: Boolean, default: false},
+  validate: {type: Boolean, default: false},
+  width: {type: String, default: "40%"}
+})
 const emit = defineEmits(['update:visible', 'changed', 'delete'])
 
 const handleCancel = () => {
@@ -79,7 +86,7 @@ const deleteStep = () => {
 <template>
   <div>
     <a-drawer
-      :width="'40%'"
+      :width="width"
       :visible="visible"
       @ok="handleOk"
       @cancel="handleCancel"

@@ -40,7 +40,7 @@ onBeforeMount(async () => {
       const task = stage.tasks[taskIndex]
       const target = pipeline.value.stages[stageIndex].tasks[taskIndex]
       target.status = task.status
-      target.calss = [task.status.stage.toLowerCase()]
+      target.class = [task.status.stage.toLowerCase()]
     }
   }
 })
@@ -103,7 +103,7 @@ const stepItemValueStyle = {
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <div style="margin: 10px 0px">
         <a-alert :type="mapping.statusAlert[pipelineTask.stage]">
-          运行【{{ mapping.status[pipelineTask.stage] }}】: {{ pipelineTask.message }}
+          【{{ mapping.status[pipelineTask.stage] }}】: {{ pipelineTask.message }}
         </a-alert>
       </div>
       <div style="padding: 0 2px">
@@ -145,7 +145,7 @@ const stepItemValueStyle = {
                 <!-- 步骤名称 -->
                 <a-button
                   :style="stepItemValueStyle"
-                  :class="task.calss"
+                  :class="task.class"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
                   >{{ task.task_name }}</a-button
                 >
@@ -155,6 +155,7 @@ const stepItemValueStyle = {
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
                 @changed="updateStep"
+                :width="'80%'"
                 :step="task"
               >
               </UpdateStep>
