@@ -29,14 +29,14 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
   showUpdateStep.value = `${stageIndex}.${taskIndex}`
   currentUpdateStepIndex = [stageIndex, taskIndex]
 }
-
-const updateStep = async (v) => {
+const updateParam = (k, v) => {
   const [stageIndex, taskIndex] = currentUpdateStepIndex
   const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
-  step.task_name = v.task_name
-  step.run_params = v.run_params
-  step.webhooks = v.webhooks
-  step.mention_users = v.mention_users
+  step.run_params.params.forEach((element) => {
+    if (element.name === k) {
+      element.value = v
+    }
+  })
 }
 
 onBeforeMount(async () => {
@@ -141,7 +141,7 @@ const stepItemValueStyle = {
               <UpdateStep
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
-                @changed="updateStep"
+                @updateParam="updateParam"
                 :step="task"
                 :validate="true"
               >

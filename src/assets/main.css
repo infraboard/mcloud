@@ -79,7 +79,7 @@
 }
 
 .failed {
-  background-color: var(--color-danger-light-1) !important;
+  background-color: rgb(var(--red-2)) !important;
 }
 
 .succeeded {

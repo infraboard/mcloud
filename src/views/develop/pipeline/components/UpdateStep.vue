@@ -1,25 +1,21 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
+import TaskLogConsole from '../../job_task/components/TaskLogConsole.vue'
 
 // 定义v-model:visible
-['visible', 'step', 'edit', 'validate']
 const props = defineProps({
-  visible: {type: Boolean, default: false},
-  step: {type: Object},
-  edit: {type: Boolean, default: false},
-  validate: {type: Boolean, default: false},
-  width: {type: String, default: "40%"}
+  visible: { type: Boolean, default: false },
+  step: { type: Object },
+  edit: { type: Boolean, default: false },
+  validate: { type: Boolean, default: false },
+  width: { type: String, default: '40%' }
 })
-const emit = defineEmits(['update:visible', 'changed', 'delete'])
+const emit = defineEmits(['update:visible', 'updateParam', 'delete'])
+
+const activeKey = ref('params')
 
 const handleCancel = () => {
-  emit('update:visible', false)
-  cleanForm()
-}
-
-const handleOk = () => {
-  emit('changed', JSON.parse(JSON.stringify(form.value)))
   emit('update:visible', false)
   cleanForm()
 }
@@ -42,6 +38,9 @@ watch(
   (newV) => {
     if (newV) {
       form.value = JSON.parse(JSON.stringify(props.step))
+      if (props.step.status) {
+        activeKey.value='console'
+      }
       GetJob()
     }
   }
@@ -69,11 +68,7 @@ const GetJob = () => {
 }
 
 const handleParamsValueChange = (k, v) => {
-  form.value.run_params.params.forEach((element) => {
-    if (element.name === k) {
-      element.value = v
-    }
-  })
+  emit('updateParam', k, v)
 }
 
 // 通知外层删除
@@ -88,14 +83,13 @@ const deleteStep = () => {
     <a-drawer
       :width="width"
       :visible="visible"
-      @ok="handleOk"
       @cancel="handleCancel"
       :header="false"
-      :footer="true"
+      :footer="false"
       unmountOnClose
     >
       <a-form ref="updateStepForm" :model="form" auto-label-width>
-        <a-tabs class="tab-container" default-active-key="params">
+        <a-tabs class="tab-container" :active-key="activeKey" default-active-key="params">
           <template #extra>
             <a-button v-if="edit" size="mini" type="text" status="danger" @click="deleteStep">
               <template #icon>
@@ -132,6 +126,17 @@ const deleteStep = () => {
               ></JobParam>
             </div>
           </a-tab-pane>
+          <a-tab-pane key="console" v-if="step.status">
+            <template #title>运行日志</template>
+            <!-- 日志控制台 -->
+            <KeepAlive>
+              <TaskLogConsole
+                style="margin-top: 8px"
+                :taskId="step.task_id"
+                height="calc(100vh - 72px)"
+              ></TaskLogConsole>
+            </KeepAlive>
+          </a-tab-pane>
           <a-tab-pane key="user">
             <template #title>关注人</template>
             Content of Tab Panel 3
@@ -147,7 +152,16 @@ const deleteStep = () => {
 </template>
 
 <style scoped>
-.tab-container {
-  position: relative;
+.tab-container :deep(.arco-tabs-pane) {
+  height: calc(100vh - 62px);
+  overflow: scroll;
+}
+
+.tab-container :deep(.arco-tabs-pane)::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
+}
+
+.tab-container :deep(.arco-tabs-pane) {
+  -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
 }
 </style>

@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { GET_PIPELINE_TASK, RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
 import mapping from '@/stores/mapping'
 import UpdateStep from '../pipeline/components/UpdateStep.vue'
-
+import { DurationHumanize } from '@/tools/time.js'
 const router = useRouter()
 const pipeline = ref({})
 const pipelineTask = ref({})
@@ -17,13 +17,16 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
   currentUpdateStepIndex = [stageIndex, taskIndex]
 }
 
-const updateStep = async (v) => {
+const updateParam = (k, v) => {
+  console.log(k,v)
+
   const [stageIndex, taskIndex] = currentUpdateStepIndex
   const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
-  step.task_name = v.task_name
-  step.run_params = v.run_params
-  step.webhooks = v.webhooks
-  step.mention_users = v.mention_users
+  step.run_params.params.forEach((element) => {
+    if (element.name === k) {
+      element.value = v
+    }
+  })
 }
 
 onBeforeMount(async () => {
@@ -39,7 +42,8 @@ onBeforeMount(async () => {
     for (let taskIndex = 0; taskIndex < stage.tasks.length; taskIndex++) {
       const task = stage.tasks[taskIndex]
       const target = pipeline.value.stages[stageIndex].tasks[taskIndex]
-      target.status = task.status
+      Object.assign(target, task)
+      target.cost = DurationHumanize(task.status.end_at - task.status.start_at)
       target.class = [task.status.stage.toLowerCase()]
     }
   }
@@ -147,15 +151,19 @@ const stepItemValueStyle = {
                   :style="stepItemValueStyle"
                   :class="task.class"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
-                  >{{ task.task_name }}</a-button
+                  >
+                  <icon-loading style="margin-right: 4px;" v-if="task.status.stage === 'ACTIVE'"  />
+                  {{ task.task_name }}
+                  【{{ task.cost }}】
+                  </a-button
                 >
               </a-button-group>
               <!-- 修改Stage弹窗 -->
               <UpdateStep
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
-                @changed="updateStep"
-                :width="'80%'"
+                @updateParam="updateParam"
+                :width="'90%'"
                 :step="task"
               >
               </UpdateStep>
