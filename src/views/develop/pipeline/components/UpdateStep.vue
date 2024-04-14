@@ -14,6 +14,9 @@ const props = defineProps({
 const emit = defineEmits(['update:visible', 'updateParam', 'delete'])
 
 const activeKey = ref('params')
+const hanleChangeTab = (v) => {
+  activeKey.value = v
+}
 
 const handleCancel = () => {
   emit('update:visible', false)
@@ -38,8 +41,8 @@ watch(
   (newV) => {
     if (newV) {
       form.value = JSON.parse(JSON.stringify(props.step))
-      if (props.step.status) {
-        activeKey.value='console'
+      if (props.step.status && props.step.status.stage !== 'PENDDING') {
+        activeKey.value = 'console'
       }
       GetJob()
     }
@@ -89,7 +92,12 @@ const deleteStep = () => {
       unmountOnClose
     >
       <a-form ref="updateStepForm" :model="form" auto-label-width>
-        <a-tabs class="tab-container" :active-key="activeKey" default-active-key="params">
+        <a-tabs
+          class="tab-container"
+          :active-key="activeKey"
+          @change="hanleChangeTab"
+          default-active-key="params"
+        >
           <template #extra>
             <a-button v-if="edit" size="mini" type="text" status="danger" @click="deleteStep">
               <template #icon>
