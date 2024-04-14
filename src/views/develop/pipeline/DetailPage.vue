@@ -31,8 +31,8 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
 }
 const updateParam = (k, v) => {
   const [stageIndex, taskIndex] = currentUpdateStepIndex
-  const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
-  step.run_params.params.forEach((element) => {
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  task.run_params.params.forEach((element) => {
     if (element.name === k) {
       element.value = v
     }

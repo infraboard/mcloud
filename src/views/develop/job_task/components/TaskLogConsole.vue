@@ -8,7 +8,7 @@ import { onMounted, watch } from 'vue'
 // 声明属性
 const props = defineProps({
   taskId: { type: String, default: '', required: true },
-  containerName: { type: String, default: '', required: true },
+  containerName: { type: String, default: '' },
   height: { type: String, default: '750px' },
   width: { type: String, default: '100%' },
   // GitHub Solarized_Darcula
