@@ -126,9 +126,9 @@ const stepItemValueStyle = {
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <div style="margin: 10px 0px">
         <a-alert :type="mapping.statusAlert[pipelineTask.stage]">
-          【{{ mapping.status[pipelineTask.stage] }}】: 
+          【{{ mapping.status[pipelineTask.stage] }}】:
           <span v-if="pipelineTask.cost"> 耗时 {{ pipelineTask.cost }}</span>
-          {{ pipelineTask.message }} 
+          {{ pipelineTask.message }}
         </a-alert>
       </div>
       <div style="padding: 0 2px">

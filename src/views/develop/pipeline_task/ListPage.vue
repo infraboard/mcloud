@@ -1,6 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_JOB_TASK } from '@/api/mflow/task'
+import { LIST_PIPELINE_TASK } from '@/api/mflow/task'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -30,7 +30,7 @@ const data = reactive({ items: [], total: 0 })
 const QueryData = async () => {
   try {
     queryLoading.value = true
-    var resp = await LIST_JOB_TASK(queryParams)
+    var resp = await LIST_PIPELINE_TASK(queryParams)
     data.items = resp.items
     pagination.total = resp.total
   } catch (error) {
@@ -56,21 +56,22 @@ onMounted(() => {
       <template #columns>
         <a-table-column title="开始时间">
           <template #cell="{ record }">
-            <ShowTime :timestamp="record.status.start_at"></ShowTime>
+            <ShowTime :timestamp="record.start_at"></ShowTime>
           </template>
         </a-table-column>
+        <a-table-column title="流水线" data-index="pipeline.name"></a-table-column>
         <a-table-column title="模式" data-index="run_mode"></a-table-column>
         <a-table-column title="调试模式" data-index="dry_run"></a-table-column>
         <a-table-column title="状态">
           <template #cell="{ record }">
-            <span>{{ record.status.stage }}</span>
+            <span>{{ record.stage }}</span>
           </template>
         </a-table-column>
         <a-table-column title="耗时">
           <template #cell="{ record }">
             <ShowTime
-              v-if="record.status.end_at"
-              :timestamp="record.status.end_at - record.status.start_at"
+              v-if="record.end_at"
+              :timestamp="record.end_at - record.start_at"
               isDuration
             ></ShowTime>
             <span v-else>-</span>
@@ -81,12 +82,12 @@ onMounted(() => {
             <a-button
               type="text"
               :size="app.size"
-              @click="router.push({ name: 'JobTaskConsole', params: { id: record.task_id } })"
+              @click="router.push({ name: 'PipelineTaskDetail', params: { id: record.id } })"
             >
               <template #icon>
                 <icon-file />
               </template>
-              日志
+              详情
             </a-button>
           </template>
         </a-table-column>

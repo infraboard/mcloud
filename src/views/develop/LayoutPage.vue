@@ -42,8 +42,8 @@ onMounted(() => {
           <template #icon><icon-common /></template>
           <template #title><span class="menu-title">研发工具</span></template>
           <a-menu-item key="DomainPipelineList">流水线模版</a-menu-item>
+          <a-menu-item key="PipelineTaskList">流水线记录</a-menu-item>
           <a-menu-item key="DomainJobList">任务模版</a-menu-item>
-          <a-menu-item key="DomainPipelineTaskList">流水线记录</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="ConsoleAudit">
           <template #icon><icon-video-camera /></template>

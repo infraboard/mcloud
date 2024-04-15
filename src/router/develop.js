@@ -87,6 +87,12 @@ export default {
           meta: { label: '创建流水线' }
         },
         {
+          path: 'pipeline_task',
+          name: 'PipelineTaskList',
+          component: () => import('@/views/develop/pipeline_task/ListPage.vue'),
+          meta: { label: '流水线执行纪录列表' }
+        },
+        {
           path: 'pipeline_task/:id',
           name: 'PipelineTaskDetail',
           component: () => import('@/views/develop/pipeline_task/DetailPage.vue'),
