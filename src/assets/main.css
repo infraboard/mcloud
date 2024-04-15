@@ -89,3 +89,7 @@
 .active {
   background-color: rgb(var(--arcoblue-2)) !important;
 }
+
+.creating {
+  background-color: rgb(var(--arcoblue-2)) !important;
+}

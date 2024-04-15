@@ -103,7 +103,7 @@ const AddTask = async (job) => {
         job_name: job.extension.uniq_name,
         job_id: job.id,
         task_name: job.display_name,
-        run_params: { ignore_failed: false, dry_run: false, params: [] },
+        run_params: { ignore_failed: false, dry_run: false, params: job.run_params.params },
         rollback_params: { ignore_failed: false, dry_run: false, params: [] },
         webhooks: [],
         mention_users: [],
@@ -123,13 +123,17 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
   currentUpdateStepIndex = [stageIndex, taskIndex]
 }
 
-const updateStep = async (v) => {
+const updateParam = (k, v) => {
+  console.log(k, v)
   const [stageIndex, taskIndex] = currentUpdateStepIndex
-  const step = pipeline.value.stages[stageIndex].tasks[taskIndex]
-  step.task_name = v.task_name
-  step.run_params = v.run_params
-  step.webhooks = v.webhooks
-  step.mention_users = v.mention_users
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  console.log(pipeline)
+  console.log(task.run_params.params)
+  task.run_params.params.forEach((element) => {
+    if (element.name === k) {
+      element.value = v
+    }
+  })
 }
 
 // 删除步骤
@@ -277,7 +281,7 @@ const stepItemValueStyle = {
               <UpdateStep
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
-                @changed="updateStep"
+                @updateParam="updateParam"
                 :edit="true"
                 :step="task"
                 @delete="deleteStep"

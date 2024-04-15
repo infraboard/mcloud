@@ -13,18 +13,18 @@ const router = useRouter()
 // 分页参数
 const pagination = reactive(app.value.pagination)
 const queryParams = reactive({
-  page_number: pagination.current,
+  page_number: 1,
   page_size: pagination.pageSize,
   inject_k8s_cluster: true
 })
 
 const pageChange = (v) => {
-  pagination.current = v
+  queryParams.page_number.current = v
   QueryData()
 }
 const pageSizeChange = (v) => {
-  pagination.pageSize = v
-  pagination.current = 1
+  queryParams.page_size = v
+  queryParams.page_number = 1
   QueryData()
 }
 

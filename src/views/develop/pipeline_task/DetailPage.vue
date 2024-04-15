@@ -153,7 +153,10 @@ const stepItemValueStyle = {
                   :class="task.class"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
                 >
-                  <icon-loading style="margin-right: 4px" v-if="task.status.stage === 'ACTIVE'" />
+                  <icon-loading
+                    style="margin-right: 4px"
+                    v-if="task.status.stage === 'ACTIVE' || task.status.stage === 'CREATING'"
+                  />
                   {{ task.task_name }}
                   <span v-if="task.cost">【{{ task.cost }}】</span>
                 </a-button>
