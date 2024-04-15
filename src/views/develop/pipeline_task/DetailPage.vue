@@ -28,10 +28,22 @@ const updateParam = (k, v) => {
 }
 
 onBeforeMount(async () => {
+  await queryData()
+})
+
+// 刷新数据
+var timer = setInterval(async () => {
+  await queryData()
+}, 3000)
+
+const queryData = async () => {
   const pid = router.currentRoute.value.params.id
   const resp = await GET_PIPELINE_TASK(pid)
   pipeline.value = resp.pipeline
   resp.pipeline = null
+  if (resp.end_at) {
+    resp.cost = DurationHumanize(resp.end_at - resp.start_at)
+  }
   pipelineTask.value = resp
 
   // 补充 Task Status
@@ -48,7 +60,13 @@ onBeforeMount(async () => {
       target.class = [task.status.stage.toLowerCase()]
     }
   }
-})
+
+  //
+  if (pipelineTask.value.end_at) {
+    // 取消定时器
+    clearInterval(timer)
+  }
+}
 
 // 运行Pipeline
 const runPipelineLoading = ref(false)
@@ -108,7 +126,9 @@ const stepItemValueStyle = {
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <div style="margin: 10px 0px">
         <a-alert :type="mapping.statusAlert[pipelineTask.stage]">
-          【{{ mapping.status[pipelineTask.stage] }}】: {{ pipelineTask.message }}
+          【{{ mapping.status[pipelineTask.stage] }}】: 
+          <span v-if="pipelineTask.cost"> 耗时 {{ pipelineTask.cost }}</span>
+          {{ pipelineTask.message }} 
         </a-alert>
       </div>
       <div style="padding: 0 2px">
