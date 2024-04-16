@@ -30,6 +30,12 @@ export default {
           meta: { label: '服务详情' }
         },
         {
+          path: 'service/detail/:id/build_conf/create',
+          name: 'BuildConfCreate',
+          component: () => import('@/views/develop/service/CreateBuildConf.vue'),
+          meta: { label: '构建配置' }
+        },
+        {
           path: 'approval/list',
           name: 'ApprovalList',
           component: () => import('@/views/develop/approval/ListPage.vue'),
