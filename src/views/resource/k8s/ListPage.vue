@@ -14,7 +14,7 @@ const queryParams = reactive({
 })
 
 const pageChange = (v) => {
-  queryParams.page_number.current = v
+  queryParams.page_number = v
   QueryData()
 }
 const pageSizeChange = (v) => {

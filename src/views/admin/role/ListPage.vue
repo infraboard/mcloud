@@ -15,7 +15,7 @@ const queryParams = reactive({
 })
 
 const pageChange = (v) => {
-  queryParams.page_number.current = v
+  queryParams.page_number = v
   QueryData()
 }
 const pageSizeChange = (v) => {
@@ -27,10 +27,6 @@ const pageSizeChange = (v) => {
 const queryLoading = ref(false)
 const data = reactive({ items: [], total: 0 })
 const QueryData = async () => {
-  // 补充分页参数
-  queryParams.page_number = pagination.current
-  queryParams.page_size = pagination.pageSize
-
   try {
     queryLoading.value = true
     var resp = await LIST_ROLE(queryParams)
