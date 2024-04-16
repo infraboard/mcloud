@@ -26,7 +26,7 @@ defineProps({
   },
   backgroundColor: {
     type: String,
-    default: 'var(--color-bg-2)',
+    default: 'var(--color-bg-2)'
   }
 })
 const emit = defineEmits(['updateParam'])
@@ -57,7 +57,10 @@ const stepItemValueStyle = {
 </script>
 
 <template>
-  <a-card :header-style="{ height: '36px', backgroundColor }" :body-style="{ padding: '0px 8px 8px 8px', backgroundColor }">
+  <a-card
+    :header-style="{ height: '36px', backgroundColor }"
+    :body-style="{ padding: '0px 8px 8px 8px', backgroundColor }"
+  >
     <template #title>
       <span>{{ pipeline.name }}</span>
     </template>

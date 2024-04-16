@@ -139,7 +139,7 @@ const handleSubmit = async (data) => {
       submitLoading.value = true
       await CREATE_BUILD(data.values)
       Notification.success(`保存成功`)
-      router.push({ name: 'NamespacePolicyList' })
+      router.go(-1)
     } catch (error) {
       Notification.error(`保存失败: ${error}`)
     } finally {

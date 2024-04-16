@@ -8,7 +8,6 @@
         添加配置
       </a-button>
     </div>
-    <div>{{ data }}</div>
   </div>
 </template>
 
