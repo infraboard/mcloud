@@ -81,7 +81,7 @@ const pageHeader = ref('添加配置')
 const router = useRouter()
 
 // pipeline选项列表
-const queryPipelineReq = ref({ with_job: true })
+const queryPipelineReq = ref({ with_job: true, with_inject_params: true })
 const queryPipelineResp = ref({ items: [] })
 const queryPipelineLoading = ref(false)
 const queryPipeline = async () => {
@@ -93,6 +93,7 @@ const queryPipeline = async () => {
     queryPipelineLoading.value = false
   }
 }
+
 onMounted(() => {
   queryPipeline()
 })

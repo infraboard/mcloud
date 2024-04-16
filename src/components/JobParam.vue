@@ -6,13 +6,14 @@ const props = defineProps(['params', 'validate'])
 const emit = defineEmits(['change'])
 
 // 查询Job详情
-const showHelp = (text, example, desc) => {
-  let v = text
-  if (desc) {
-    v += ', ' + desc
-  }
+const showHelp = (name, example, desc) => {
+  let v = name
   if (example) {
     v += ', 例如 ' + example
+  }
+
+  if (desc) {
+    v = desc +  ', ' + v
   }
 
   return v
@@ -52,11 +53,11 @@ const handleUpdateValue = (vaule, key) => {
       :key="param.name"
       :field="param.name"
       :label="param.name"
-      :help="showHelp(param.name_desc, param.example)"
+      :help="showHelp(param.name_desc, param.example, param.value_desc)"
       :required="param.required && validate"
     >
       <a-select
-        :disabled="param.read_only"
+        :disabled="param.read_only || param.event_inject"
         @change="handleUpdateValue($event, param.name)"
         v-if="param.enum_options.length > 0"
         v-model="form[param.name]"
@@ -70,7 +71,7 @@ const handleUpdateValue = (vaule, key) => {
         @change="handleUpdateValue($event, param.name)"
         :auto-size="{ maxRows: 5 }"
         v-model="form[param.name]"
-        :disabled="param.read_only"
+        :disabled="param.read_only || param.event_inject"
       />
     </a-form-item>
   </a-form>

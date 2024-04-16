@@ -58,6 +58,7 @@ const GetJob = () => {
         item.name_desc = param.name_desc
         item.value_desc = param.value_desc
         item.example = param.example
+        item.event_inject = param.event_inject
         if (item.value === '') {
           item.value = param.value
         }
