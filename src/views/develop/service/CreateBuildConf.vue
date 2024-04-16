@@ -44,14 +44,20 @@
           <a-select v-model="form.condition.sub_events" multiple allow-create> </a-select>
         </a-form-item>
         <a-divider orientation="center" type="dotted">触发流水线</a-divider>
-        <a-form-item field="condition.events" label="流水线" help="规则匹配后执行的流水线" required>
+        <a-form-item field="pipeline_id" label="流水线" help="规则匹配后执行的流水线" required>
           <a-select v-model="form.pipeline_id">
-            <a-option>Push Hook</a-option>
-            <a-option>Tag Push Hook</a-option>
-            <a-option>Issue Hook</a-option>
-            <a-option>Note Hook</a-option>
-            <a-option>Merge Request Hook</a-option>
+            <a-option v-for="p in queryPipelineResp.items" :key="p.id" :value="p.id">{{
+              p.name
+            }}</a-option>
           </a-select>
+        </a-form-item>
+        <a-form-item label="" help="">
+          <PipelineDetail
+            style="width: 100%"
+            backgroundColor="#f7f8fa"
+            v-if="selectedPipeline"
+            :pipeline="selectedPipeline"
+          ></PipelineDetail>
         </a-form-item>
         <div class="form-submit">
           <a-space>
@@ -65,12 +71,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { CREATE_BUILD } from '@/api/mflow/build'
+import { LIST_PIPELINE } from '@/api/mflow/pipeline'
+import PipelineDetail from '../pipeline/components/PipelineDetail.vue'
 
 const pageHeader = ref('添加配置')
 const router = useRouter()
+
+// pipeline选项列表
+const queryPipelineReq = ref({ with_job: true })
+const queryPipelineResp = ref({ items: [] })
+const queryPipelineLoading = ref(false)
+const queryPipeline = async () => {
+  queryPipelineLoading.value = true
+  try {
+    const resp = await LIST_PIPELINE(queryPipelineReq.value)
+    queryPipelineResp.value = resp
+  } finally {
+    queryPipelineLoading.value = false
+  }
+}
+onMounted(() => {
+  queryPipeline()
+})
 
 const form = ref({
   enabled: true,
@@ -92,6 +117,18 @@ const form = ref({
   deploy_id: '',
   labels: {},
   extra: {}
+})
+
+const selectedPipeline = computed(() => {
+  if (form.value.pipeline_id) {
+    for (const element of queryPipelineResp.value.items) {
+      if (element.id === form.value.pipeline_id) {
+        return element
+      }
+    }
+  }
+
+  return null
 })
 
 // 创建配置

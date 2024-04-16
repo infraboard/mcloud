@@ -23,29 +23,18 @@ defineProps({
         labels: {}
       }
     }
+  },
+  backgroundColor: {
+    type: String,
+    default: 'var(--color-bg-2)',
   }
 })
 const emit = defineEmits(['updateParam'])
 
 const router = useRouter()
-// const pipeline = ref({
-//   name: '默认',
-//   description: '',
-//   logo: '',
-//   required_approval: false,
-//   is_parallel: false,
-//   is_template: true,
-//   visiable_mode: 'NAMESPACE',
-//   with: [],
-//   stages: [],
-//   webhooks: [],
-//   mention_users: [],
-//   next_pipeline: '',
-//   labels: {}
-// })
 
 // 更新步骤
-const showUpdateStep = ref(-1)
+const showUpdateStep = ref('-1')
 var currentUpdateStepIndex = []
 const handleUpdateStep = (stageIndex, taskIndex) => {
   showUpdateStep.value = `${stageIndex}.${taskIndex}`
@@ -53,20 +42,7 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
 }
 const updateParam = (k, v) => {
   emit('updateParam', currentUpdateStepIndex, k, v)
-  //   const [stageIndex, taskIndex] = currentUpdateStepIndex
-  //   const task = props.pipeline.stages[stageIndex].tasks[taskIndex]
-  //   task.run_params.params.forEach((element) => {
-  //     if (element.name === k) {
-  //       element.value = v
-  //     }
-  //   })
 }
-
-// onBeforeMount(async () => {
-//   const pid = router.currentRoute.value.params.id
-//   const resp = await GET_PIPELINE(pid, { with_job: true })
-//   pipeline.value = resp
-// })
 
 // 变量
 const stepItemKeyStyle = {
@@ -81,7 +57,7 @@ const stepItemValueStyle = {
 </script>
 
 <template>
-  <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
+  <a-card :header-style="{ height: '36px', backgroundColor }" :body-style="{ padding: '0px 8px 8px 8px', backgroundColor }">
     <template #title>
       <span>{{ pipeline.name }}</span>
     </template>
@@ -124,7 +100,7 @@ const stepItemValueStyle = {
             <!-- 修改Stage弹窗 -->
             <UpdateStep
               :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
-              @update:visible="showUpdateStep = -1"
+              @update:visible="showUpdateStep = '-1'"
               @updateParam="updateParam"
               :step="task"
               :validate="true"
