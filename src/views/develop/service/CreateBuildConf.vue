@@ -31,7 +31,17 @@
             <a-radio value="REGEXP">正则表达式</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item field="condition.events" label="事件" help="选择或者输入事件的名称" required>
+        <a-form-item field="condition.events" label="事件" required>
+          <template #help>
+            <span
+              >选择或者输入事件的名称,具体请参考:
+              <a
+                target="_blank"
+                href="https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html"
+                >Gitlab Webhook events</a
+              >
+            </span>
+          </template>
           <a-select v-model="form.condition.events" multiple allow-create>
             <a-option>Push Hook</a-option>
             <a-option>Tag Push Hook</a-option>
@@ -45,7 +55,7 @@
         </a-form-item>
         <a-divider orientation="center" type="dotted">触发流水线</a-divider>
         <a-form-item field="pipeline_id" label="流水线" help="规则匹配后执行的流水线" required>
-          <a-select v-model="form.pipeline_id">
+          <a-select @change="selectedPipelineChange" v-model="form.pipeline_id">
             <a-option v-for="p in queryPipelineResp.items" :key="p.id" :value="p.id">{{
               p.name
             }}</a-option>
@@ -57,6 +67,7 @@
             backgroundColor="#f7f8fa"
             v-if="selectedPipeline"
             :pipeline="selectedPipeline"
+            @updateParam="updateParam"
           ></PipelineDetail>
         </a-form-item>
         <div class="form-submit">
@@ -73,9 +84,10 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { CREATE_BUILD } from '@/api/mflow/build'
+import { CREATE_BUILD, DESCRIBE_BUILD, UPDATE_BUILD } from '@/api/mflow/build'
 import { LIST_PIPELINE } from '@/api/mflow/pipeline'
 import PipelineDetail from '../pipeline/components/PipelineDetail.vue'
+import { Notification } from '@arco-design/web-vue'
 
 const pageHeader = ref('添加配置')
 const router = useRouter()
@@ -96,6 +108,7 @@ const queryPipeline = async () => {
 
 onMounted(() => {
   queryPipeline()
+  getBuildConf()
 })
 
 const form = ref({
@@ -104,7 +117,7 @@ const form = ref({
   condition: { events: [], sub_events_match_type: 'EXACT', sub_events: [] },
   pipeline_id: '',
   queue: { enabled: false, max_length: 1 },
-  env_vars: {},
+  custom_params: [],
   name: '',
   describe: '',
   target_type: 'IMAGE',
@@ -120,6 +133,43 @@ const form = ref({
   extra: {}
 })
 
+// 获取详情
+const id = router.currentRoute.value.query.id
+const getBuildConf = async () => {
+  if (id) {
+    pageHeader.value = '编辑配置'
+    const resp = await DESCRIBE_BUILD(id)
+    form.value = resp
+
+    if (selectedPipeline.value) {
+      console.log(selectedPipeline.value)
+      resp.custom_params.forEach((element) => {
+        selectedPipeline.value.stages.forEach((stage) => {
+          stage.tasks.forEach((task) => {
+            task.run_params.params.forEach((param) => {
+              if (param.name === element.name) {
+                console.log(param.name, element.name)
+                param.value = element.value
+              }
+            })
+          })
+        })
+      })
+    }
+  }
+}
+
+const updateCustomParams = (v) => {
+  for (const param of form.value.custom_params) {
+    if (param.name === v.name) {
+      param.value = v.value
+      return
+    }
+  }
+
+  form.value.custom_params.push(v)
+}
+
 const selectedPipeline = computed(() => {
   if (form.value.pipeline_id) {
     for (const element of queryPipelineResp.value.items) {
@@ -132,17 +182,43 @@ const selectedPipeline = computed(() => {
   return null
 })
 
+const selectedPipelineChange = () => {
+  form.value.custom_params = []
+}
+
+// 更新步骤
+const updateParam = (currentUpdateStepIndex, k, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const stage = selectedPipeline.value.stages[stageIndex]
+  const task = stage.tasks[taskIndex]
+  task.run_params.params.forEach((param) => {
+    if (param.name === k) {
+      param.value = v
+      param.param_scope = {
+        stage: stage.number.toString(),
+        task: task.number.toString()
+      }
+      updateCustomParams(param)
+    }
+  })
+}
+
 // 创建配置
 const submitLoading = ref(false)
 const handleSubmit = async (data) => {
   if (!data.errors) {
     try {
       submitLoading.value = true
-      await CREATE_BUILD(data.values)
-      Notification.success(`保存成功`)
+      if (id) {
+        await UPDATE_BUILD(id, data.values)
+        Notification.success(`更新成功`)
+      } else {
+        await CREATE_BUILD(data.values)
+        Notification.success(`保存成功`)
+      }
       router.go(-1)
     } catch (error) {
-      Notification.error(`保存失败: ${error}`)
+      Notification.error(`失败: ${error}`)
     } finally {
       submitLoading.value = false
     }

@@ -13,7 +13,7 @@ const showHelp = (name, example, desc) => {
   }
 
   if (desc) {
-    v = desc +  ', ' + v
+    v = desc + ', ' + v
   }
 
   return v

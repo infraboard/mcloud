@@ -8,6 +8,9 @@
         添加配置
       </a-button>
     </div>
+    <div>
+      <BuildItem v-for="item in data.items" :key="item.id" :buildConf="item"></BuildItem>
+    </div>
   </div>
 </template>
 
@@ -16,6 +19,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { app } from '@/stores/localstorage'
 import { useRouter } from 'vue-router'
 import { LIST_BUILD } from '@/api/mflow/build'
+import BuildItem from './BuildItem.vue'
 
 const router = useRouter()
 
