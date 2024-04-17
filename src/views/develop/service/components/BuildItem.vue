@@ -19,12 +19,16 @@
         修改
       </a-button>
     </template>
-    {{ buildConf }}
+    <div>
+      <a-table :loading="queryLoadding" :columns="columns" :data="records.items" />
+    </div>
   </a-card>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { LIST_TRIGGER_RECORD } from '@/api/mflow/trigger'
+import { onMounted, ref } from 'vue'
 
 // 声明属性
 const props = defineProps(['buildConf'])
@@ -34,6 +38,31 @@ const router = useRouter()
 const goToEdit = () => {
   router.push({ name: 'BuildConfCreate', query: { id: props.buildConf.id } })
 }
+
+onMounted(() => {
+  queryBuildRecord()
+})
+
+const queryLoadding = ref(false)
+const records = ref({ items: [] })
+const queryBuildRecord = async () => {
+  queryLoadding.value = true
+  try {
+    const resp = await LIST_TRIGGER_RECORD({
+      build_conf_ids: props.buildConf.id
+    })
+    console.log(resp)
+  } finally {
+    queryLoadding.value = false
+  }
+}
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name'
+  }
+]
 </script>
 
 <style scoped></style>

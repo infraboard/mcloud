@@ -72,7 +72,7 @@
         </a-form-item>
         <div class="form-submit">
           <a-space>
-            <a-button @click="router.push({ name: 'NamespacePolicyList' })">取消</a-button>
+            <a-button @click="router.go(-1)">取消</a-button>
             <a-button type="primary" html-type="submit" :loading="submitLoading">保存</a-button>
           </a-space>
         </div>
@@ -106,8 +106,8 @@ const queryPipeline = async () => {
   }
 }
 
-onMounted(() => {
-  queryPipeline()
+onMounted(async () => {
+  await queryPipeline()
   getBuildConf()
 })
 
@@ -140,15 +140,12 @@ const getBuildConf = async () => {
     pageHeader.value = '编辑配置'
     const resp = await DESCRIBE_BUILD(id)
     form.value = resp
-
     if (selectedPipeline.value) {
-      console.log(selectedPipeline.value)
       resp.custom_params.forEach((element) => {
         selectedPipeline.value.stages.forEach((stage) => {
           stage.tasks.forEach((task) => {
             task.run_params.params.forEach((param) => {
               if (param.name === element.name) {
-                console.log(param.name, element.name)
                 param.value = element.value
               }
             })
