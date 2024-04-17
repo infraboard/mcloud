@@ -7,10 +7,19 @@
         </template>
         添加配置
       </a-button>
+      <div class="table-op-right">
+        <a-button @click="mannulDebug = !mannulDebug" size="mini" type="text">
+          <template #icon>
+            <icon-bug />
+          </template>
+          调试
+        </a-button>
+      </div>
     </div>
     <div>
       <BuildItem v-for="item in data.items" :key="item.id" :buildConf="item"></BuildItem>
     </div>
+    <MannulTest v-model:visible="mannulDebug"></MannulTest>
   </div>
 </template>
 
@@ -19,6 +28,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { app } from '@/stores/localstorage'
 import { useRouter } from 'vue-router'
 import { LIST_BUILD } from '@/api/mflow/build'
+import MannulTest from '../../trigger/components/MannulTest.vue'
 import BuildItem from './BuildItem.vue'
 
 const router = useRouter()
@@ -58,4 +68,7 @@ const QueryData = async () => {
     queryLoading.value = false
   }
 }
+
+// 调试窗口
+const mannulDebug = ref(false)
 </script>

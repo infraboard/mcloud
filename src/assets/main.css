@@ -33,6 +33,12 @@
   display: flex;
 }
 
+.table-op-right {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+}
+
 .form-submit {
   margin-top: 12px;
   display: flex;

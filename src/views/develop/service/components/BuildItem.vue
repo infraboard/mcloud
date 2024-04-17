@@ -18,6 +18,12 @@
         </template>
         修改
       </a-button>
+      <a-button status="danger" size="mini" type="text">
+        <template #icon>
+          <icon-delete />
+        </template>
+        删除
+      </a-button>
     </template>
     <div>
       <a-table :loading="queryLoadding" :columns="columns" :data="records.items" />
