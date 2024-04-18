@@ -50,7 +50,7 @@
               <span v-else style="color: rgb(var(--success-6))">成功</span>
             </template>
           </a-table-column>
-          <a-table-column align="center" title="流水线状态">
+          <a-table-column align="center" title="执行状态">
             <template #cell="{ record }">
               <div v-if="ps(record).id">
                 <a-button
@@ -103,23 +103,6 @@ const queryBuildRecord = async () => {
   } finally {
     queryLoadding.value = false
   }
-}
-
-const bs = (record) => {
-  const status = {
-    stage: '成功',
-    color: 'success',
-    message: ''
-  }
-  if (record.build_status.length > 0) {
-    const bs = record.build_status[0]
-    if (bs.error_message) {
-      status.stage = '失败'
-      status.message = bs.error_message
-    }
-  }
-
-  return status
 }
 
 const ps = (record) => {
