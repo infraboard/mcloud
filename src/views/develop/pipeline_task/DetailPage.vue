@@ -72,9 +72,6 @@ const queryData = async () => {
   }
 }
 
-
-
-
 // 运行Pipeline
 const runPipelineLoading = ref(false)
 

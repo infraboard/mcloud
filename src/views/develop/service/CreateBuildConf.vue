@@ -142,14 +142,14 @@ const getBuildConf = async () => {
     form.value = resp
     if (selectedPipeline.value) {
       resp.custom_params.forEach((element) => {
-        selectedPipeline.value.stages.forEach((stage) => {
-          stage.tasks.forEach((task) => {
-            task.run_params.params.forEach((param) => {
-              if (param.name === element.name) {
-                param.value = element.value
-              }
-            })
-          })
+        const stageIndex = parseInt(element.param_scope.stage) - 1
+        const taskIndex = parseInt(element.param_scope.task) - 1
+        console.log(stageIndex, taskIndex, selectedPipeline.value.stages)
+        const task = selectedPipeline.value.stages[stageIndex].tasks[taskIndex]
+        task.run_params.params.forEach((param) => {
+          if (param.name === element.name) {
+            param.value = element.value
+          }
         })
       })
     }
@@ -158,7 +158,11 @@ const getBuildConf = async () => {
 
 const updateCustomParams = (v) => {
   for (const param of form.value.custom_params) {
-    if (param.name === v.name) {
+    if (
+      param.name === v.name &&
+      param.param_scope.stage === v.param_scope.stage &&
+      param.param_scope.task === v.param_scope.task
+    ) {
       param.value = v.value
       return
     }
