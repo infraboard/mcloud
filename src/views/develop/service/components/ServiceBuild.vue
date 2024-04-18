@@ -17,9 +17,18 @@
       </div>
     </div>
     <div>
-      <BuildItem v-for="item in data.items" :key="item.id" :buildConf="item"></BuildItem>
+      <BuildItem
+        :refresh_record="refreshRecord"
+        v-for="item in data.items"
+        :key="item.id"
+        :buildConf="item"
+      ></BuildItem>
     </div>
-    <MannulTest :service="service" v-model:visible="mannulDebug"></MannulTest>
+    <MannulTest
+      @change="refreshRecord = new Date().getTime()"
+      :service="service"
+      v-model:visible="mannulDebug"
+    ></MannulTest>
   </div>
 </template>
 
@@ -44,6 +53,9 @@ const goToCreate = () => {
     }
   })
 }
+
+//
+const refreshRecord = ref(0)
 
 onMounted(() => {
   QueryData()

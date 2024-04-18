@@ -62,7 +62,6 @@ const handleSelect = async (v, record) => {
     <BreadcrumbMenu />
     <div class="table-op">
       <a-space>
-        <a-button type="primary" :size="app.size"> 创建服务 </a-button>
         <a-button
           type="primary"
           :size="app.size"

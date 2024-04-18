@@ -26,7 +26,13 @@
       </a-button>
     </template>
     <div>
-      <a-table :loading="queryLoadding" :data="records.items">
+      <a-table
+        :pagination="pagination"
+        @page-change="pageChange"
+        @page-size-change="pageSizeChange"
+        :loading="queryLoadding"
+        :data="records.items"
+      >
         <template #columns>
           <a-table-column align="center" title="时间">
             <template #cell="{ record }">
@@ -75,10 +81,10 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { LIST_TRIGGER_RECORD } from '@/api/mflow/trigger'
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 
 // 声明属性
-const props = defineProps(['buildConf'])
+const props = defineProps(['buildConf', 'refresh_record'])
 
 const router = useRouter()
 
@@ -86,20 +92,60 @@ const goToEdit = () => {
   router.push({ name: 'BuildConfCreate', query: { id: props.buildConf.id } })
 }
 
+// 分页参数
+const pagination = reactive({
+  size: 'medium',
+  total: 0,
+  current: 1,
+  pageSize: 5,
+  showTotal: true,
+  showMore: true,
+  showJumper: true,
+  showPageSize: true,
+  pageSizeOptions: [5, 10, 20, 50, 100]
+})
+const queryParams = reactive({
+  page_number: 1,
+  page_size: pagination.pageSize,
+  build_conf_ids: props.buildConf.id,
+  with_pipeline_task: true
+})
+
+const pageChange = (v) => {
+  pagination.current = v
+  queryBuildRecord()
+}
+const pageSizeChange = (v) => {
+  pagination.current = 1
+  pagination.pageSize = v
+  queryBuildRecord()
+}
+
 onMounted(() => {
   queryBuildRecord()
 })
 
+// 填充默认值
+watch(
+  () => props.refresh_record,
+  (newV) => {
+    if (newV) {
+      queryBuildRecord()
+    }
+  }
+)
+
 const queryLoadding = ref(false)
 const records = ref({ items: [] })
 const queryBuildRecord = async () => {
+  queryParams.page_number = pagination.current
+  queryParams.page_size = pagination.pageSize
+
   queryLoadding.value = true
   try {
-    const resp = await LIST_TRIGGER_RECORD({
-      build_conf_ids: props.buildConf.id,
-      with_pipeline_task: true
-    })
+    const resp = await LIST_TRIGGER_RECORD(queryParams)
     records.value = resp
+    pagination.total = resp.total
   } finally {
     queryLoadding.value = false
   }

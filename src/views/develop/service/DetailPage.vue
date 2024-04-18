@@ -33,9 +33,7 @@ onBeforeMount(async () => {
     </a-page-header>
     <!-- 详情标签页 -->
     <a-tabs :active-key="tab" @change="ChangeTab" lazy-load>
-      <a-tab-pane key="BaseInfo" title="基础信息">
-        {{ service }}
-      </a-tab-pane>
+      <a-tab-pane key="BaseInfo" title="基础信息"> </a-tab-pane>
       <a-tab-pane key="ServiceBuild" title="持续构建">
         <ServiceBuild :service="service"></ServiceBuild>
       </a-tab-pane>
