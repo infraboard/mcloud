@@ -35,10 +35,35 @@
           </a-table-column>
           <a-table-column align="center" title="事件" data-index="name" />
           <a-table-column align="center" title="分支" data-index="sub_name" />
-          <a-table-column align="center" title="执行状态">
+          <a-table-column align="center" title="触发状态">
             <template #cell="{ record }">
-              <div v-if="record.build_status && record.build_status[0].pipline_task"></div>
-              <div v-else>-</div>
+              <span v-if="record.build_status[0].error_message">
+                <a-popover :content-style="{ fontSize: '12px' }">
+                  <a-button size="mini" type="text" status="danger"
+                    >失败 <icon-question-circle-fill
+                  /></a-button>
+                  <template #content>
+                    {{ record.build_status[0].error_message }}
+                  </template>
+                </a-popover>
+              </span>
+              <span v-else style="color: rgb(var(--success-6))">成功</span>
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="流水线状态">
+            <template #cell="{ record }">
+              <div v-if="ps(record).id">
+                <a-button
+                  @click="
+                    $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
+                  "
+                  size="mini"
+                  type="text"
+                  :status="ps(record).color"
+                  >{{ ps(record).stage }}</a-button
+                >
+              </div>
+              <span v-else>-</span>
             </template>
           </a-table-column>
         </template>
@@ -71,12 +96,55 @@ const queryBuildRecord = async () => {
   queryLoadding.value = true
   try {
     const resp = await LIST_TRIGGER_RECORD({
-      build_conf_ids: props.buildConf.id
+      build_conf_ids: props.buildConf.id,
+      with_pipeline_task: true
     })
     records.value = resp
   } finally {
     queryLoadding.value = false
   }
+}
+
+const bs = (record) => {
+  const status = {
+    stage: '成功',
+    color: 'success',
+    message: ''
+  }
+  if (record.build_status.length > 0) {
+    const bs = record.build_status[0]
+    if (bs.error_message) {
+      status.stage = '失败'
+      status.message = bs.error_message
+    }
+  }
+
+  return status
+}
+
+const ps = (record) => {
+  const status = {
+    stage: '无',
+    color: '',
+    id: ''
+  }
+  if (record.build_status.length > 0) {
+    const bs = record.build_status[0]
+    const pt = bs.pipline_task
+    if (pt) {
+      status.id = pt.id
+      switch (pt.stage) {
+        case 'FAILED':
+          status.stage = '失败'
+          status.color = 'danger'
+          break
+        default:
+          break
+      }
+    }
+  }
+
+  return status
 }
 </script>
 

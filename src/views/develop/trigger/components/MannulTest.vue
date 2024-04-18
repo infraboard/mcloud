@@ -86,8 +86,11 @@ const handleSubmit = async (data) => {
       form.value.skip_run_pipeline = !form.value.run_pipeline
       submitLoading.value = true
       mockData.commits[0].id = form.value.extra.commit_id
+      mockData.after = form.value.extra.commit_id
+      mockData.checkout_sha = form.value.extra.commit_id
       mockData.ref = `refs/heads/${form.value.sub_name}`
       mockData.repository.git_ssh_url = props.service.code_repository.ssh_url
+      mockData.project.git_ssh_url = props.service.code_repository.ssh_url
       form.value.raw = JSON.stringify(mockData)
       let resp = await MANNUL_GITLAB_TRIGGER(form.value)
       emit('change', resp)
