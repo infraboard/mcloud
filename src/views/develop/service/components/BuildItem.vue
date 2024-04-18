@@ -26,7 +26,23 @@
       </a-button>
     </template>
     <div>
-      <a-table :loading="queryLoadding" :columns="columns" :data="records.items" />
+      <a-table :loading="queryLoadding" :data="records.items">
+        <template #columns>
+          <a-table-column align="center" title="时间">
+            <template #cell="{ record }">
+              <ShowTime :timestamp="record.time / 1000"></ShowTime>
+            </template>
+          </a-table-column>
+          <a-table-column align="center" title="事件" data-index="name" />
+          <a-table-column align="center" title="分支" data-index="sub_name" />
+          <a-table-column align="center" title="执行状态">
+            <template #cell="{ record }">
+              <div v-if="record.build_status && record.build_status[0].pipline_task"></div>
+              <div v-else>-</div>
+            </template>
+          </a-table-column>
+        </template>
+      </a-table>
     </div>
   </a-card>
 </template>
@@ -57,18 +73,15 @@ const queryBuildRecord = async () => {
     const resp = await LIST_TRIGGER_RECORD({
       build_conf_ids: props.buildConf.id
     })
-    console.log(resp)
+    records.value = resp
   } finally {
     queryLoadding.value = false
   }
 }
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name'
-  }
-]
 </script>
 
-<style scoped></style>
+<style scoped>
+.job-card :deep(.arco-table-th) {
+  background-color: #fff;
+}
+</style>

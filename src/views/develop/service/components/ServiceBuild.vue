@@ -19,7 +19,7 @@
     <div>
       <BuildItem v-for="item in data.items" :key="item.id" :buildConf="item"></BuildItem>
     </div>
-    <MannulTest v-model:visible="mannulDebug"></MannulTest>
+    <MannulTest :service="service" v-model:visible="mannulDebug"></MannulTest>
   </div>
 </template>
 
@@ -32,6 +32,9 @@ import MannulTest from '../../trigger/components/MannulTest.vue'
 import BuildItem from './BuildItem.vue'
 
 const router = useRouter()
+
+// 声明属性
+defineProps(['service'])
 
 const goToCreate = () => {
   router.push({
@@ -51,7 +54,8 @@ const pagination = reactive(app.value.pagination)
 const queryParams = reactive({
   page_number: 1,
   page_size: pagination.pageSize,
-  is_template: true
+  is_template: true,
+  service_id: router.currentRoute.value.params.id
 })
 
 const queryLoading = ref(false)

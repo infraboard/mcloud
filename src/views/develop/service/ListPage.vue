@@ -1,9 +1,10 @@
 <script setup>
 import { app } from '@/stores/localstorage'
-import { LIST_SERVICE } from '@/api/mcenter/service'
+import { LIST_SERVICE, DELETE_SERVICE } from '@/api/mcenter/service'
 import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Notification } from '@arco-design/web-vue'
 
 const router = useRouter()
 
@@ -41,6 +42,19 @@ const QueryData = async () => {
 onMounted(() => {
   QueryData()
 })
+
+// 处理操作
+const handleSelect = async (v, record) => {
+  switch (v) {
+    case 'delete':
+      await DELETE_SERVICE(record.id)
+      Notification.success(`删除${record.id}成功`)
+      QueryData()
+      break
+    default:
+      break
+  }
+}
 </script>
 
 <template>
@@ -93,6 +107,29 @@ onMounted(() => {
         <a-table-column title="创建时间">
           <template #cell="{ record }">
             <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
+        <a-table-column align="center" title="操作" :width="200">
+          <template #cell="{ record }">
+            <a-button
+              type="text"
+              :size="app.size"
+              @click="router.push({ name: 'DomainJobCreate', query: { id: record.id } })"
+            >
+              编辑
+            </a-button>
+            <a-divider direction="vertical" />
+            <a-dropdown @select="handleSelect($event, record)">
+              <a-button type="text"><icon-more-vertical /></a-button>
+              <template #content>
+                <a-doption value="delete">
+                  <template #icon>
+                    <icon-delete />
+                  </template>
+                  删除
+                </a-doption>
+              </template>
+            </a-dropdown>
           </template>
         </a-table-column>
       </template>
