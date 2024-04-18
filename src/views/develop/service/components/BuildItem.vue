@@ -140,7 +140,6 @@ const records = ref({ items: [] })
 const queryBuildRecord = async () => {
   queryParams.page_number = pagination.current
   queryParams.page_size = pagination.pageSize
-
   queryLoadding.value = true
   try {
     const resp = await LIST_TRIGGER_RECORD(queryParams)
@@ -166,6 +165,10 @@ const ps = (record) => {
         case 'FAILED':
           status.stage = '失败'
           status.color = 'danger'
+          break
+        case 'ACTIVE':
+          status.stage = '运行中'
+          status.color = 'info'
           break
         default:
           break

@@ -85,9 +85,8 @@ const handleSubmit = async (data) => {
     try {
       form.value.skip_run_pipeline = !form.value.run_pipeline
       submitLoading.value = true
-      mockData.commits[0].id = form.value.extra.commit_id
-      mockData.after = form.value.extra.commit_id
-      mockData.checkout_sha = form.value.extra.commit_id
+      mockData.commits[mockData.commits.length - 1].id = form.value.extra.commit_id
+      
       mockData.ref = `refs/heads/${form.value.sub_name}`
       mockData.repository.git_ssh_url = props.service.code_repository.ssh_url
       mockData.project.git_ssh_url = props.service.code_repository.ssh_url

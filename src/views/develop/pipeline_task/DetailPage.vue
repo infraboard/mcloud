@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_PIPELINE_TASK, RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
 import mapping from '@/stores/mapping'
@@ -36,6 +36,10 @@ var timer = setInterval(async () => {
   await queryData()
 }, 3000)
 
+onUnmounted(() => {
+  clearInterval(timer)
+})
+
 const queryData = async () => {
   const pid = router.currentRoute.value.params.id
   const resp = await GET_PIPELINE_TASK(pid)
@@ -61,12 +65,15 @@ const queryData = async () => {
     }
   }
 
-  //
+  // 取消定时器
   if (pipelineTask.value.end_at) {
     // 取消定时器
     clearInterval(timer)
   }
 }
+
+
+
 
 // 运行Pipeline
 const runPipelineLoading = ref(false)
