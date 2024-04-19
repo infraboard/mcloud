@@ -1,5 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
+import { _pagination } from '@/stores/pagination'
 import { LIST_PIPELINE_TASK } from '@/api/mflow/task'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
@@ -8,7 +9,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 // 分页参数
-const pagination = reactive(app.value.pagination)
+const pagination = reactive(_pagination)
 const queryParams = reactive({
   page_number: 1,
   page_size: pagination.pageSize,
@@ -16,18 +17,20 @@ const queryParams = reactive({
 })
 
 const pageChange = (v) => {
-  queryParams.page_number = v
+  pagination.current = v
   QueryData()
 }
 const pageSizeChange = (v) => {
-  queryParams.page_size = v
-  queryParams.page_number = 1
+  pagination.pageSize = v
+  pagination.current = 1
   QueryData()
 }
 
 const queryLoading = ref(false)
 const data = reactive({ items: [], total: 0 })
 const QueryData = async () => {
+  queryParams.page_number = pagination.current
+  queryParams.page_size = pagination.pageSize
   try {
     queryLoading.value = true
     var resp = await LIST_PIPELINE_TASK(queryParams)

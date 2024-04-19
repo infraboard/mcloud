@@ -17,7 +17,7 @@ export var CREATE_DEPLOY = (data) => {
 
 // 更新部署
 export var UPDATE_DEPLOY = (id, data) => {
-  return instance.put('/mpaas/api/v1/deploys', data)
+  return instance.put(`/mpaas/api/v1/deploys/${id}`, data)
 }
 
 // 删除部署

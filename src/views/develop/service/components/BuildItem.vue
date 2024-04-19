@@ -170,6 +170,10 @@ const ps = (record) => {
           status.stage = '运行中'
           status.color = 'info'
           break
+        case 'SUCCEEDED':
+          status.stage = '成功'
+          status.color = 'success'
+          break
         default:
           break
       }
