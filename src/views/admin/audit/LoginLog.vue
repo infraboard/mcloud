@@ -1,29 +1,31 @@
 <script setup>
-import { app } from '@/stores/localstorage'
+import { _pagination } from '@/stores/pagination'
 import { LIST_TOKEN } from '@/api/mcenter/token'
 import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 
 // 分页参数
-const pagination = reactive(app.value.pagination)
+const pagination = reactive(_pagination)
 const queryParams = reactive({
   page_number: 1,
   page_size: pagination.pageSize
 })
 
 const pageChange = (v) => {
-  queryParams.page_number = v
+  pagination.current = v
   QueryData()
 }
 const pageSizeChange = (v) => {
-  queryParams.page_size = v
-  queryParams.page_number = 1
+  pagination.current = 1
+  pagination.pageSize = v
   QueryData()
 }
 
 const queryLoading = ref(false)
 const data = reactive({ items: [], total: 0 })
 const QueryData = async () => {
+  queryParams.page_number = pagination.current
+  queryParams.page_size = pagination.pageSize
   try {
     queryLoading.value = true
     var resp = await LIST_TOKEN(queryParams)
