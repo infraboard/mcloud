@@ -86,6 +86,9 @@ watch(
         <a-link>详情</a-link>
       </a-space>
     </div>
+    <a-alert v-if="deploy.status && deploy.status.stage !='ACTIVE' &&  deploy.status.message" type="error" style="margin-bottom: 12px">{{
+      deploy.status.message
+    }}</a-alert>
     <a-table class="pods" :bordered="true" :pagination="false" :data="pods">
       <template #columns>
         <a-table-column title="名称" data-index="metadata.name"></a-table-column>
