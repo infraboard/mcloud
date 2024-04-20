@@ -1,38 +1,14 @@
 # mcloud
 
-This template should help get you started developing with Vue 3 in Vite.
+微服务研发云前端
 
-## Recommended IDE Setup
+## 后端服务列表
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
++ [https://github.com/infraboard/mcenter](用户中心)
++ [https://github.com/infraboard/mpaas](发布中心)
++ [https://github.com/infraboard/mflow](流水线服务)
++ [https://github.com/infraboard/moperator](流水线服务)
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
 
 ### 关于构建环境变量
 
