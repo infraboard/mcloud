@@ -6,7 +6,7 @@
 
 + [用户中心](https://github.com/infraboard/mcenter)
 + [发布中心](https://github.com/infraboard/mpaas)
-+ [流水线服务]https://github.com/infraboard/mflow()
++ [流水线服务](https://github.com/infraboard/mflow)
 + [流水线服务](https://github.com/infraboard/moperator)
 
 
