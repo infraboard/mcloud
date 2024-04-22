@@ -29,3 +29,8 @@ export var RUN_PIPELINE_TASK = (data) => {
 export var GET_PIPELINE_TASK = (id, params) => {
   return instance.get(`/mflow/api/v1/pipeline_tasks/${id}`, { params })
 }
+
+// 删除Pipeline执行详情
+export var DELETE_PIPELINE_TASK = (id) => {
+  return instance.delete(`/mflow/api/v1/pipeline_tasks/${id}`)
+}

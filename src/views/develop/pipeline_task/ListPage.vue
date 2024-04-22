@@ -1,7 +1,7 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { _pagination } from '@/stores/pagination'
-import { LIST_PIPELINE_TASK } from '@/api/mflow/task'
+import { LIST_PIPELINE_TASK, DELETE_PIPELINE_TASK } from '@/api/mflow/task'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -45,6 +45,18 @@ const QueryData = async () => {
 onMounted(() => {
   QueryData()
 })
+
+// 删除执行记录
+const selectRow = ref('')
+const deleteTask = async (id) => {
+  selectRow.value = id
+  try {
+    await DELETE_PIPELINE_TASK(id)
+    QueryData()
+  } finally {
+    selectRow.value = ''
+  }
+}
 </script>
 
 <template>
@@ -65,7 +77,7 @@ onMounted(() => {
           </template>
         </a-table-column>
         <a-table-column title="流水线" data-index="pipeline.name"></a-table-column>
-        <a-table-column title="模式" data-index="run_mode"></a-table-column>
+        <a-table-column title="执行模式" data-index="run_mode"></a-table-column>
         <a-table-column title="调试模式" data-index="dry_run"></a-table-column>
         <a-table-column title="状态">
           <template #cell="{ record }">
@@ -94,6 +106,19 @@ onMounted(() => {
               </template>
               详情
             </a-button>
+            <a-popconfirm
+              :content="`您确定要删除吗?`"
+              type="warning"
+              :ok-loading="selectRow === record.id"
+              @ok="deleteTask(record.id)"
+            >
+              <a-button type="text" status="danger" :size="app.size">
+                <template #icon>
+                  <icon-delete />
+                </template>
+                删除
+              </a-button>
+            </a-popconfirm>
           </template>
         </a-table-column>
       </template>
