@@ -38,7 +38,7 @@ onMounted(() => {
 <template>
   <a-select
     :loading="queryLoading"
-    placeholder="请输入用户名进行模糊搜索"
+    placeholder=""
     :model-value="modelValue"
     @search="handleSearch"
     @change="$emit('update:modelValue', $event)"

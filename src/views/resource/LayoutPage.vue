@@ -48,8 +48,8 @@ onMounted(() => {
         <a-sub-menu key="ResourceSync">
           <template #icon><icon-relation /></template>
           <template #title><span class="menu-title">资源同步</span></template>
-          <a-menu-item key="ResourceTaskList">任务列表</a-menu-item>
           <a-menu-item key="ResourceSecretList">账号管理</a-menu-item>
+          <a-menu-item key="ResourceTaskList">任务列表</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </div>

@@ -33,7 +33,7 @@ onBeforeMount(() => {
 <template>
   <a-select
     :loading="queryLoading"
-    placeholder="请选择角色"
+    placeholder=""
     :model-value="modelValue"
     @change="$emit('update:modelValue', $event)"
     allow-search

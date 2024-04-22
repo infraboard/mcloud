@@ -79,7 +79,7 @@ onBeforeMount(async () => {
         <a-form-item field="user_id" label="用户" help="请输入用户名进行模糊搜索" required>
           <SearchUser v-model="form.user_id"></SearchUser>
         </a-form-item>
-        <a-form-item field="role_id" label="角色" required>
+        <a-form-item field="role_id" label="角色" help="成员角色" required>
           <SearchRole v-model="form.role_id"></SearchRole>
         </a-form-item>
         <a-form-item label="是否过期" help="">
