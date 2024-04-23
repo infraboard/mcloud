@@ -15,6 +15,13 @@
 [ngrok](https://ngrok.com/docs)
 
 
+## 镜像构建
+
+```sh
+docker buildx build  --platform linux/amd64 -t mcloud .
+```
+
+
 ### 关于构建环境变量
 
 https://cn.vitejs.dev/guide/env-and-mode.html
