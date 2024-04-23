@@ -25,9 +25,9 @@ EXPOSE 80
 # Nginx 配置文件，用于处理路由
 
 # 配置反向代理默认地址
-ENV MCENTER_SERVICE_URL = http://127.0.0.1:8010\
-MPAAS_SERVICE_URL = http://127.0.0.1:8080\
-MFLOW_SERVICE_URL = http://127.0.0.1:8090
+ENV MCENTER_SERVICE_URL=http://127.0.0.1:8010 \
+MPAAS_SERVICE_URL=http://127.0.0.1:8080 \
+MFLOW_SERVICE_URL=http://127.0.0.1:8090
 
 COPY etc/nginx.conf /etc/nginx/templates/default.conf.template
 
