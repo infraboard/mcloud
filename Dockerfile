@@ -16,8 +16,8 @@ RUN npm run  build
 # 使用官方的 Nginx 镜像作为基础镜像
 FROM nginx:latest
 
-# 将构建好的 React 应用复制到 Nginx 的默认静态文件目录
-COPY --from=build /app/build /usr/share/nginx/html
+# 将构建好的 Vue 应用复制到 Nginx 的默认静态文件目录
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # 暴露容器的 80 端口
 EXPOSE 80
