@@ -39,7 +39,7 @@ docker run --restart=always \
 docker run --restart=always \
 --name mcloud \
 --network host \
--itd registry.cn-hangzhou.aliyuncs.com/infraboard/mcloud:v0.0.1
+-itd registry.cn-hangzhou.aliyuncs.com/infraboard/mcloud:v0.0.2
 # moperator
 docker run --restart=always \
 -e GRPC_HOST="10.0.8.3" \
