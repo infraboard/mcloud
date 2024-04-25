@@ -40,7 +40,7 @@ const connect = () => {
   emit('changed', '连接中')
 
   let socket = new WebSocket(
-    `ws://127.0.0.1:8090/mflow/api/v1/job_tasks/${props.taskId}/log?mcenter_access_token=${app.value.token.access_token}`
+    `ws://127.0.0.1:8090/mflow/api/v1/ws/job_tasks/${props.taskId}/log?mcenter_access_token=${app.value.token.access_token}`
   )
 
   socket.onopen = function () {

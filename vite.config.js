@@ -29,8 +29,16 @@ export default defineConfig({
       '/mcenter/api/v1': {
         target: 'http://127.0.0.1:8010'
       },
+      '/mflow/api/v1/ws': {
+        target: 'http://127.0.0.1:8090',
+        ws: true,
+      },
       '/mflow/api/v1': {
         target: 'http://127.0.0.1:8090'
+      },
+      '/mpaas/api/v1/ws': {
+        target: 'http://127.0.0.1:8080',
+        ws: true,
       },
       '/mpaas/api/v1': {
         target: 'http://127.0.0.1:8080'
