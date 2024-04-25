@@ -62,9 +62,8 @@ const fitSize = () => {
 // 连接socket
 const connect = () => {
   emit('changed', '连接中')
-  const addr = (import.meta.env.VITE_BASE_URL) ? import.meta.env.VITE_BASE_URL: location.host;
   socket = new WebSocket(
-    `ws://${addr}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login?mcenter_access_token=${app.value.token.access_token}`
+    `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login?mcenter_access_token=${app.value.token.access_token}`
   )
   //心跳检测
   var heartCheck = {
