@@ -18,17 +18,17 @@ const pros = defineProps({
 const delta = dayjs.duration(pros.timestamp, 'seconds')
 const showDelta = () => {
   let text = []
-  let s = delta.seconds()
-  if (s > 0) {
-    text.push(`${s} 秒`)
+  let seconds = delta.seconds()
+  if (seconds > 0) {
+    text.push(`${seconds} 秒`)
   }
-  let m = delta.minutes()
-  if (m > 0) {
-    text.push(`${m} 分`)
+  let minutes = delta.minutes()
+  if (minutes > 0) {
+    text.push(`${minutes} 分`)
   }
-  let d = delta.days()
-  if (d > 0) {
-    text.push(`${d} 天`)
+  let day = delta.days()
+  if (day > 0) {
+    text.push(`${day} 天`)
   }
   return text.splice(0, 2).reverse().join(' ')
 }

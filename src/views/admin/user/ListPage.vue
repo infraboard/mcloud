@@ -5,6 +5,7 @@ import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ResetPassword from './components/ResetPassword.vue'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 
@@ -78,8 +79,16 @@ onMounted(() => {
     >
       <template #columns>
         <a-table-column title="用户名" data-index="username"></a-table-column>
-        <a-table-column title="类型" data-index="type"></a-table-column>
-        <a-table-column title="状态" data-index="status.locked"></a-table-column>
+        <a-table-column title="类型">
+          <template #cell="{ record }">
+            {{ mapping.USER_TYPE[record.type] }}
+          </template>
+        </a-table-column>
+        <a-table-column title="冻结">
+          <template #cell="{ record }">
+            {{ mapping.BOOLEAN[record.status.locked] }}
+          </template>
+        </a-table-column>
         <a-table-column title="创建时间">
           <template #cell="{ record }">
             <ShowTime :timestamp="record.create_at"></ShowTime>

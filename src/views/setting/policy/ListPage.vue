@@ -65,15 +65,17 @@ onMounted(() => {
     >
       <template #columns>
         <a-table-column title="空间" data-index="namespace"></a-table-column>
-        <a-table-column title="用户" data-index="username"></a-table-column>
+        <a-table-column title="用户" data-index="user_id"></a-table-column>
         <a-table-column title="角色">
           <template #cell="{ record }">
-            <a-link @click="router.push({ name: 'RoleDetail', query: { id: record.role.id } })">{{
-              record.role.name
-            }}</a-link>
+            {{ record.role.name }}
           </template>
         </a-table-column>
-        <a-table-column title="创建时间" data-index="create_at"></a-table-column>
+        <a-table-column title="创建时间">
+          <template #cell="{ record }">
+            <ShowTime :timestamp="record.create_at"></ShowTime>
+          </template>
+        </a-table-column>
       </template>
     </a-table>
   </div>

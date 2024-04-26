@@ -105,11 +105,12 @@ const handleSelect = async (v, record) => {
         </a-table-column>
         <a-table-column title="创建时间">
           <template #cell="{ record }">
-            <ShowTime v-if="record.code_repository &&
-             record.code_repository.created_at" :timestamp="record.code_repository.created_at">
-             </ShowTime>
-             <ShowTime v-else :timestamp="record.create_at">
-             </ShowTime>
+            <ShowTime
+              v-if="record.code_repository && record.code_repository.created_at"
+              :timestamp="record.code_repository.created_at"
+            >
+            </ShowTime>
+            <ShowTime v-else :timestamp="record.create_at"> </ShowTime>
           </template>
         </a-table-column>
         <a-table-column align="center" title="操作" :width="200">

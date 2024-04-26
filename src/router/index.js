@@ -6,6 +6,7 @@ import admin from './admin'
 import setting from './setting'
 import resource from './resource'
 import develop from './develop'
+import person from './person'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,8 @@ const router = createRouter({
       name: 'UserWorkspace',
       redirect: { name: 'ServiceConsole' }
     },
+    // 账号中心
+    person,
     // 服务工作台
     console,
     // 后台管理

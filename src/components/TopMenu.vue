@@ -4,14 +4,15 @@ import { useRouter } from 'vue-router'
 import { LIST_NAMESPACE } from '@/api/mcenter/namespace'
 import { CHANGE_NAMESPACE } from '@/api/mcenter/token'
 import { onBeforeMount, reactive, ref, watch } from 'vue'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 const Logout = () => {
   app.value.isLogin = false
   router.push({ name: 'LoginPage' })
 }
-const Login = () => {
-  router.push({ name: 'LoginPage' })
+const JumpToUpdatePassword = () => {
+  router.push({ name: 'UpdateMyPassword' })
 }
 const JumpToAdmin = () => {
   router.push({ name: app.value.menu.admin })
@@ -136,9 +137,6 @@ onBeforeMount(() => {
             type="text"
             @click="JumpToAdmin"
           >
-            <template #icon>
-              <icon-tool />
-            </template>
             管理后台
           </a-button>
         </div>
@@ -152,8 +150,49 @@ onBeforeMount(() => {
         </div>
 
         <div class="user-info">
-          <a-button v-if="app.isLogin" type="text" @click="Logout">退出</a-button>
-          <a-button v-else type="text" @click="Login">登录</a-button>
+          <a-trigger>
+            <div style="display: flex">
+              <div class="user-name">
+                <div class="username">{{ app.token.username }}</div>
+                <div class="user-type">{{ mapping.USER_TYPE[app.token.user_type] }}</div>
+              </div>
+              <div class="user-avatar">
+                <a-avatar :size="30" :style="{ backgroundColor: '#00d0b6' }">{{
+                  app.token.username[0].toUpperCase()
+                }}</a-avatar>
+              </div>
+            </div>
+            <template #content>
+              <a-card class="user-menu">
+                <template #title>
+                  <div class="user-card-title">
+                    <div class="user-card-line">
+                      <div style="font-weight: 600; font-size: 14px; width: 60px">
+                        {{ app.token.username }}
+                      </div>
+                      <a-tag color="arcoblue" bordered>{{
+                        mapping.USER_TYPE[app.token.user_type]
+                      }}</a-tag>
+                    </div>
+                    <a-space>
+                      <span>账号 ID</span>
+                      <span style="margin-left: 12px">{{ app.token.user_id }}</span>
+                    </a-space>
+                  </div>
+                </template>
+                <template #default>
+                  <div class="user-menu-content">
+                    <a-button class="user-menu-item" type="text" @click="JumpToUpdatePassword"
+                      >修改密码</a-button
+                    >
+                  </div>
+                </template>
+                <template #actions>
+                  <a-button class="user-menu-item" type="text" @click="Logout">退出</a-button>
+                </template>
+              </a-card>
+            </template>
+          </a-trigger>
         </div>
       </div>
     </div>
@@ -163,7 +202,7 @@ onBeforeMount(() => {
 <style scoped>
 .nav {
   /* margin-top: 46px; */
-  padding: 0 8px;
+  padding: 0 0 0 8px;
   height: 45px;
   width: 100vw;
   display: flex;
@@ -226,13 +265,82 @@ onBeforeMount(() => {
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   height: 100%;
   border-left: 1px solid rgb(229, 230, 235);
+  width: 120px;
+  cursor: pointer;
+}
+
+.user-card-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-info:hover {
+  background-color: var(--color-neutral-2);
 }
 
 .user-op {
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+.user-name {
+  display: flex;
+  width: 90px;
+  font-size: 12px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-type {
+  font-size: 0.9em;
+  color: var(--color-neutral-6);
+}
+
+.username {
+  font-size: inherit;
+}
+
+.user-avatar {
+  margin: 0px 10px;
+}
+
+.user-menu {
+  width: 260px;
+  margin-top: 4px;
+}
+
+.user-menu :deep(.arco-card-header) {
+  border-bottom: 1px solid var(--color-neutral-3);
+  height: 80px !important;
+  background-color: var(--color-neutral-2);
+}
+
+.user-menu :deep(.arco-card-body) {
+  padding: 0 0;
+}
+
+.user-menu :deep(.arco-card-actions) {
+  border-top: 1px solid var(--color-neutral-3);
+  margin-top: 0px;
+}
+
+.user-menu :deep(.arco-card-actions-right) {
+  width: 100%;
+}
+.user-menu :deep(.arco-card-actions-item) {
+  width: 100%;
+}
+
+.user-menu-item {
+  width: 100%;
+  color: var(--color-neutral-8);
+  height: 50px;
+  font-weight: 400;
+  font-size: 12px;
 }
 </style>
