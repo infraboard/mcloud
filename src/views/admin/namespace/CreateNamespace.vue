@@ -3,6 +3,7 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_NAMESPACE, CREATE_NAMESPACE } from '@/api/mcenter/namespace'
 import { Notification } from '@arco-design/web-vue'
+import SearchUser from '@/components/SearchUser.vue'
 
 const router = useRouter()
 const form = ref({
@@ -71,6 +72,9 @@ onBeforeMount(async () => {
         </a-form-item>
         <a-form-item field="description" label="描述" required>
           <a-input v-model="form.description" placeholder="请输入空间名称" />
+        </a-form-item>
+        <a-form-item field="owner" label="负责人" help="请选择空间负责人" required>
+          <SearchUser v-model="form.owner"></SearchUser>
         </a-form-item>
         <div class="form-submit">
           <a-space>

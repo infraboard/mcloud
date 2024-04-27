@@ -1,7 +1,7 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { useRouter } from 'vue-router'
-import { LIST_NAMESPACE } from '@/api/mcenter/namespace'
+import { LIST_NAMESPACE } from '@/api/mcenter/permission'
 import { CHANGE_NAMESPACE } from '@/api/mcenter/token'
 import { onBeforeMount, reactive, ref, watch } from 'vue'
 import mapping from '@/stores/mapping'
