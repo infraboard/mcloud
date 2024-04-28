@@ -21,6 +21,7 @@ const router = useRouter()
 const form = ref({
   username: '',
   password: '',
+  shared: false,
   description: '',
   labels: { UserGroup: '' },
   profile: {
@@ -90,22 +91,27 @@ const handleSubmit = async (data) => {
     <a-card>
       <a-form :model="form" @submit="handleSubmit" auto-label-width>
         <a-divider orientation="center" type="dotted">账号信息</a-divider>
-        <a-form-item field="username" label="用户名" v-if="isCreate" required>
-          <a-input v-model="form.username" placeholder="请输入用户名" />
+        <a-form-item field="username" label="用户名" v-if="isCreate" help="请输入用户名" required>
+          <a-input v-model="form.username" />
         </a-form-item>
-        <a-form-item field="password" label="密码" v-if="isCreate" required>
-          <a-input-password v-model="form.password" placeholder="请输入密码" />
+        <a-form-item field="password" label="密码" v-if="isCreate" help="请输入密码" required>
+          <a-input-password v-model="form.password" />
         </a-form-item>
-        <a-form-item field="labels.UserGroup" label="用户组" required>
+        <a-form-item field="labels.UserGroup" label="用户组" help="用户组" required>
           <a-cascader
             :options="groupLabels"
             allow-search
-            laceholder="选择用户组"
             v-model="form.labels.UserGroup"
           />
         </a-form-item>
-        <a-form-item field="description" label="描述">
+        <a-form-item field="description" label="描述" help="用户描述">
           <a-input v-model="form.description" />
+        </a-form-item>
+        <a-form-item field="shared" label="共享" help="是否允许多人同时使用">
+          <a-switch type="round" v-model="form.shared">
+            <template #checked> ON </template>
+            <template #unchecked> OFF </template>
+          </a-switch>
         </a-form-item>
 
         <a-divider orientation="center" type="dotted">用户信息</a-divider>
