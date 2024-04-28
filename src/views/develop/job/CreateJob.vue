@@ -7,6 +7,7 @@ import { Notification } from '@arco-design/web-vue'
 import mapping from '@/stores/mapping'
 import ParamSetting from './components/ParamSetting.vue'
 import { app } from '@/stores/localstorage'
+import CodeEditor from '@/components/CodeEditor.vue'
 
 const router = useRouter()
 const runner_attr = ref('runner_spec')

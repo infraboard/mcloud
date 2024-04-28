@@ -7,6 +7,7 @@ import { LIST_LABEL } from '@/api/mcenter/label'
 import { Message } from '@arco-design/web-vue'
 import SearchService from '../../../components/SearchService.vue'
 import SearchK8s from '../../../components/SearchK8s.vue'
+import CodeEditor from '@/components/CodeEditor.vue'
 
 const router = useRouter()
 const form = ref({
