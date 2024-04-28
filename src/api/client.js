@@ -27,15 +27,23 @@ instance.interceptors.response.use(
     // api 有返回异常，使用API接口返回的异常
     if (error.response && error.response.data) {
       message = error.response.data.message
-
+      console.log(error.response.data.error_code)
       switch (error.response.data.error_code) {
         case 401:
           app.value.isLogin = false
           window.location.reload()
           return
+        case 403:
+          Modal.warning({
+            title: '你当前没有操作权限',
+            draggable: true,
+            content: message,
+            okText: '我知道了'
+          })
+          break
         // Token过期
         case 50015:
-          Modal.error({
+          Modal.info({
             title: '确认退出',
             content: '当前会话已过期，您可以取消以停留在此页面，或者重新登录',
             okText: '重新登录',
@@ -47,7 +55,7 @@ instance.interceptors.response.use(
           return
         // 异地登录
         case 50010:
-          Modal.error({
+          Modal.info({
             title: error.response.data.reason,
             content: `${message}`,
             okText: '重新登录',
@@ -58,15 +66,16 @@ instance.interceptors.response.use(
           })
           return
       }
+    } else {
+      // 提示异常
+      Message.error({
+        content: message,
+        resetOnHover: true,
+        duration: 5000,
+        closable: true
+      })
     }
 
-    // 提示异常
-    Message.error({
-      content: message,
-      resetOnHover: true,
-      duration: 5000,
-      closable: true
-    })
     return Promise.reject(new Error(message))
   }
 )

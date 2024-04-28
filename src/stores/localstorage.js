@@ -38,3 +38,11 @@ export var app = useStorage(
   localStorage,
   { mergeDefaults: true }
 )
+
+export var showMemberManagement = () => {
+  if (app.value.token.user_type === 'SUB' && !app.value.token.is_namespace_manager) {
+    return false
+  }
+
+  return true
+}
