@@ -35,8 +35,6 @@ const handleSubmit = async (data) => {
           break
       }
       router.push({ name: 'ServiceClusterList' })
-    } catch (error) {
-      Notification.error(`保存失败: ${error}`)
     } finally {
       submitLoading.value = false
     }
@@ -47,12 +45,8 @@ const handleSubmit = async (data) => {
 const GetK8sCluster = async () => {
   if (!isCreate) {
     pageHeader = '编辑集群'
-    try {
-      const resp = await DESCRIBE_CLUSTER(id)
-      form.value = resp
-    } catch (error) {
-      Notification.error(`查询集群失败: ${error}`)
-    }
+    const resp = await DESCRIBE_CLUSTER(id)
+    form.value = resp
   }
 }
 

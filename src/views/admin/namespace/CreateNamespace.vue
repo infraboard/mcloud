@@ -2,7 +2,6 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GET_NAMESPACE, CREATE_NAMESPACE } from '@/api/mcenter/namespace'
-import { Notification } from '@arco-design/web-vue'
 import SearchUser from '@/components/SearchUser.vue'
 
 const router = useRouter()
@@ -21,8 +20,6 @@ const handleSubmit = async (data) => {
       let resp = await CREATE_NAMESPACE(data.values)
       console.log(resp)
       router.push({ name: 'NamespaceList' })
-    } catch (error) {
-      Notification.error(`保存失败: ${error}`)
     } finally {
       submitLoading.value = false
     }
@@ -36,11 +33,7 @@ const isCreate = id === undefined
 const GetNamespace = async () => {
   if (!isCreate) {
     pageHeader = '编辑空间'
-    try {
-      form.value = await GET_NAMESPACE(id)
-    } catch (error) {
-      Notification.error(`查询空间失败: ${error}`)
-    }
+    form.value = await GET_NAMESPACE(id)
   }
 }
 onBeforeMount(async () => {

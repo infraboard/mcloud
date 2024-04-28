@@ -6,7 +6,6 @@ import AddStage from './components/AddStage.vue'
 import UpdateStep from './components/UpdateStep.vue'
 import UpdateStage from './components/UpdateStage.vue'
 import ChoiceJob from '../job/components/ChoiceJob.vue'
-import { Notification } from '@arco-design/web-vue'
 import { CREATE_PIPELINE, GET_PIPELINE, UPDATE_PIPELINE } from '@/api/mflow/pipeline.js'
 
 const router = useRouter()
@@ -155,8 +154,6 @@ const saveOrUpdate = async () => {
       await CREATE_PIPELINE(pipeline.value)
     }
     router.push({ name: 'DomainPipelineList' })
-  } catch (error) {
-    Notification.error(`保存流水线失败: ${error}`)
   } finally {
     saveOrUpdateLoading.value = false
   }

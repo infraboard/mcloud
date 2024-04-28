@@ -94,8 +94,6 @@ const handleSubmit = async (data) => {
       let resp = await MANNUL_GITLAB_TRIGGER(form.value)
       emit('change', resp)
       emit('update:visible', false)
-    } catch (error) {
-      Notification.error(`保存失败: ${error}`)
     } finally {
       submitLoading.value = false
     }

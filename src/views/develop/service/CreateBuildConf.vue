@@ -218,8 +218,6 @@ const handleSubmit = async (data) => {
         Notification.success(`保存成功`)
       }
       router.go(-1)
-    } catch (error) {
-      Notification.error(`失败: ${error}`)
     } finally {
       submitLoading.value = false
     }

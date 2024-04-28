@@ -64,8 +64,6 @@ const syncChanged = async (v, record) => {
     try {
       await CREATE_SERVICE(record)
       listProject()
-    } catch (error) {
-      Notification.error(`创建服务失败: ${error}`)
     } finally {
       syncLoading.value = null
     }
@@ -74,8 +72,6 @@ const syncChanged = async (v, record) => {
     try {
       await DELETE_SERVICE(record.id)
       listProject()
-    } catch (error) {
-      Notification.error(`删除服务失败: ${error}`)
     } finally {
       syncLoading.value = null
     }

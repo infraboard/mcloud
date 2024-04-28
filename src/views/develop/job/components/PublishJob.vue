@@ -42,8 +42,6 @@ const handleSubmit = async () => {
       publishJobForm.value.resetFields()
       emit('update:visible', false)
       emit('ok', true)
-    } catch (error) {
-      Notification.error(`发布失败: ${error}`)
     } finally {
       submitLoading.value = false
     }

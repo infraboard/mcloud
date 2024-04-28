@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { RUN_JOB_TASK } from '@/api/mflow/task'
-import { Notification } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
 
@@ -61,8 +60,6 @@ const handleSubmit = async () => {
       // 状态处理
       runJobForm.value.resetFields()
       emit('update:visible', false)
-    } catch (error) {
-      Notification.error(`运行失败: ${error}`)
     } finally {
       submitLoading.value = false
     }

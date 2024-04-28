@@ -43,13 +43,9 @@ const isCreate = uid === undefined
 const GetUser = async () => {
   if (!isCreate) {
     pageHeader = '编辑用户'
-    try {
-      let resp = await GET_SUB_USER(uid)
-      resp.password = ''
-      form.value = resp
-    } catch (error) {
-      Notification.error(`查询用户失败: ${error}`)
-    }
+    let resp = await GET_SUB_USER(uid)
+    resp.password = ''
+    form.value = resp
   }
 }
 onBeforeMount(async () => {

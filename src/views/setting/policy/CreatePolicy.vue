@@ -28,8 +28,6 @@ const handleSubmit = async (data) => {
       await CREATE_POLICY(data.values)
       Notification.success(`保存成功`)
       router.push({ name: 'NamespacePolicyList' })
-    } catch (error) {
-      Notification.error(`保存失败: ${error}`)
     } finally {
       submitLoading.value = false
     }
@@ -43,17 +41,13 @@ const isCreate = id === undefined
 const GetPolicy = async () => {
   if (!isCreate) {
     pageHeader = '编辑策略'
-    try {
-      const resp = await GET_POLICY(id)
-      form.value = resp
+    const resp = await GET_POLICY(id)
+    form.value = resp
 
-      // 补充界面的过期选项
-      isExpired.value = resp.expired_time > 0
-      if (isExpired.value) {
-        expiredTime.value = dayjs.unix(resp.expired_time)
-      }
-    } catch (error) {
-      Notification.error(`查询策略失败: ${error}`)
+    // 补充界面的过期选项
+    isExpired.value = resp.expired_time > 0
+    if (isExpired.value) {
+      expiredTime.value = dayjs.unix(resp.expired_time)
     }
   }
 }

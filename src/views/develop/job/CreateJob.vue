@@ -48,8 +48,6 @@ const handleSubmit = async (data) => {
           break
       }
       router.push({ name: 'DomainJobList' })
-    } catch (error) {
-      Notification.error(`保存失败: ${error}`)
     } finally {
       submitLoading.value = false
     }
@@ -60,11 +58,7 @@ const handleSubmit = async (data) => {
 const GetJob = async () => {
   if (!isCreate) {
     pageHeader = '编辑任务'
-    try {
-      form.value = await GET_JOB(id)
-    } catch (error) {
-      Notification.error(`查询Job失败: ${error}`)
-    }
+    form.value = await GET_JOB(id)
   }
 }
 
