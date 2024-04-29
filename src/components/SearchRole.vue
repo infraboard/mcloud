@@ -1,7 +1,6 @@
 <script setup>
 import { onBeforeMount, reactive, ref } from 'vue'
 import { LIST_ROLE } from '@/api/mcenter/role'
-import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
 defineProps(['modelValue'])
@@ -17,8 +16,6 @@ const ListRole = async () => {
   try {
     const resp = await LIST_ROLE(queryParms)
     options.value = resp.items
-  } catch (error) {
-    Message.error(`查询角色失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

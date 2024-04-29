@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { LIST_SERVICE } from '@/api/mcenter/service'
-import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
 defineProps({
@@ -23,8 +22,6 @@ const ListService = async () => {
   try {
     const resp = await LIST_SERVICE(queryParms)
     options.value = resp.items
-  } catch (error) {
-    Message.error(`查询服务失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

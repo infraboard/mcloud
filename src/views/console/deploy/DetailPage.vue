@@ -15,16 +15,13 @@ const workload_obj = ref({})
 const service = ref({ spec: { ports: [] } })
 const pods = ref([])
 const GetDeploy = async () => {
+  deploy.value = await DESCRIBE_DEPLOY(router.currentRoute.value.params.id)
+  const kc = deploy.value.k8s_type_config
+  workload_yaml.value = kc.workload_config
+
   try {
-    deploy.value = await DESCRIBE_DEPLOY(router.currentRoute.value.params.id)
-    const kc = deploy.value.k8s_type_config
-    workload_yaml.value = kc.workload_config
-    try {
-      workload_obj.value = parse(kc.workload_config)
-      service.value = parse(kc.service)
-    } catch (error) {
-      console.log(error)
-    }
+    workload_obj.value = parse(kc.workload_config)
+    service.value = parse(kc.service)
 
     let tempPods = []
     Object.keys(kc.pods).forEach((key) => {

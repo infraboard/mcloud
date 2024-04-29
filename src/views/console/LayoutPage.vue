@@ -1,6 +1,5 @@
 <script setup>
 import { LIST_LABEL } from '@/api/mcenter/label'
-import { Message } from '@arco-design/web-vue'
 import { computed, h, onBeforeMount, ref } from 'vue'
 import { LIST_CLUSTER } from '@/api/mpaas/cluster'
 import BreatheLamp from '@/components/BreatheLamp.vue'
@@ -20,8 +19,6 @@ const QueryEnv = async () => {
     if (resp.items.length > 0) {
       envs.value = resp.items[0].enum_options
     }
-  } catch (error) {
-    Message.error(`查询标签失败: ${error}`)
   } finally {
     queryLoading.value = false
   }
@@ -51,8 +48,6 @@ const QueryCluster = async () => {
     const resp = await LIST_CLUSTER(listClusterReq)
     initData(resp.items)
     clusters.value = resp
-  } catch (error) {
-    Message.error(`查询集群失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

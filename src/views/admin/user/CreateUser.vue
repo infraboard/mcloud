@@ -98,11 +98,7 @@ const handleSubmit = async (data) => {
           <a-input-password v-model="form.password" />
         </a-form-item>
         <a-form-item field="labels.UserGroup" label="用户组" help="用户组" required>
-          <a-cascader
-            :options="groupLabels"
-            allow-search
-            v-model="form.labels.UserGroup"
-          />
+          <a-cascader :options="groupLabels" allow-search v-model="form.labels.UserGroup" />
         </a-form-item>
         <a-form-item field="description" label="描述" help="用户描述">
           <a-input v-model="form.description" />

@@ -1,7 +1,6 @@
 <script setup>
 import { _pagination } from '@/stores/pagination'
 import { LIST_TOKEN } from '@/api/mcenter/token'
-import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 
 // 分页参数
@@ -31,8 +30,6 @@ const QueryData = async () => {
     var resp = await LIST_TOKEN(queryParams)
     data.items = resp.items
     pagination.total = resp.total
-  } catch (error) {
-    Message.error(`查询登录日志失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

@@ -27,7 +27,6 @@ instance.interceptors.response.use(
     // api 有返回异常，使用API接口返回的异常
     if (error.response && error.response.data) {
       message = error.response.data.message
-      console.log(error.response.data.error_code)
       switch (error.response.data.error_code) {
         case 401:
           app.value.isLogin = false
@@ -40,7 +39,7 @@ instance.interceptors.response.use(
             content: message,
             okText: '我知道了'
           })
-          break
+          return Promise.reject(new Error(message))
         // Token过期
         case 50015:
           Modal.info({
@@ -66,15 +65,14 @@ instance.interceptors.response.use(
           })
           return
       }
-    } else {
-      // 提示异常
-      Message.error({
-        content: message,
-        resetOnHover: true,
-        duration: 5000,
-        closable: true
-      })
     }
+    // 提示异常
+    Message.error({
+      content: message,
+      resetOnHover: true,
+      duration: 5000,
+      closable: true
+    })
 
     return Promise.reject(new Error(message))
   }

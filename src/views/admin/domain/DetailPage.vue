@@ -3,7 +3,6 @@ import { app } from '@/stores/localstorage'
 import LocalUser from './components/LocalUser.vue'
 import LdpaSetting from './components/LdpaSetting.vue'
 import FeishuSetting from './components/FeishuSetting.vue'
-import { Message } from '@arco-design/web-vue'
 import { GET_DOMAIN } from '@/api/mcenter/domain'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -22,12 +21,8 @@ const settings = ref({
   security_setting: {}
 })
 onBeforeMount(async () => {
-  try {
-    let resp = await GET_DOMAIN(app.value.token.domain)
-    settings.value = resp
-  } catch (error) {
-    Message.error(`查询域详情失败: ${error}`)
-  }
+  let resp = await GET_DOMAIN(app.value.token.domain)
+  settings.value = resp
 })
 </script>
 

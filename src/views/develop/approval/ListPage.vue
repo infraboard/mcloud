@@ -1,7 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { LIST_APPROVAL } from '@/api/mflow/approval'
-import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 
 // 分页参数
@@ -29,8 +28,6 @@ const QueryData = async () => {
     var resp = await LIST_APPROVAL(queryParams)
     data.items = resp.items
     data.total = resp.total
-  } catch (error) {
-    Message.error(`查询上线申请失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

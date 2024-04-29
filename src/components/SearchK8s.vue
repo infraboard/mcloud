@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
 import { LIST_K8S_CLUSTER } from '@/api/mpaas/k8s'
-import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
 defineProps({
@@ -23,8 +22,6 @@ const ListK8s = async () => {
   try {
     const resp = await LIST_K8S_CLUSTER(queryParms)
     options.value = resp.items
-  } catch (error) {
-    Message.error(`查询k8s集群失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

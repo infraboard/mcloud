@@ -1,7 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { LIST_LABEL } from '@/api/mcenter/label'
-import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 
 // 分页参数
@@ -29,8 +28,6 @@ const QueryData = async () => {
     var resp = await LIST_LABEL()
     data.items = resp.items
     pagination.total = resp.total
-  } catch (error) {
-    Message.error(`查询标签失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

@@ -1,7 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { LIST_CLUSTER, DELETE_CLUSTER } from '@/api/mpaas/cluster'
-import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Notification } from '@arco-design/web-vue'
@@ -33,8 +32,6 @@ const QueryData = async () => {
     var resp = await LIST_CLUSTER(queryParams)
     data.items = resp.items
     pagination.total = resp.total
-  } catch (error) {
-    Message.error(`查询部署失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

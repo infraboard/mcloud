@@ -6,22 +6,22 @@ const pros = defineProps({
 })
 
 const showDelta = () => {
-    let timeString = "";
-    let seconds = pros.timestamp
-    if(seconds >= 86400) {
-        const days = Math.floor(seconds / 86400);
-        const hours = Math.floor((seconds % 86400) / 3600);
-        timeString = `${days}天${hours}小时`;
-    } else if(seconds >= 3600) {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        timeString = `${hours}小时${minutes}分钟`;
-    } else {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        timeString = `${minutes}分钟${remainingSeconds}秒`;
-    }
-    return timeString;
+  let timeString = ''
+  let seconds = pros.timestamp
+  if (seconds >= 86400) {
+    const days = Math.floor(seconds / 86400)
+    const hours = Math.floor((seconds % 86400) / 3600)
+    timeString = `${days}天${hours}小时`
+  } else if (seconds >= 3600) {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    timeString = `${hours}小时${minutes}分钟`
+  } else {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    timeString = `${minutes}分钟${remainingSeconds}秒`
+  }
+  return timeString
 }
 const showTime = () => {
   // 创建一个 Date 对象

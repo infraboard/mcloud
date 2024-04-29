@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import { DESCRIBE_CLUSTER, CREATE_CLUSTER, UPDATE_CLUSTER } from '@/api/mpaas/cluster'
 import { Notification } from '@arco-design/web-vue'
 import { LIST_LABEL } from '@/api/mcenter/label'
-import { Message } from '@arco-design/web-vue'
 
 const router = useRouter()
 const form = ref({
@@ -63,8 +62,6 @@ const QueryEnv = async () => {
           break
       }
     })
-  } catch (error) {
-    Message.error(`查询标签失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

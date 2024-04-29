@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import { CREATE_DEPLOY, DESCRIBE_DEPLOY, UPDATE_DEPLOY } from '@/api/mpaas/deploy'
 import { Notification } from '@arco-design/web-vue'
 import { LIST_LABEL } from '@/api/mcenter/label'
-import { Message } from '@arco-design/web-vue'
 import SearchService from '../../../components/SearchService.vue'
 import SearchK8s from '../../../components/SearchK8s.vue'
 import CodeEditor from '@/components/CodeEditor.vue'
@@ -82,8 +81,6 @@ const QueryGroup = async () => {
           break
       }
     })
-  } catch (error) {
-    Message.error(`查询标签失败: ${error}`)
   } finally {
     queryLoading.value = false
   }

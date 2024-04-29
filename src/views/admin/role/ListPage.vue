@@ -1,7 +1,6 @@
 <script setup>
 import { app } from '@/stores/localstorage'
 import { LIST_ROLE } from '@/api/mcenter/role'
-import { Message } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -32,8 +31,6 @@ const QueryData = async () => {
     var resp = await LIST_ROLE(queryParams)
     data.items = resp.items
     pagination.total = resp.total
-  } catch (error) {
-    Message.error(`查询角色失败: ${error}`)
   } finally {
     queryLoading.value = false
   }
