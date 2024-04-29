@@ -34,7 +34,6 @@ const form = ref({ run_params: { params: [] }, audit: { enable: false, auditors:
 watch(
   () => props.visible,
   (newV) => {
-    console.log(newV)
     if (newV) {
       form.value = JSON.parse(JSON.stringify(props.step))
       if (props.step.status && props.step.status.stage !== 'PENDDING') {
