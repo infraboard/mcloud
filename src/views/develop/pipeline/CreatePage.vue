@@ -123,16 +123,20 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
 }
 
 const updateParam = (k, v) => {
-  console.log(k, v)
   const [stageIndex, taskIndex] = currentUpdateStepIndex
   const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
-  console.log(pipeline)
-  console.log(task.run_params.params)
   task.run_params.params.forEach((element) => {
     if (element.name === k) {
       element.value = v
     }
   })
+}
+
+// 更新审核
+const updateAudit = (k, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  task.audit[k] = v
 }
 
 // 删除步骤
@@ -279,6 +283,7 @@ const stepItemValueStyle = {
                 :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
                 @update:visible="showUpdateStep = -1"
                 @updateParam="updateParam"
+                @updateAudit="updateAudit"
                 :edit="true"
                 :step="task"
                 @delete="deleteStep"

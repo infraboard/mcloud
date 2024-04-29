@@ -1,17 +1,19 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { LIST_SUB_USER } from '@/api/mcenter/user'
 import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
-defineProps(['modelValue'])
+defineProps(['modelValue', 'multiple'])
 defineEmits(['update:modelValue'])
 
 // 准备好选项
 var options = ref([])
 const queryLoading = ref(false)
 const queryParms = reactive({ keywords: '' })
+var hasLoad = false
 const ListUser = async () => {
+  hasLoad = true
   queryLoading.value = true
   options.value = []
   try {
@@ -30,9 +32,11 @@ const handleSearch = (v) => {
   ListUser()
 }
 
-onMounted(() => {
-  ListUser()
-})
+const popupVisibleChange = (v) => {
+  if (!hasLoad && v) {
+    ListUser()
+  }
+}
 </script>
 
 <template>
@@ -42,7 +46,9 @@ onMounted(() => {
     :model-value="modelValue"
     @search="handleSearch"
     @change="$emit('update:modelValue', $event)"
+    @popup-visible-change="popupVisibleChange"
     allow-search
+    :multiple="multiple"
     :filter-option="false"
   >
     <a-option v-for="item of options" :key="item.id" :value="item.id">{{ item.username }}</a-option>

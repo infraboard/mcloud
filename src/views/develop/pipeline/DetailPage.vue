@@ -33,6 +33,13 @@ const updateParam = (currentUpdateStepIndex, k, v) => {
   })
 }
 
+// 更新审核
+const updateAudit = (currentUpdateStepIndex, k, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  task.audit[k] = v
+}
+
 onBeforeMount(async () => {
   const pid = router.currentRoute.value.params.id
   const resp = await GET_PIPELINE(pid, { with_job: true })
@@ -80,7 +87,7 @@ const runPipeline = async () => {
     </template>
   </a-page-header>
   <div class="page" style="padding-top: 0px">
-    <PipelineDetail :pipeline="pipeline" @updateParam="updateParam"></PipelineDetail>
+    <PipelineDetail :pipeline="pipeline" @updateParam="updateParam" @updateAudit="updateAudit" />
   </div>
 </template>
 

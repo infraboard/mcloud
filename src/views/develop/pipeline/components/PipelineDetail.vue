@@ -29,7 +29,7 @@ defineProps({
     default: 'var(--color-bg-2)'
   }
 })
-const emit = defineEmits(['updateParam'])
+const emit = defineEmits(['updateParam', 'updateAudit'])
 
 const router = useRouter()
 
@@ -42,6 +42,9 @@ const handleUpdateStep = (stageIndex, taskIndex) => {
 }
 const updateParam = (k, v) => {
   emit('updateParam', currentUpdateStepIndex, k, v)
+}
+const updateAudit = (k, v) => {
+  emit('updateAudit', currentUpdateStepIndex, k, v)
 }
 
 // 变量
@@ -105,6 +108,7 @@ const stepItemValueStyle = {
               :visible="showUpdateStep === `${stageIndex}.${taskIndex}`"
               @update:visible="showUpdateStep = '-1'"
               @updateParam="updateParam"
+              @updateAudit="updateAudit"
               :step="task"
               :validate="true"
             >

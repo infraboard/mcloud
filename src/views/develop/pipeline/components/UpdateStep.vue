@@ -2,16 +2,17 @@
 import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
 import TaskLogConsole from '../../job_task/components/TaskLogConsole.vue'
+import SearchUser from '@/components/SearchUser.vue'
 
 // 定义v-model:visible
 const props = defineProps({
   visible: { type: Boolean, default: false },
-  step: { type: Object },
+  step: { type: Object, required: true },
   edit: { type: Boolean, default: false },
   validate: { type: Boolean, default: false },
   width: { type: String, default: '40%' }
 })
-const emit = defineEmits(['update:visible', 'updateParam', 'delete'])
+const emit = defineEmits(['update:visible', 'updateParam', 'updateAudit', 'delete'])
 
 const activeKey = ref('params')
 const hanleChangeTab = (v) => {
@@ -27,18 +28,13 @@ const cleanForm = () => {
   updateStepForm.value.resetFields()
 }
 
-onMounted(() => {
-  if (props.step) {
-    GetJob()
-  }
-})
-
 // form
 const updateStepForm = ref()
-const form = ref({ run_params: { params: [] } })
+const form = ref({ run_params: { params: [] }, audit: { enable: false, auditors: [] } })
 watch(
   () => props.visible,
   (newV) => {
+    console.log(newV)
     if (newV) {
       form.value = JSON.parse(JSON.stringify(props.step))
       if (props.step.status && props.step.status.stage !== 'PENDDING') {
@@ -71,8 +67,18 @@ const GetJob = () => {
   })
 }
 
+onMounted(() => {
+  if (props.step) {
+    GetJob()
+  }
+})
+
 const handleParamsValueChange = (k, v) => {
   emit('updateParam', k, v)
+}
+
+const handleAuditValueChange = (k, v) => {
+  emit('updateAudit', k, v)
 }
 
 // 通知外层删除
@@ -146,13 +152,53 @@ const deleteStep = () => {
               ></TaskLogConsole>
             </KeepAlive>
           </a-tab-pane>
+          <a-tab-pane key="audit" lazy-load>
+            <template #title>审核</template>
+            <div class="page">
+              <a-alert style="margin-bottom: 12px"
+                >如果开启, 执行到该任务时会暂停, 直到审核通过, 常用于手动确认</a-alert
+              >
+              <a-form :model="form.audit" auto-label-width>
+                <a-form-item field="audit.enable" label="开启">
+                  <a-switch
+                    type="round"
+                    v-model="form.audit.enable"
+                    @change="handleAuditValueChange('enable', $event)"
+                  >
+                    <template #checked> ON </template>
+                    <template #unchecked> OFF </template>
+                  </a-switch>
+                </a-form-item>
+                <a-form-item v-if="form.audit.enable" field="auditors" label="审核人" required>
+                  <SearchUser
+                    v-model="form.audit.auditors"
+                    :multiple="true"
+                    @change="handleAuditValueChange('auditors', $event)"
+                  />
+                </a-form-item>
+              </a-form>
+            </div>
+          </a-tab-pane>
           <a-tab-pane key="user">
-            <template #title>关注人</template>
-            Content of Tab Panel 3
+            <template #title>通知</template>
+            <div class="page">
+              <a-alert style="margin-bottom: 12px">订阅任务状态通知</a-alert>
+              <a-form :model="form.audit" auto-label-width>
+                <a-form-item field="audit.enable" label="群组通知">
+                  {{ step.im_robot_notify }}
+                </a-form-item>
+                <a-form-item field="audit.enable" label="个人通知">
+                  {{ step.mention_users }}
+                </a-form-item>
+              </a-form>
+            </div>
           </a-tab-pane>
           <a-tab-pane key="hooks">
             <template #title>Web Hooks</template>
-            Content of Tab Panel 3
+            <div class="page">
+              <a-alert style="margin-bottom: 12px">通过WebHook与外部系统集成</a-alert>
+              {{ step.webhooks }}
+            </div>
           </a-tab-pane>
         </a-tabs>
       </a-form>
