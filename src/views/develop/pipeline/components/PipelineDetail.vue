@@ -97,11 +97,15 @@ const stepItemValueStyle = {
                 </template>
               </a-button>
               <!-- 步骤名称 -->
-              <a-button
-                :style="stepItemValueStyle"
-                @click="handleUpdateStep(stageIndex, taskIndex)"
-                >{{ task.task_name }}</a-button
-              >
+              <a-button :style="stepItemValueStyle" @click="handleUpdateStep(stageIndex, taskIndex)"
+                >{{ task.task_name }}
+              </a-button>
+              <!-- 是否审核 -->
+              <a-button v-if="task.audit.enable" :style="stepItemKeyStyle">
+                <template #icon>
+                  <icon-pause-circle />
+                </template>
+              </a-button>
             </a-button-group>
             <!-- 修改Stage弹窗 -->
             <UpdateStep

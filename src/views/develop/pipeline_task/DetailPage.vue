@@ -165,7 +165,11 @@ const stepItemValueStyle = {
             >
               <!-- 步骤图标 -->
               <a-button-group>
-                <a-button :style="stepItemKeyStyle" @click="router.push({ name: '' })">
+                <a-button
+                  :class="task.class"
+                  :style="stepItemKeyStyle"
+                  @click="router.push({ name: '' })"
+                >
                   <template #icon>
                     <SvgIcon v-if="task.job && task.job.icon" :svgCode="task.job.icon"></SvgIcon>
                     <span v-else>{{ task.job_name.slice(0, 3) }}</span>
@@ -174,7 +178,6 @@ const stepItemValueStyle = {
                 <!-- 步骤名称 -->
                 <a-button
                   :style="stepItemValueStyle"
-                  :class="task.class"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
                 >
                   <icon-loading
