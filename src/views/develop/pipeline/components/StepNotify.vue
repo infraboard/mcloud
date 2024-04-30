@@ -46,6 +46,7 @@
       :visible="showDialogName === 'im_robot_notify'"
       @ok="handleImFormSubmit"
       @cancel="showDialogName = ''"
+      draggable
     >
       <template #title> {{ updateImRobotNotifyTitle }}群组通知 </template>
       <a-form :model="imForm" ref="imFormRef" auto-label-width>
