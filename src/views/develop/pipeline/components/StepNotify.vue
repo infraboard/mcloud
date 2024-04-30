@@ -4,17 +4,21 @@
     <a-form :model="form" auto-label-width layout="vertical">
       <a-form-item field="im_robot_notify" label="群组通知">
         <a-space wrap>
-          <a-button-group v-for="(item, imIndex) in im_robot_notify" :key="item.description">
+          <a-button-group
+            size="small"
+            v-for="(item, imIndex) in im_robot_notify"
+            :key="item.description"
+          >
             <a-button @click="editUpdateImRobotNotify(item, imIndex)">{{
               item.description
             }}</a-button>
-            <a-button @click="$emit('updateImRobotNotify', 'delete', imIndex)">
+            <a-button v-if="edit" @click="$emit('updateImRobotNotify', 'delete', imIndex)">
               <template #icon>
                 <icon-close />
               </template>
             </a-button>
           </a-button-group>
-          <a-button type="outline" size="mini" @click="addUpdateImRobotNotify">
+          <a-button v-if="edit" type="outline" size="mini" @click="addUpdateImRobotNotify">
             <template #icon>
               <icon-plus />
             </template>
@@ -24,7 +28,7 @@
       <a-form-item field="mention_users" label="个人通知">
         <a-space>
           <a-tag v-for="item in mention_users" :key="item.UserName">{{ item.UserName }}</a-tag>
-          <a-button type="outline" size="mini">
+          <a-button v-if="edit" type="outline" size="mini">
             <template #icon>
               <icon-plus />
             </template>
@@ -34,7 +38,7 @@
       <a-form-item field="webhooks" label="Web Hooks" tooltip="通过WebHook与外部系统集成">
         <a-space>
           <a-tag v-for="item in webhooks" :key="item.description">{{ item.description }}</a-tag>
-          <a-button type="outline" size="mini">
+          <a-button v-if="edit" type="outline" size="mini">
             <template #icon>
               <icon-plus />
             </template>

@@ -171,6 +171,7 @@ const deleteStep = () => {
               <a-form :model="form.audit" auto-label-width>
                 <a-form-item field="audit.enable" label="开启">
                   <a-switch
+                    :disabled="!edit"
                     type="round"
                     v-model="form.audit.enable"
                     @change="handleAuditValueChange('enable', $event)"
@@ -181,6 +182,7 @@ const deleteStep = () => {
                 </a-form-item>
                 <a-form-item v-if="form.audit.enable" field="auditors" label="审核人" required>
                   <SearchUser
+                    :disabled="!edit"
                     v-model="form.audit.auditors"
                     :multiple="true"
                     @change="handleAuditValueChange('auditors', $event)"
@@ -192,6 +194,7 @@ const deleteStep = () => {
           <a-tab-pane key="notify">
             <template #title>通知</template>
             <StepNotify
+              :edit="edit"
               :im_robot_notify="step.im_robot_notify"
               @updateImRobotNotify="updateImRobotNotify"
               :mention_users="step.mention_users"

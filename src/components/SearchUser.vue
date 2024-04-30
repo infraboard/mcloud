@@ -4,7 +4,7 @@ import { LIST_SUB_USER } from '@/api/mcenter/user'
 import { Message } from '@arco-design/web-vue'
 
 // 定义v-model
-defineProps(['modelValue', 'multiple'])
+defineProps(['modelValue', 'multiple', 'disabled'])
 defineEmits(['update:modelValue'])
 
 // 准备好选项
@@ -48,6 +48,7 @@ const popupVisibleChange = (v) => {
     @change="$emit('update:modelValue', $event)"
     @popup-visible-change="popupVisibleChange"
     allow-search
+    :disabled="disabled"
     :multiple="multiple"
     :filter-option="false"
   >
