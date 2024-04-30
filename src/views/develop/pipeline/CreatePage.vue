@@ -139,6 +139,25 @@ const updateAudit = (k, v) => {
   task.audit[k] = v
 }
 
+const updateImRobotNotify = (action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  switch (action) {
+    case 'add':
+      task.im_robot_notify.push(v)
+      break
+    case 'delete':
+      task.im_robot_notify.splice(v, 1)
+      break
+    case 'update':
+      console.log(action, v)
+      task.im_robot_notify[v.index] = v
+      break
+    default:
+      break
+  }
+}
+
 // 删除步骤
 const deleteStep = async () => {
   const [stageIndex, taskIndex] = currentUpdateStepIndex
@@ -284,6 +303,7 @@ const stepItemValueStyle = {
                 @update:visible="showUpdateStep = -1"
                 @updateParam="updateParam"
                 @updateAudit="updateAudit"
+                @updateImRobotNotify="updateImRobotNotify"
                 :edit="true"
                 :step="task"
                 @delete="deleteStep"

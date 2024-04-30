@@ -13,7 +13,13 @@ const props = defineProps({
   validate: { type: Boolean, default: false },
   width: { type: String, default: '40%' }
 })
-const emit = defineEmits(['update:visible', 'updateParam', 'updateAudit', 'delete'])
+const emit = defineEmits([
+  'update:visible',
+  'updateParam',
+  'updateAudit',
+  'updateImRobotNotify',
+  'delete'
+])
 
 const activeKey = ref('params')
 const hanleChangeTab = (v) => {
@@ -79,6 +85,10 @@ const handleParamsValueChange = (k, v) => {
 
 const handleAuditValueChange = (k, v) => {
   emit('updateAudit', k, v)
+}
+
+const updateImRobotNotify = (action, v) => {
+  emit('updateImRobotNotify', action, v)
 }
 
 // 通知外层删除
@@ -183,6 +193,7 @@ const deleteStep = () => {
             <template #title>通知</template>
             <StepNotify
               :im_robot_notify="step.im_robot_notify"
+              @updateImRobotNotify="updateImRobotNotify"
               :mention_users="step.mention_users"
               :webhooks="step.webhooks"
             />
