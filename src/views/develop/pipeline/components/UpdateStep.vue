@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import JobParam from '@/components/JobParam.vue'
 import TaskLogConsole from '../../job_task/components/TaskLogConsole.vue'
 import SearchUser from '@/components/SearchUser.vue'
+import StepNotify from './StepNotify.vue'
 
 // 定义v-model:visible
 const props = defineProps({
@@ -178,26 +179,13 @@ const deleteStep = () => {
               </a-form>
             </div>
           </a-tab-pane>
-          <a-tab-pane key="user">
+          <a-tab-pane key="notify">
             <template #title>通知</template>
-            <div class="page">
-              <a-alert style="margin-bottom: 12px">订阅任务状态通知</a-alert>
-              <a-form :model="form.audit" auto-label-width>
-                <a-form-item field="audit.enable" label="群组通知">
-                  {{ step.im_robot_notify }}
-                </a-form-item>
-                <a-form-item field="audit.enable" label="个人通知">
-                  {{ step.mention_users }}
-                </a-form-item>
-              </a-form>
-            </div>
-          </a-tab-pane>
-          <a-tab-pane key="hooks">
-            <template #title>Web Hooks</template>
-            <div class="page">
-              <a-alert style="margin-bottom: 12px">通过WebHook与外部系统集成</a-alert>
-              {{ step.webhooks }}
-            </div>
+            <StepNotify
+              :im_robot_notify="step.im_robot_notify"
+              :mention_users="step.mention_users"
+              :webhooks="step.webhooks"
+            />
           </a-tab-pane>
         </a-tabs>
       </a-form>

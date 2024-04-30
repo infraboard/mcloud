@@ -99,3 +99,10 @@
 .creating {
   background-color: rgb(var(--arcoblue-2)) !important;
 }
+
+.form-label {
+  font-size: 12px;
+  color: var(--color-neutral-6);
+  font-weight: 500;
+  margin-right: 6px;
+}

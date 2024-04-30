@@ -42,6 +42,12 @@ export default {
           meta: { label: '上线申请' }
         },
         {
+          path: 'task_audit/list',
+          name: 'TaskAuditList',
+          component: () => import('@/views/develop/task_audit/ListPage.vue'),
+          meta: { label: '任务审批' }
+        },
+        {
           path: 'cluster/list',
           name: 'ServiceClusterList',
           component: () => import('@/views/develop/cluster/ListPage.vue'),
