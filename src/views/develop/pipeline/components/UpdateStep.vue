@@ -18,6 +18,8 @@ const emit = defineEmits([
   'updateParam',
   'updateAudit',
   'updateImRobotNotify',
+  'updateWebHookNotify',
+  'updateMentitionUserNotify',
   'delete'
 ])
 
@@ -89,6 +91,14 @@ const handleAuditValueChange = (k, v) => {
 
 const updateImRobotNotify = (action, v) => {
   emit('updateImRobotNotify', action, v)
+}
+
+const updateWebHookNotify = (action, v) => {
+  emit('updateWebHookNotify', action, v)
+}
+
+const updateMentitionUserNotify = (action, v) => {
+  emit('updateMentitionUserNotify', action, v)
 }
 
 // 通知外层删除
@@ -197,6 +207,8 @@ const deleteStep = () => {
               :edit="edit"
               :im_robot_notify="step.im_robot_notify"
               @updateImRobotNotify="updateImRobotNotify"
+              @updateWebHookNotify="updateWebHookNotify"
+              @updateMentitionUserNotify="updateMentitionUserNotify"
               :mention_users="step.mention_users"
               :webhooks="step.webhooks"
             />

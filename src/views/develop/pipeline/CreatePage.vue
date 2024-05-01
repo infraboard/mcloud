@@ -139,6 +139,7 @@ const updateAudit = (k, v) => {
   task.audit[k] = v
 }
 
+// 更新群组通知
 const updateImRobotNotify = (action, v) => {
   const [stageIndex, taskIndex] = currentUpdateStepIndex
   const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
@@ -150,8 +151,45 @@ const updateImRobotNotify = (action, v) => {
       task.im_robot_notify.splice(v, 1)
       break
     case 'update':
-      console.log(action, v)
       task.im_robot_notify[v.index] = v
+      break
+    default:
+      break
+  }
+}
+
+// 更新WebHook
+const updateMentitionUserNotify = (action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  switch (action) {
+    case 'add':
+      task.mention_users.push(v)
+      break
+    case 'delete':
+      task.mention_users.splice(v, 1)
+      break
+    case 'update':
+      task.mention_users[v.index] = v
+      break
+    default:
+      break
+  }
+}
+
+// 更新WebHook
+const updateWebHookNotify = (action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = pipeline.value.stages[stageIndex].tasks[taskIndex]
+  switch (action) {
+    case 'add':
+      task.webhooks.push(v)
+      break
+    case 'delete':
+      task.webhooks.splice(v, 1)
+      break
+    case 'update':
+      task.webhooks[v.index] = v
       break
     default:
       break
@@ -304,6 +342,8 @@ const stepItemValueStyle = {
                 @updateParam="updateParam"
                 @updateAudit="updateAudit"
                 @updateImRobotNotify="updateImRobotNotify"
+                @updateWebHookNotify="updateWebHookNotify"
+                @updateMentitionUserNotify="updateMentitionUserNotify"
                 :edit="true"
                 :step="task"
                 @delete="deleteStep"
