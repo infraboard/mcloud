@@ -43,23 +43,29 @@ onMounted(() => {
 })
 
 // 审核
-const auditLoadding = ref('')
+const auditPassLoadding = ref('')
+const showAuditDeny = ref('')
+const auditDenyLoadding = ref(false)
 const auditRequest = ref({
   comment: '',
   stage: ''
 })
 const handleAuditJobTask = async (isPass, record) => {
-  auditLoadding.value = record.id
+  console.log(record)
   if (isPass) {
+    auditPassLoadding.value = record.task_id
     auditRequest.value.stage = 'PASS'
   } else {
+    showAuditDeny.value = record.task_id
     auditRequest.value.stage = 'DENY'
   }
 
   try {
-    await Audit_JOB_TASK(record.id)
+    await Audit_JOB_TASK(record.task_id, auditRequest.value)
+    QueryData()
   } finally {
-    auditLoadding.value = ''
+    auditPassLoadding.value = ''
+    auditDenyLoadding.value = false
   }
 }
 </script>
@@ -105,7 +111,7 @@ const handleAuditJobTask = async (isPass, record) => {
               type="text"
               :size="app.size"
               status="success"
-              :loading="auditLoadding === record.id"
+              :loading="auditPassLoadding === record.task_id"
               @click="handleAuditJobTask(true, record)"
             >
               <template #icon>
@@ -117,7 +123,7 @@ const handleAuditJobTask = async (isPass, record) => {
               type="text"
               :size="app.size"
               status="danger"
-              @click="auditLoadding = record.id"
+              @click="showAuditDeny = record.task_id"
             >
               <template #icon>
                 <icon-close-circle-fill />
@@ -128,13 +134,17 @@ const handleAuditJobTask = async (isPass, record) => {
             <a-modal
               class="deny-frame"
               hideTitle
-              :visible="auditLoadding === record.id"
+              :visible="showAuditDeny === record.task_id"
               @ok="handleAuditJobTask(false, record)"
-              @cancel="auditLoadding = ''"
+              @cancel="showAuditDeny = ''"
               :bodyStyle="{ padding: '6px 6px 0px 6px' }"
             >
               <div>
-                <a-textarea style="height: 160px" placeholder="请输入审核不通过的原因" />
+                <a-textarea
+                  v-model="auditRequest.comment"
+                  style="height: 160px"
+                  placeholder="请输入审核不通过的原因"
+                />
               </div>
             </a-modal>
           </template>

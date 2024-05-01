@@ -17,7 +17,7 @@ export var GET_JOB_TASK = (id) => {
 
 // 查询Job执行记录
 export var Audit_JOB_TASK = (id, data) => {
-  return instance.get(`/mflow/api/v1/job_tasks/${id}/audit`, data)
+  return instance.post(`/mflow/api/v1/job_tasks/${id}/audit`, data)
 }
 
 // 查询Pipeline执行列表

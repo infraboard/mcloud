@@ -64,7 +64,23 @@ const queryData = async () => {
       if (task.status.end_at !== 0) {
         target.cost = DurationHumanize(task.status.end_at - task.status.start_at)
       }
+      // 任务状态
       target.class = [task.status.stage.toLowerCase()]
+
+      // 审核状态
+      switch (target.audit.status.stage) {
+        case 'PASS':
+          target.audit_class = ['succeeded']
+          break
+        case 'DENY':
+          target.audit_class = ['failed']
+          break
+        case 'WAITING':
+          target.audit_class = ['active']
+          break
+        default:
+          break
+      }
     }
   }
 
@@ -191,6 +207,7 @@ const stepItemValueStyle = {
                 <a-button
                   v-if="task.audit.enable"
                   :loading="task.audit.status.stage === 'WAITING'"
+                  :class="task.audit_class"
                   :style="stepItemKeyStyle"
                 >
                   <template #icon>
