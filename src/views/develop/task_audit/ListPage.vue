@@ -68,6 +68,10 @@ const handleAuditJobTask = async (isPass, record) => {
     auditDenyLoadding.value = false
   }
 }
+const cancelAuditDeny = () => {
+  auditRequest.value.comment = ''
+  showAuditDeny.value = ''
+}
 </script>
 
 <template>
@@ -136,7 +140,7 @@ const handleAuditJobTask = async (isPass, record) => {
               hideTitle
               :visible="showAuditDeny === record.task_id"
               @ok="handleAuditJobTask(false, record)"
-              @cancel="showAuditDeny = ''"
+              @cancel="cancelAuditDeny"
               :bodyStyle="{ padding: '6px 6px 0px 6px' }"
             >
               <div>
