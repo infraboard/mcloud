@@ -27,7 +27,11 @@
       </a-form-item>
       <a-form-item field="mention_users" label="个人通知">
         <a-space wrap>
-          <a-button-group size="small" v-for="(item, muIndex) in mention_users" :key="item.description">
+          <a-button-group
+            size="small"
+            v-for="(item, muIndex) in mention_users"
+            :key="item.description"
+          >
             <a-button @click="editUpdateMentitionUserNotify(item, muIndex)">{{
               item.user_name
             }}</a-button>
@@ -68,15 +72,17 @@
       :visible="showDialogName === 'im_robot_notify'"
       @ok="handleImFormSubmit"
       @cancel="handleImFormCancel"
+      :hide-title="!edit"
+      :hide-cancel="!edit"
       draggable
     >
       <template #title> {{ updateImRobotNotifyTitle }}群组通知 </template>
       <a-form :model="imForm" ref="imFormRef" auto-label-width>
-        <a-form-item field="url" label="URL" required help="群组的URL">
-          <a-input v-model="imForm.url" />
+        <a-form-item field="description" label="群组名称" required help="群组的名称">
+          <a-input :disabled="!edit" v-model="imForm.description" />
         </a-form-item>
-        <a-form-item field="description" label="描述" required help="群组的名称">
-          <a-input v-model="imForm.description" />
+        <a-form-item field="url" label="URL" required help="群组URL">
+          <a-input :disabled="!edit" v-model="imForm.url" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -84,15 +90,22 @@
       :visible="showDialogName === 'mention_users'"
       @ok="handleMentitionUserSubmit"
       @cancel="handleMentitionUserFormCancel"
+      :hide-title="!edit"
+      :hide-cancel="!edit"
       draggable
     >
       <template #title> {{ updateMentitionUserNotifyTitle }}个人通知 </template>
       <a-form :model="mentitionUserForm" ref="mentitionUserFormRef" auto-label-width>
         <a-form-item field="user_name" label="用户" required help="用户名称">
-          <SearchUser v-model="mentitionUserForm.user_name"></SearchUser>
+          <SearchUser :disabled="!edit" v-model="mentitionUserForm.user_name"></SearchUser>
         </a-form-item>
         <a-form-item field="notify_types" label="通知方式" required help="默认邮件通知">
-          <a-select  v-model="mentitionUserForm.notify_types" :default-value="['MAIL']" multiple>
+          <a-select
+            :disabled="!edit"
+            v-model="mentitionUserForm.notify_types"
+            :default-value="['MAIL']"
+            multiple
+          >
             <a-option value="MAIL">邮件</a-option>
           </a-select>
         </a-form-item>
@@ -102,15 +115,17 @@
       :visible="showDialogName === 'webhooks'"
       @ok="handleWebHookSubmit"
       @cancel="handleWebHookFormCancel"
+      :hide-title="!edit"
+      :hide-cancel="!edit"
       draggable
     >
       <template #title> {{ updateWebHookNotifyTitle }}Web Hook </template>
       <a-form :model="webHookForm" ref="webHookFormRef" auto-label-width>
-        <a-form-item field="url" label="URL" required help="Web Hook的URL">
-          <a-input v-model="webHookForm.url" />
+        <a-form-item field="description" label="描述" required help="Web Hook描述">
+          <a-input :disabled="!edit" v-model="webHookForm.description" />
         </a-form-item>
-        <a-form-item field="description" label="描述" required help="描述">
-          <a-input v-model="webHookForm.description" />
+        <a-form-item field="url" label="URL" required help="Web Hook的URL">
+          <a-input :disabled="!edit" v-model="webHookForm.url" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -121,7 +136,7 @@
 import { ref } from 'vue'
 import SearchUser from '@/components/SearchUser.vue'
 
-defineProps({
+const props = defineProps({
   im_robot_notify: {
     type: Array,
     default() {
@@ -145,7 +160,11 @@ defineProps({
     default: false
   }
 })
-const emit = defineEmits(['updateImRobotNotify', 'updateWebHookNotify', 'updateMentitionUserNotify'])
+const emit = defineEmits([
+  'updateImRobotNotify',
+  'updateWebHookNotify',
+  'updateMentitionUserNotify'
+])
 
 const form = ref({ im_robot_notify: [], mention_users: [], webhooks: [] })
 
@@ -174,6 +193,10 @@ const handleImFormCancel = () => {
   showDialogName.value = ''
 }
 const handleImFormSubmit = async () => {
+  if (props.edit) {
+    return
+  }
+
   const err = await imFormRef.value.validate()
   if (!err) {
     let aciont = 'add'
@@ -210,6 +233,10 @@ const handleMentitionUserFormCancel = () => {
 }
 
 const handleMentitionUserSubmit = async () => {
+  if (props.edit) {
+    return
+  }
+
   const err = await mentitionUserFormRef.value.validate()
   if (!err) {
     let aciont = 'add'
@@ -221,7 +248,6 @@ const handleMentitionUserSubmit = async () => {
     showDialogName.value = ''
   }
 }
-
 
 // WebHook通知
 const webHookFormRef = ref(null)
@@ -247,6 +273,10 @@ const handleWebHookFormCancel = () => {
 }
 
 const handleWebHookSubmit = async () => {
+  if (props.edit) {
+    return
+  }
+
   const err = await webHookFormRef.value.validate()
   if (!err) {
     let aciont = 'add'

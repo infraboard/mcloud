@@ -44,17 +44,7 @@ onBeforeMount(async () => {
   <a-layout class="main">
     <a-layout>
       <a-layout-header class="header">
-        <a-button
-          :size="app.size"
-          type="text"
-          @click="
-            router.push({
-              name: 'DomainJobDetail',
-              params: { id: task.job.id },
-              query: { tab: 'History' }
-            })
-          "
-        >
+        <a-button :size="app.size" type="text" @click="router.go(-1)">
           <template #icon><icon-double-left /></template>
           执行记录
         </a-button>

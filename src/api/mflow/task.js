@@ -15,6 +15,11 @@ export var GET_JOB_TASK = (id) => {
   return instance.get(`/mflow/api/v1/job_tasks/${id}`)
 }
 
+// 查询Job执行记录
+export var Audit_JOB_TASK = (id, data) => {
+  return instance.get(`/mflow/api/v1/job_tasks/${id}/audit`, data)
+}
+
 // 查询Pipeline执行列表
 export var LIST_PIPELINE_TASK = (params) => {
   return instance.get('/mflow/api/v1/pipeline_tasks', { params })

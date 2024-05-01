@@ -57,10 +57,13 @@ const queryData = async () => {
       const task = stage.tasks[taskIndex]
       const target = pipeline.value.stages[stageIndex].tasks[taskIndex]
       target.status = task.status
+      target.im_robot_notify = task.im_robot_notify
+      target.webhooks = task.webhooks
+      target.mention_users = task.mention_users
+      target.audit = task.audit
       if (task.status.end_at !== 0) {
         target.cost = DurationHumanize(task.status.end_at - task.status.start_at)
       }
-
       target.class = [task.status.stage.toLowerCase()]
     }
   }
@@ -169,6 +172,7 @@ const stepItemValueStyle = {
                   :class="task.class"
                   :style="stepItemKeyStyle"
                   @click="router.push({ name: '' })"
+                  :loading="task.status.stage === 'ACTIVE' || task.status.stage === 'CREATING'"
                 >
                   <template #icon>
                     <SvgIcon v-if="task.job && task.job.icon" :svgCode="task.job.icon"></SvgIcon>
@@ -180,12 +184,18 @@ const stepItemValueStyle = {
                   :style="stepItemValueStyle"
                   @click="handleUpdateStep(stageIndex, taskIndex)"
                 >
-                  <icon-loading
-                    style="margin-right: 4px"
-                    v-if="task.status.stage === 'ACTIVE' || task.status.stage === 'CREATING'"
-                  />
                   {{ task.task_name }}
                   <span v-if="task.cost">【{{ task.cost }}】</span>
+                </a-button>
+                <!-- 是否审核 -->
+                <a-button
+                  v-if="task.audit.enable"
+                  :loading="task.audit.status.stage === 'WAITING'"
+                  :style="stepItemKeyStyle"
+                >
+                  <template #icon>
+                    <icon-pause-circle />
+                  </template>
                 </a-button>
               </a-button-group>
               <!-- 修改Stage弹窗 -->
