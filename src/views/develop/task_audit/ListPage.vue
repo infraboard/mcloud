@@ -72,6 +72,15 @@ const cancelAuditDeny = () => {
   auditRequest.value.comment = ''
   showAuditDeny.value = ''
 }
+const auditIsComplete = (record) => {
+  if (record.audit && record.audit.status) {
+    if (record.audit.status.stage === 'PASS' || record.audit.status.stage === 'DENY') {
+      return true
+    }
+  }
+
+  return false
+}
 </script>
 
 <template>
@@ -115,6 +124,7 @@ const cancelAuditDeny = () => {
               type="text"
               :size="app.size"
               status="success"
+              :disabled="auditIsComplete(record)"
               :loading="auditPassLoadding === record.task_id"
               @click="handleAuditJobTask(true, record)"
             >
@@ -126,6 +136,7 @@ const cancelAuditDeny = () => {
             <a-button
               type="text"
               :size="app.size"
+              :disabled="auditIsComplete(record)"
               status="danger"
               @click="showAuditDeny = record.task_id"
             >
