@@ -81,6 +81,24 @@
       </a-form>
     </a-modal>
     <a-modal
+      :visible="showDialogName === 'mention_users'"
+      @ok="handleMentitionUserSubmit"
+      @cancel="handleMentitionUserFormCancel"
+      draggable
+    >
+      <template #title> {{ updateMentitionUserNotifyTitle }}个人通知 </template>
+      <a-form :model="mentitionUserForm" ref="mentitionUserFormRef" auto-label-width>
+        <a-form-item field="user_name" label="用户" required help="用户名称">
+          <SearchUser v-model="mentitionUserForm.user_name"></SearchUser>
+        </a-form-item>
+        <a-form-item field="notify_types" label="通知方式" required help="默认邮件通知">
+          <a-select  v-model="mentitionUserForm.notify_types" :default-value="['MAIL']" multiple>
+            <a-option value="MAIL">邮件</a-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <a-modal
       :visible="showDialogName === 'webhooks'"
       @ok="handleWebHookSubmit"
       @cancel="handleWebHookFormCancel"
@@ -96,27 +114,12 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal
-      :visible="showDialogName === 'mention_users'"
-      @ok="handleMentitionUserSubmit"
-      @cancel="handleMentitionUserFormCancel"
-      draggable
-    >
-      <template #title> {{ updateMentitionUserNotifyTitle }}个人通知 </template>
-      <a-form :model="mentitionUserForm" ref="mentitionUserFormRef" auto-label-width>
-        <a-form-item field="user_name" label="用户" required help="用户名称">
-          <a-input v-model="mentitionUserForm.user_name" />
-        </a-form-item>
-        <a-form-item field="description" label="描述" required help="描述">
-          <a-input v-model="mentitionUserForm.description" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import SearchUser from '@/components/SearchUser.vue'
 
 defineProps({
   im_robot_notify: {
@@ -186,8 +189,8 @@ const handleImFormSubmit = async () => {
 // 个人通知 mention_users
 const mentitionUserFormRef = ref(null)
 const mentitionUserForm = ref({
-  url: '',
-  header: {},
+  user_name: '',
+  notify_types: ['MAIL'],
   events: [],
   description: ''
 })
