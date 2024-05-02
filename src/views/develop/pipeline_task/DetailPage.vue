@@ -68,7 +68,7 @@ const queryData = async () => {
       target.class = [task.status.stage.toLowerCase()]
 
       // 审核状态
-      switch (target.audit.status.stage) {
+      switch (task.status.audit.status.stage) {
         case 'PASS':
           target.audit_class = ['succeeded']
           break
@@ -206,7 +206,7 @@ const stepItemValueStyle = {
                 <!-- 是否审核 -->
                 <a-button
                   v-if="task.audit.enable"
-                  :loading="task.audit.status.stage === 'WAITING'"
+                  :loading="task.status.audit.status.stage === 'WAITING'"
                   :class="task.audit_class"
                   :style="stepItemKeyStyle"
                 >
