@@ -73,8 +73,8 @@ const cancelAuditDeny = () => {
   showAuditDeny.value = ''
 }
 const auditIsComplete = (record) => {
-  if (record.status.audit && record.status.audit.status) {
-    const stage = record.status.audit.status.stage
+  if (record.audit && record.audit.status) {
+    const stage = record.audit.status.stage
     if (stage === 'PASS' || stage === 'DENY') {
       return true
     }
@@ -116,7 +116,7 @@ const auditIsComplete = (record) => {
         <a-table-column title="模式" data-index="run_mode"></a-table-column>
         <a-table-column title="状态">
           <template #cell="{ record }">
-            <span>{{ record.status.audit.status.stage }}</span>
+            <span>{{ record.audit.status.stage }}</span>
           </template>
         </a-table-column>
         <a-table-column align="center" title="操作" :width="200">
