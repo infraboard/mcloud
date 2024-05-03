@@ -16,14 +16,14 @@
         </a-button>
       </div>
     </div>
-    <div>
+    <a-space direction="vertical" fill>
       <BuildItem
         :refresh_record="refreshRecord"
         v-for="item in data.items"
         :key="item.id"
         :buildConf="item"
       ></BuildItem>
-    </div>
+    </a-space>
     <MannulTest
       @change="refreshRecord = new Date().getTime()"
       :service="service"
