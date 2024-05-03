@@ -9,7 +9,7 @@
             v-for="(item, imIndex) in im_robot_notify"
             :key="item.description"
           >
-            <a-button @click="editUpdateImRobotNotify(item, imIndex)">{{
+            <a-button :status="hookStatus(item)" @click="editUpdateImRobotNotify(item, imIndex)">{{
               item.description
             }}</a-button>
             <a-button v-if="edit" @click="$emit('updateImRobotNotify', 'delete', imIndex)">
@@ -51,7 +51,7 @@
       <a-form-item field="webhooks" label="Web Hooks" tooltip="通过WebHook与外部系统集成">
         <a-space wrap>
           <a-button-group size="small" v-for="(item, whIndex) in webhooks" :key="item.description">
-            <a-button @click="editUpdateWebHookNotify(item, whIndex)">{{
+            <a-button :status="hookStatus(item)" @click="editUpdateWebHookNotify(item, whIndex)">{{
               item.description
             }}</a-button>
             <a-button v-if="edit" @click="$emit('updateWebHookNotify', 'delete', whIndex)">
@@ -77,6 +77,11 @@
       draggable
     >
       <template #title> {{ updateImRobotNotifyTitle }}群组通知 </template>
+      <a-alert style="margin-bottom: 12px" v-if="imForm.status" :type="hookStatus(imForm)"
+        ><span v-if="imForm.status.success">通知成功</span><span v-else>通知失败</span>, 开始于:
+        {{ FormatDate(imForm.status.start_at) }} 耗时: {{ imForm.status.cost }}ms
+        <span v-if="!imForm.status.success"> {{ imForm.status.message }} </span></a-alert
+      >
       <a-form :model="imForm" ref="imFormRef" auto-label-width>
         <a-form-item field="description" label="群组名称" required help="群组的名称">
           <a-input :disabled="!edit" v-model="imForm.description" />
@@ -120,6 +125,11 @@
       draggable
     >
       <template #title> {{ updateWebHookNotifyTitle }}Web Hook </template>
+      <a-alert style="margin-bottom: 12px" v-if="webHookForm.status" :type="hookStatus(webHookForm)"
+        ><span v-if="webHookForm.status.success">通知成功</span><span v-else>通知失败</span>,
+        开始于: {{ FormatDate(webHookForm.status.start_at) }} 耗时: {{ webHookForm.status.cost }}ms
+        <span v-if="!webHookForm.status.success"> {{ webHookForm.status.message }} </span></a-alert
+      >
       <a-form :model="webHookForm" ref="webHookFormRef" auto-label-width>
         <a-form-item field="description" label="描述" required help="Web Hook描述">
           <a-input :disabled="!edit" v-model="webHookForm.description" />
@@ -135,6 +145,7 @@
 <script setup>
 import { ref } from 'vue'
 import SearchUser from '@/components/SearchUser.vue'
+import { FormatDate } from '@/tools/time.js'
 
 const props = defineProps({
   im_robot_notify: {
@@ -288,6 +299,17 @@ const handleWebHookSubmit = async () => {
     webHookFormRef.value.resetFields()
     showDialogName.value = ''
   }
+}
+
+const hookStatus = (record) => {
+  if (!record.status) {
+    return ''
+  }
+  if (record.status.success) {
+    return 'success'
+  }
+
+  return 'warning'
 }
 </script>
 
