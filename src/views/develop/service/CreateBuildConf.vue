@@ -68,6 +68,7 @@
             v-if="selectedPipeline"
             :pipeline="selectedPipeline"
             @updateParam="updateParam"
+            edit
           ></PipelineDetail>
         </a-form-item>
         <div class="form-submit">

@@ -27,6 +27,10 @@ defineProps({
   backgroundColor: {
     type: String,
     default: 'var(--color-bg-2)'
+  },
+  edit: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['updateParam', 'updateAudit'])
@@ -115,6 +119,7 @@ const stepItemValueStyle = {
               @updateAudit="updateAudit"
               :step="task"
               :validate="true"
+              :edit="edit"
             >
             </UpdateStep>
           </a-button-group>

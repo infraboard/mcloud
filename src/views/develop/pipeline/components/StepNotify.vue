@@ -193,7 +193,8 @@ const handleImFormCancel = () => {
   showDialogName.value = ''
 }
 const handleImFormSubmit = async () => {
-  if (props.edit) {
+  if (!props.edit) {
+    showDialogName.value = ''
     return
   }
 
