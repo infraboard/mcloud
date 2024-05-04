@@ -149,6 +149,16 @@ const deleteStep = () => {
               <a-form-item field="job_name" label="关联任务" required help="任务的名称">
                 <a-input disabled v-model="form.job_name" />
               </a-form-item>
+              <a-form-item
+                field="job_name"
+                label="忽略失败"
+                help="任务执行失败后, 是否允许继续执行"
+              >
+                <a-switch :disabled="!edit" type="round" v-model="form.run_params.ignore_failed">
+                  <template #checked> ON </template>
+                  <template #unchecked> OFF </template>
+                </a-switch>
+              </a-form-item>
             </div>
           </a-tab-pane>
           <a-tab-pane key="params" title="任务参数">

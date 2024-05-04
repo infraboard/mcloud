@@ -37,13 +37,14 @@ onMounted(() => {
           <a-menu-item key="ServiceList">服务列表</a-menu-item>
           <a-menu-item key="ServiceClusterList">部署集群</a-menu-item>
           <a-menu-item key="ApprovalList">上线申请</a-menu-item>
-          <a-menu-item key="TaskAuditList">任务审批</a-menu-item>
+
         </a-sub-menu>
         <a-sub-menu key="DevToolManage">
           <template #icon><icon-common /></template>
           <template #title><span class="menu-title">研发工具</span></template>
           <a-menu-item key="DomainPipelineList">流水线模版</a-menu-item>
           <a-menu-item key="PipelineTaskList">流水线记录</a-menu-item>
+          <a-menu-item key="TaskAuditList">任务审批</a-menu-item>
           <a-menu-item key="DomainJobList">任务模版</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="ConsoleAudit">

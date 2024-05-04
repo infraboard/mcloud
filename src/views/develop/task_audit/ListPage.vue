@@ -4,6 +4,7 @@ import { _pagination } from '@/stores/pagination'
 import { LIST_JOB_TASK, Audit_JOB_TASK } from '@/api/mflow/task'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 
@@ -112,15 +113,34 @@ const auditIsComplete = (record) => {
             </a-button>
           </template>
         </a-table-column>
-        <a-table-column title="开始时间">
+        <a-table-column title="开始时间" align="center" >
           <template #cell="{ record }">
             <ShowTime :timestamp="record.status.start_at"></ShowTime>
           </template>
         </a-table-column>
-        <a-table-column title="模式" data-index="run_mode"></a-table-column>
+        <a-table-column title="任务状态">
+          <template #cell="{ record }">
+            {{ mapping.status[record.status.stage] }}
+          </template>
+        </a-table-column>
+        <a-table-column title="审核人">
+          <template #cell="{ record }">
+            <span v-for="item in record.audit.auditors" :key="item">{{ item.split('@')[0] }}</span>
+          </template>
+        </a-table-column>
+        <a-table-column title="审核信息" align="center" >
+          <template #cell="{ record }">
+            <ShowTime
+              v-if="record.audit.status.audit_at"
+              :timestamp="record.audit.status.audit_at"
+            ></ShowTime>
+            <span v-else> - </span>
+            <div style="margin-left: 6px;">{{ record.audit.status.audit_by.split('@')[0] }}</div>
+          </template>
+        </a-table-column>
         <a-table-column title="状态">
           <template #cell="{ record }">
-            <span>{{ record.audit.status.stage }}</span>
+            <span>{{ mapping.audit[record.audit.status.stage] }}</span>
           </template>
         </a-table-column>
         <a-table-column align="center" title="操作" :width="200">
