@@ -50,6 +50,7 @@ const handleUpdatePipeline = () => {
 const updatePipeline = (v) => {
   pipeline.value.name = v.name
   pipeline.value.description = v.description
+  pipeline.value.visiable_mode = v.visiable_mode
 }
 
 /*

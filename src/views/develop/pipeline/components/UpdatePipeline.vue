@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import mapping from '@/stores/mapping'
 
 // 定义v-model:visible
 const props = defineProps(['visible', 'pipeline'])
@@ -12,7 +13,7 @@ const handleCancel = () => {
 
 // form
 const updatePipelineForm = ref()
-const form = ref({})
+const form = ref({visiable_mode: 'NAMESPACE'})
 
 const handleOk = () => {
   emit('change', form.value)
@@ -54,6 +55,13 @@ watch(
               </a-form-item>
               <a-form-item field="description" label="描述" required help="描述信息">
                 <a-input v-model="form.description" />
+              </a-form-item>
+              <a-form-item field="visiable_mode" label="访问范围" help="访问范围" required>
+                <a-radio-group v-model="form.visiable_mode" type="button">
+                  <a-radio value="NAMESPACE">{{ mapping['NAMESPACE'] }}</a-radio>
+                  <a-radio value="DOMAIN">{{ mapping['DOMAIN'] }}</a-radio>
+                  <a-radio value="GLOBAL">{{ mapping['GLOBAL'] }}</a-radio>
+                </a-radio-group>
               </a-form-item>
             </div>
           </a-tab-pane>

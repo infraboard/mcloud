@@ -79,7 +79,7 @@ const handleSelect = async (v, record) => {
       @page-size-change="pageSizeChange"
     >
       <template #columns>
-        <a-table-column title="名称">
+        <a-table-column align="center" title="名称">
           <template #cell="{ record }">
             <a-link
               @click="router.push({ name: 'DomainPipelineDetail', params: { id: record.id } })"
@@ -87,13 +87,14 @@ const handleSelect = async (v, record) => {
             >
           </template>
         </a-table-column>
-        <a-table-column title="描述" data-index="description"></a-table-column>
-        <a-table-column title="访问范围">
+        <a-table-column  align="center" title="描述" data-index="description"></a-table-column>
+        <a-table-column align="center" title="访问范围">
           <template #cell="{ record }">
             <span>{{ mapping[record.visiable_mode] }}</span>
           </template>
         </a-table-column>
-        <a-table-column title="创建时间">
+        <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>
+        <a-table-column align="center" title="创建时间">
           <template #cell="{ record }">
             <ShowTime :timestamp="record.create_at"></ShowTime>
           </template>
