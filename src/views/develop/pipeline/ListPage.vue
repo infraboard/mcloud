@@ -4,6 +4,7 @@ import { LIST_PIPELINE, DELETE_PIPELINE } from '@/api/mflow/pipeline'
 import { Notification } from '@arco-design/web-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 
@@ -87,7 +88,11 @@ const handleSelect = async (v, record) => {
           </template>
         </a-table-column>
         <a-table-column title="描述" data-index="description"></a-table-column>
-        <a-table-column title="来源" data-index="visiable_mode"></a-table-column>
+        <a-table-column title="访问范围">
+          <template #cell="{ record }">
+            <span>{{ mapping[record.visiable_mode] }}</span>
+          </template>
+        </a-table-column>
         <a-table-column title="创建时间">
           <template #cell="{ record }">
             <ShowTime :timestamp="record.create_at"></ShowTime>
@@ -101,10 +106,6 @@ const handleSelect = async (v, record) => {
               @click="router.push({ name: 'DomainPipelineCreate', query: { id: record.id } })"
             >
               编辑
-            </a-button>
-            <a-divider direction="vertical" />
-            <a-button type="text" :size="app.size" @click="showRunJobHandler(record)">
-              执行记录
             </a-button>
             <a-divider direction="vertical" />
             <a-dropdown @select="handleSelect($event, record)">
