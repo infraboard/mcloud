@@ -12,13 +12,21 @@
             <a-button :status="hookStatus(item)" @click="editUpdateImRobotNotify(item, imIndex)">{{
               item.description
             }}</a-button>
-            <a-button v-if="edit" @click="$emit('updateImRobotNotify', 'delete', imIndex)">
+            <a-button
+              v-if="(edit || allowAppend) && !IsImRobotNotifyDisabled(item)"
+              @click="$emit('updateImRobotNotify', 'delete', imIndex)"
+            >
               <template #icon>
                 <icon-close />
               </template>
             </a-button>
           </a-button-group>
-          <a-button v-if="edit" type="outline" size="mini" @click="addUpdateImRobotNotify">
+          <a-button
+            v-if="edit || allowAppend"
+            type="outline"
+            size="mini"
+            @click="addUpdateImRobotNotify"
+          >
             <template #icon>
               <icon-plus />
             </template>
@@ -35,13 +43,21 @@
             <a-button @click="editUpdateMentitionUserNotify(item, muIndex)">{{
               item.user_name
             }}</a-button>
-            <a-button v-if="edit" @click="$emit('updateMentitionUserNotify', 'delete', muIndex)">
+            <a-button
+              v-if="edit || allowAppend"
+              @click="$emit('updateMentitionUserNotify', 'delete', muIndex)"
+            >
               <template #icon>
                 <icon-close />
               </template>
             </a-button>
           </a-button-group>
-          <a-button v-if="edit" type="outline" size="mini" @click="addUpdateMentitionUserNotify">
+          <a-button
+            v-if="edit || allowAppend"
+            type="outline"
+            size="mini"
+            @click="addUpdateMentitionUserNotify"
+          >
             <template #icon>
               <icon-plus />
             </template>
@@ -54,13 +70,21 @@
             <a-button :status="hookStatus(item)" @click="editUpdateWebHookNotify(item, whIndex)">{{
               item.description
             }}</a-button>
-            <a-button v-if="edit" @click="$emit('updateWebHookNotify', 'delete', whIndex)">
+            <a-button
+              v-if="edit || allowAppend"
+              @click="$emit('updateWebHookNotify', 'delete', whIndex)"
+            >
               <template #icon>
                 <icon-close />
               </template>
             </a-button>
           </a-button-group>
-          <a-button v-if="edit" type="outline" size="mini" @click="addUpdateWebHookNotify">
+          <a-button
+            v-if="edit || allowAppend"
+            type="outline"
+            size="mini"
+            @click="addUpdateWebHookNotify"
+          >
             <template #icon>
               <icon-plus />
             </template>
@@ -72,8 +96,8 @@
       :visible="showDialogName === 'im_robot_notify'"
       @ok="handleImFormSubmit"
       @cancel="handleImFormCancel"
-      :hide-title="!edit"
-      :hide-cancel="!edit"
+      :hide-title="(!edit && !allowAppend) || IsImRobotNotifyDisabled(imForm)"
+      :hide-cancel="(!edit && !allowAppend) || IsImRobotNotifyDisabled(imForm)"
       draggable
     >
       <template #title> {{ updateImRobotNotifyTitle }}群组通知 </template>
@@ -84,10 +108,16 @@
       >
       <a-form :model="imForm" ref="imFormRef" auto-label-width>
         <a-form-item field="description" label="群组名称" required help="群组的名称">
-          <a-input :disabled="!edit" v-model="imForm.description" />
+          <a-input
+            :disabled="(!edit && !allowAppend) || IsImRobotNotifyDisabled(imForm)"
+            v-model="imForm.description"
+          />
         </a-form-item>
         <a-form-item field="url" label="URL" required help="群组URL">
-          <a-input :disabled="!edit" v-model="imForm.url" />
+          <a-input
+            :disabled="(!edit && !allowAppend) || IsImRobotNotifyDisabled(imForm)"
+            v-model="imForm.url"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -95,18 +125,21 @@
       :visible="showDialogName === 'mention_users'"
       @ok="handleMentitionUserSubmit"
       @cancel="handleMentitionUserFormCancel"
-      :hide-title="!edit"
-      :hide-cancel="!edit"
+      :hide-title="(!edit && !allowAppend) || IsMentionUserDisabled(mentitionUserForm)"
+      :hide-cancel="(!edit && !allowAppend) || IsMentionUserDisabled(mentitionUserForm)"
       draggable
     >
       <template #title> {{ updateMentitionUserNotifyTitle }}个人通知 </template>
       <a-form :model="mentitionUserForm" ref="mentitionUserFormRef" auto-label-width>
         <a-form-item field="user_name" label="用户" required help="用户名称">
-          <SearchUser :disabled="!edit" v-model="mentitionUserForm.user_name"></SearchUser>
+          <SearchUser
+            :disabled="(!edit && !allowAppend) || IsMentionUserDisabled(mentitionUserForm)"
+            v-model="mentitionUserForm.user_name"
+          ></SearchUser>
         </a-form-item>
         <a-form-item field="notify_types" label="通知方式" required help="默认邮件通知">
           <a-select
-            :disabled="!edit"
+            :disabled="(!edit && !allowAppend) || IsMentionUserDisabled(mentitionUserForm)"
             v-model="mentitionUserForm.notify_types"
             :default-value="['MAIL']"
             multiple
@@ -120,8 +153,8 @@
       :visible="showDialogName === 'webhooks'"
       @ok="handleWebHookSubmit"
       @cancel="handleWebHookFormCancel"
-      :hide-title="!edit"
-      :hide-cancel="!edit"
+      :hide-title="(!edit && !allowAppend) || IsWebHookDisabled(webHookForm)"
+      :hide-cancel="(!edit && !allowAppend) || IsWebHookDisabled(webHookForm)"
       draggable
     >
       <template #title> {{ updateWebHookNotifyTitle }}Web Hook </template>
@@ -132,10 +165,16 @@
       >
       <a-form :model="webHookForm" ref="webHookFormRef" auto-label-width>
         <a-form-item field="description" label="描述" required help="Web Hook描述">
-          <a-input :disabled="!edit" v-model="webHookForm.description" />
+          <a-input
+            :disabled="(!edit && !allowAppend) || IsWebHookDisabled(webHookForm)"
+            v-model="webHookForm.description"
+          />
         </a-form-item>
         <a-form-item field="url" label="URL" required help="Web Hook的URL">
-          <a-input :disabled="!edit" v-model="webHookForm.url" />
+          <a-input
+            :disabled="(!edit && !allowAppend) || IsWebHookDisabled(webHookForm)"
+            v-model="webHookForm.url"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -154,7 +193,19 @@ const props = defineProps({
       return []
     }
   },
+  disabled_im_robot_notify: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
   mention_users: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  disabled_mention_users: {
     type: Array,
     default() {
       return []
@@ -166,7 +217,17 @@ const props = defineProps({
       return []
     }
   },
+  disabled_webhooks: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
   edit: {
+    type: Boolean,
+    default: false
+  },
+  allowAppend: {
     type: Boolean,
     default: false
   }
@@ -204,7 +265,7 @@ const handleImFormCancel = () => {
   showDialogName.value = ''
 }
 const handleImFormSubmit = async () => {
-  if (!props.edit) {
+  if (!props.edit && !props.allowAppend) {
     showDialogName.value = ''
     return
   }
@@ -245,7 +306,7 @@ const handleMentitionUserFormCancel = () => {
 }
 
 const handleMentitionUserSubmit = async () => {
-  if (props.edit) {
+  if (!props.edit && !props.allowAppend) {
     return
   }
 
@@ -285,7 +346,7 @@ const handleWebHookFormCancel = () => {
 }
 
 const handleWebHookSubmit = async () => {
-  if (props.edit) {
+  if (!props.edit && !props.allowAppend) {
     return
   }
 
@@ -310,6 +371,36 @@ const hookStatus = (record) => {
   }
 
   return 'warning'
+}
+
+// 判断是否可以编辑
+const IsImRobotNotifyDisabled = (im) => {
+  for (const item of props.disabled_im_robot_notify) {
+    if (item.url === im.url) {
+      return true
+    }
+  }
+  return false
+}
+
+// 判断是否可以编辑
+const IsWebHookDisabled = (wh) => {
+  for (const item of props.disabled_webhooks) {
+    if (item.url === wh.url) {
+      return true
+    }
+  }
+  return false
+}
+
+// 判断是否可以编辑
+const IsMentionUserDisabled = (mu) => {
+  for (const item of props.disabled_webhooks) {
+    if (item.user_name === mu.user_name) {
+      return true
+    }
+  }
+  return false
 }
 </script>
 

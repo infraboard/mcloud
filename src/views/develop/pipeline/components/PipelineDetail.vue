@@ -31,9 +31,19 @@ defineProps({
   edit: {
     type: Boolean,
     default: false
+  },
+  allowAppend: {
+    type: Boolean,
+    default: false
   }
 })
-const emit = defineEmits(['updateParam', 'updateAudit'])
+const emit = defineEmits([
+  'updateParam',
+  'updateAudit',
+  'updateImRobotNotify',
+  'updateWebHookNotify',
+  'updateMentitionUserNotify'
+])
 
 const router = useRouter()
 
@@ -49,6 +59,15 @@ const updateParam = (k, v) => {
 }
 const updateAudit = (k, v) => {
   emit('updateAudit', currentUpdateStepIndex, k, v)
+}
+const updateImRobotNotify = (k, v) => {
+  emit('updateImRobotNotify', currentUpdateStepIndex, k, v)
+}
+const updateWebHookNotify = (k, v) => {
+  emit('updateWebHookNotify', currentUpdateStepIndex, k, v)
+}
+const updateMentitionUserNotify = (k, v) => {
+  emit('updateMentitionUserNotify', currentUpdateStepIndex, k, v)
 }
 
 // 变量
@@ -117,9 +136,13 @@ const stepItemValueStyle = {
               @update:visible="showUpdateStep = '-1'"
               @updateParam="updateParam"
               @updateAudit="updateAudit"
+              @updateImRobotNotify="updateImRobotNotify"
+              @updateWebHookNotify="updateWebHookNotify"
+              @updateMentitionUserNotify="updateMentitionUserNotify"
               :step="task"
               :validate="true"
               :edit="edit"
+              :allowAppend="allowAppend"
             >
             </UpdateStep>
           </a-button-group>

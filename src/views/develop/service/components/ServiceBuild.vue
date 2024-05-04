@@ -5,7 +5,7 @@
         <template #icon>
           <icon-plus />
         </template>
-        添加配置
+        触发配置
       </a-button>
       <div class="table-op-right">
         <a-button @click="mannulDebug = !mannulDebug" size="mini" type="text">

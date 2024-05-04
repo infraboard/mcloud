@@ -5,7 +5,7 @@
         <span>{{ buildConf.name }}</span>
         <span>创建于: <ShowTime :timestamp="buildConf.create_at"></ShowTime></span>
         <span
-          ><span>匹配规则: </span>{{ buildConf.condition.events.join(',') }}/{{
+          ><span>触发规则: </span>{{ buildConf.condition.events.join(',') }}/{{
             buildConf.condition.sub_events.join(',')
           }}</span
         >

@@ -68,7 +68,11 @@
             v-if="selectedPipeline"
             :pipeline="selectedPipeline"
             @updateParam="updateParam"
-            edit
+            @updateAudit="updateAudit"
+            @updateImRobotNotify="updateImRobotNotify"
+            @updateWebHookNotify="updateWebHookNotify"
+            @updateMentitionUserNotify="updateMentitionUserNotify"
+            :allowAppend="true"
           ></PipelineDetail>
         </a-form-item>
         <div class="form-submit">
@@ -101,6 +105,17 @@ const queryPipeline = async () => {
   queryPipelineLoading.value = true
   try {
     const resp = await LIST_PIPELINE(queryPipelineReq.value)
+    // 有追加项的保留原始值
+    resp.items.forEach((element) => {
+      element.stages.forEach((stage) => {
+        stage.tasks.forEach((task) => {
+          task.old_audit = JSON.parse(JSON.stringify(task.audit))
+          task.old_im_robot_notify = JSON.parse(JSON.stringify(task.im_robot_notify))
+          task.old_mention_users = JSON.parse(JSON.stringify(task.mention_users))
+          task.old_webhooks = JSON.parse(JSON.stringify(task.webhooks))
+        })
+      })
+    })
     queryPipelineResp.value = resp
   } finally {
     queryPipelineLoading.value = false
@@ -203,6 +218,72 @@ const updateParam = (currentUpdateStepIndex, k, v) => {
       updateCustomParams(param)
     }
   })
+}
+
+// 更新审核
+const updateAudit = (currentUpdateStepIndex, k, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const stage = selectedPipeline.value.stages[stageIndex]
+  const task = stage.tasks[taskIndex]
+  task.audit[k] = v
+}
+
+// 更新群组通知
+const updateImRobotNotify = (currentUpdateStepIndex, action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = selectedPipeline.value.stages[stageIndex].tasks[taskIndex]
+  console.log(task, action, v)
+  switch (action) {
+    case 'add':
+      task.im_robot_notify.push(v)
+      break
+    case 'delete':
+      task.im_robot_notify.splice(v, 1)
+      break
+    case 'update':
+      task.im_robot_notify[v.index] = v
+      break
+    default:
+      break
+  }
+}
+
+// 更新WebHook
+const updateMentitionUserNotify = (currentUpdateStepIndex, action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = selectedPipeline.value.stages[stageIndex].tasks[taskIndex]
+  switch (action) {
+    case 'add':
+      task.mention_users.push(v)
+      break
+    case 'delete':
+      task.mention_users.splice(v, 1)
+      break
+    case 'update':
+      task.mention_users[v.index] = v
+      break
+    default:
+      break
+  }
+}
+
+// 更新WebHook
+const updateWebHookNotify = (currentUpdateStepIndex, action, v) => {
+  const [stageIndex, taskIndex] = currentUpdateStepIndex
+  const task = selectedPipeline.value.stages[stageIndex].tasks[taskIndex]
+  switch (action) {
+    case 'add':
+      task.webhooks.push(v)
+      break
+    case 'delete':
+      task.webhooks.splice(v, 1)
+      break
+    case 'update':
+      task.webhooks[v.index] = v
+      break
+    default:
+      break
+  }
 }
 
 // 创建配置

@@ -10,6 +10,7 @@ const props = defineProps({
   visible: { type: Boolean, default: false },
   step: { type: Object, required: true },
   edit: { type: Boolean, default: false },
+  allowAppend: { type: Boolean, default: false },
   validate: { type: Boolean, default: false },
   width: { type: String, default: '40%' }
 })
@@ -200,10 +201,17 @@ const deleteStep = () => {
                     <template #unchecked> OFF </template>
                   </a-switch>
                 </a-form-item>
-                <a-form-item v-if="form.audit.enable" field="auditors" label="审核人" required>
+                <a-form-item
+                  v-if="form.audit.enable"
+                  field="auditors"
+                  label="审核人"
+                  :required="!edit"
+                  help="审核人, 请输入用户名进行搜索"
+                >
                   <SearchUser
-                    :disabled="!edit"
+                    :disabled="!allowAppend && !edit"
                     v-model="form.audit.auditors"
+                    :disabledUser="step.old_audit ? step.old_audit.auditors : []"
                     :multiple="true"
                     @change="handleAuditValueChange('auditors', $event)"
                   />
@@ -215,12 +223,16 @@ const deleteStep = () => {
             <template #title>通知</template>
             <StepNotify
               :edit="edit"
+              :allowAppend="allowAppend"
               :im_robot_notify="step.im_robot_notify"
+              :disabled_im_robot_notify="step.old_im_robot_notify ? step.old_im_robot_notify : []"
+              :disabled_mention_users="step.old_mention_users ? step.old_mention_users : []"
+              :disabled_webhooks="step.old_webhooks ? step.old_webhooks : []"
+              :mention_users="step.mention_users"
+              :webhooks="step.webhooks"
               @updateImRobotNotify="updateImRobotNotify"
               @updateWebHookNotify="updateWebHookNotify"
               @updateMentitionUserNotify="updateMentitionUserNotify"
-              :mention_users="step.mention_users"
-              :webhooks="step.webhooks"
             />
           </a-tab-pane>
         </a-tabs>

@@ -113,7 +113,7 @@ const auditIsComplete = (record) => {
             </a-button>
           </template>
         </a-table-column>
-        <a-table-column title="开始时间" align="center" >
+        <a-table-column title="开始时间" align="center">
           <template #cell="{ record }">
             <ShowTime :timestamp="record.status.start_at"></ShowTime>
           </template>
@@ -128,14 +128,14 @@ const auditIsComplete = (record) => {
             <span v-for="item in record.audit.auditors" :key="item">{{ item.split('@')[0] }}</span>
           </template>
         </a-table-column>
-        <a-table-column title="审核信息" align="center" >
+        <a-table-column title="审核信息" align="center">
           <template #cell="{ record }">
             <ShowTime
               v-if="record.audit.status.audit_at"
               :timestamp="record.audit.status.audit_at"
             ></ShowTime>
             <span v-else> - </span>
-            <div style="margin-left: 6px;">{{ record.audit.status.audit_by.split('@')[0] }}</div>
+            <div style="margin-left: 6px">{{ record.audit.status.audit_by.split('@')[0] }}</div>
           </template>
         </a-table-column>
         <a-table-column title="状态">
