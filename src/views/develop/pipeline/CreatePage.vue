@@ -107,7 +107,7 @@ const AddTask = async (job) => {
         rollback_params: { ignore_failed: false, dry_run: false, params: [] },
         webhooks: [],
         mention_users: [],
-        audit: {enable: false, auditors: []},
+        audit: { enable: false, auditors: [] },
         im_robot_notify: [],
         labels: {},
         job: job,

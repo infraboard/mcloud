@@ -87,7 +87,7 @@ const handleSelect = async (v, record) => {
             >
           </template>
         </a-table-column>
-        <a-table-column  align="center" title="描述" data-index="description"></a-table-column>
+        <a-table-column align="center" title="描述" data-index="description"></a-table-column>
         <a-table-column align="center" title="访问范围">
           <template #cell="{ record }">
             <span>{{ mapping[record.visiable_mode] }}</span>

@@ -67,7 +67,7 @@ const connect = () => {
   )
   //心跳检测
   var heartCheck = {
-    timeout: 10000, //10秒发一次心跳
+    timeout: 5000, //10秒发一次心跳
     timeoutObj: null,
     reset: function () {
       clearTimeout(this.timeoutObj)

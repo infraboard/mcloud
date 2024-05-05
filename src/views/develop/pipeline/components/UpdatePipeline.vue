@@ -13,7 +13,7 @@ const handleCancel = () => {
 
 // form
 const updatePipelineForm = ref()
-const form = ref({visiable_mode: 'NAMESPACE'})
+const form = ref({ visiable_mode: 'NAMESPACE' })
 
 const handleOk = () => {
   emit('change', form.value)

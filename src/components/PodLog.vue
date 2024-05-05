@@ -52,11 +52,30 @@ const connect = () => {
     `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/log?mcenter_access_token=${app.value.token.access_token}`
   )
 
+  //心跳检测
+  var heartCheck = {
+    timeout: 5000, //10秒发一次心跳
+    timeoutObj: null,
+    reset: function () {
+      clearTimeout(this.timeoutObj)
+      return this
+    },
+    start: function () {
+      this.timeoutObj = setTimeout(function () {
+        //这里发送一个心跳，后端收到后，返回一个心跳消息，
+        //onmessage拿到返回的心跳就说明连接正常
+        socket.send(JSON.stringify({ command: 'ping', params: {} }))
+      }, this.timeout)
+    }
+  }
+
   socket.onopen = function () {
     emit('changed', '已连接')
     socket.send(JSON.stringify(props.option))
   }
   socket.onmessage = function (event) {
+    //如果获取到消息，心跳检测重置, 拿到任何消息都说明当前连接是正常的
+    heartCheck.reset().start()
     if (event.data instanceof Blob) {
       // 数据
       let reader = new FileReader()
@@ -71,6 +90,7 @@ const connect = () => {
   }
   socket.onclose = function (event) {
     emit('changed', '已关闭')
+    heartCheck.reset()
     if (event.wasClean) {
       term.write(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`)
     } else {
