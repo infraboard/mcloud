@@ -1,3 +1,22 @@
+//心跳检测
+export var HeartCheck = (socket) => {
+  return {
+    timeout: 5000,
+    timeoutObj: null,
+    reset: function () {
+      clearTimeout(this.timeoutObj)
+      return this
+    },
+    start: function () {
+      this.timeoutObj = setTimeout(function () {
+        //这里发送一个心跳，后端收到后，返回一个心跳消息，
+        //onmessage拿到返回的心跳就说明连接正常
+        socket.send(JSON.stringify({ command: 'ping', params: {} }))
+      }, this.timeout)
+    }
+  }
+}
+
 // 深色主题
 export var Solarized_Darcula = {
   foreground: '#d2d8d9',

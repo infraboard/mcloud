@@ -2,7 +2,7 @@
 import 'xterm/css/xterm.css'
 import { app } from '@/stores/localstorage'
 import { Terminal } from 'xterm'
-import { GitHub, Solarized_Darcula, GetTermSize } from '@/tools/term'
+import { GitHub, Solarized_Darcula, GetTermSize, HeartCheck } from '@/tools/term'
 import { onMounted, watch } from 'vue'
 
 // 声明属性
@@ -65,22 +65,9 @@ const connect = () => {
   socket = new WebSocket(
     `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login?mcenter_access_token=${app.value.token.access_token}`
   )
-  //心跳检测
-  var heartCheck = {
-    timeout: 5000, //10秒发一次心跳
-    timeoutObj: null,
-    reset: function () {
-      clearTimeout(this.timeoutObj)
-      return this
-    },
-    start: function () {
-      this.timeoutObj = setTimeout(function () {
-        //这里发送一个心跳，后端收到后，返回一个心跳消息，
-        //onmessage拿到返回的心跳就说明连接正常
-        socket.send(JSON.stringify({ command: 'ping', params: {} }))
-      }, this.timeout)
-    }
-  }
+
+    //心跳检测
+    var heartCheck = HeartCheck(socket)
 
   socket.onopen = function () {
     emit('changed', '已连接')

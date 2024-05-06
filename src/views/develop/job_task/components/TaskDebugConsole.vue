@@ -1,8 +1,7 @@
 <script setup>
 import 'xterm/css/xterm.css'
-import { app } from '@/stores/localstorage'
 import { Terminal } from 'xterm'
-import { GitHub, Solarized_Darcula, GetTermSize } from '@/tools/term'
+import { GitHub, Solarized_Darcula, GetTermSize, HeartCheck } from '@/tools/term'
 import { onMounted, watch } from 'vue'
 
 // 声明属性
@@ -54,25 +53,9 @@ const fitSize = () => {
 const connect = () => {
   emit('changed', '连接中')
 
-  socket = new WebSocket(
-    `ws://${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/debug?mcenter_access_token=${app.value.token.access_token}`
-  )
+  socket = new WebSocket(`ws://${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/debug`)
   //心跳检测
-  var heartCheck = {
-    timeout: 10000, //10秒发一次心跳
-    timeoutObj: null,
-    reset: function () {
-      clearTimeout(this.timeoutObj)
-      return this
-    },
-    start: function () {
-      this.timeoutObj = setTimeout(function () {
-        //这里发送一个心跳，后端收到后，返回一个心跳消息，
-        //onmessage拿到返回的心跳就说明连接正常
-        socket.send(JSON.stringify({ command: 'ping', params: {} }))
-      }, this.timeout)
-    }
-  }
+  var heartCheck = HeartCheck(socket)
 
   socket.onopen = function () {
     emit('changed', '已连接')
