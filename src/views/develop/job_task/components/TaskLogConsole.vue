@@ -1,6 +1,5 @@
 <script setup>
 import 'xterm/css/xterm.css'
-import { app } from '@/stores/localstorage'
 import { Terminal } from 'xterm'
 import { GitHub, Solarized_Darcula, GetTermSize, HeartCheck } from '@/tools/term'
 import { onMounted, watch } from 'vue'
@@ -40,7 +39,7 @@ const connect = () => {
   emit('changed', '连接中')
 
   let socket = new WebSocket(
-    `ws://${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/log?mcenter_access_token=${app.value.token.access_token}`
+    `ws://${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/log`
   )
 
   //心跳检测

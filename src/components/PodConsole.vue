@@ -1,6 +1,5 @@
 <script setup>
 import 'xterm/css/xterm.css'
-import { app } from '@/stores/localstorage'
 import { Terminal } from 'xterm'
 import { GitHub, Solarized_Darcula, GetTermSize, HeartCheck } from '@/tools/term'
 import { onMounted, watch } from 'vue'
@@ -63,7 +62,7 @@ const fitSize = () => {
 const connect = () => {
   emit('changed', '连接中')
   socket = new WebSocket(
-    `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login?mcenter_access_token=${app.value.token.access_token}`
+    `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login`
   )
 
     //心跳检测
