@@ -4,10 +4,12 @@ import { useRouter } from 'vue-router'
 import { GET_PIPELINE_TASK, RUN_PIPELINE_TASK } from '@/api/mflow/task.js'
 import mapping from '@/stores/mapping'
 import UpdateStep from '../pipeline/components/UpdateStep.vue'
+import EventDetail from '@/views/develop/trigger/components/EventDetail.vue'
 import { DurationHumanize } from '@/tools/time.js'
 const router = useRouter()
 const pipeline = ref({})
 const pipelineTask = ref({})
+const eventId = ref(null)
 
 // 更新步骤
 const showUpdateStep = ref(-1)
@@ -49,6 +51,7 @@ const queryData = async () => {
     resp.cost = DurationHumanize(resp.end_at - resp.start_at)
   }
   pipelineTask.value = resp
+  eventId.value = pipelineTask.value.labels['_EVENT_ID']
 
   // 补充 Task Status
   for (let stageIndex = 0; stageIndex < resp.stage_status.length; stageIndex++) {
@@ -90,6 +93,12 @@ const queryData = async () => {
     clearInterval(timer)
   }
 }
+
+// const queryPipelineTriggerEvent =  async () => {
+//   const eventId = pipelineTask.value.labels['_EVENT_ID']
+//   const resp = await GET_TRIGGER_RECORD(eventId)
+//   console.log(resp)
+// }
 
 // 运行Pipeline
 const runPipelineLoading = ref(false)
@@ -153,6 +162,7 @@ const stepItemValueStyle = {
           <span v-if="pipelineTask.cost"> 耗时 {{ pipelineTask.cost }}</span>
           {{ pipelineTask.message }}
         </a-alert>
+        <EventDetail v-if="eventId" :eventId="eventId"></EventDetail>
       </div>
       <div style="padding: 0 2px">
         <a-space>

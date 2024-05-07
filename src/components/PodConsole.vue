@@ -65,8 +65,8 @@ const connect = () => {
     `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/login`
   )
 
-    //心跳检测
-    var heartCheck = HeartCheck(socket)
+  //心跳检测
+  var heartCheck = HeartCheck(socket)
 
   socket.onopen = function () {
     emit('changed', '已连接')
