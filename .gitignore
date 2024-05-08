@@ -16,6 +16,10 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
+*.key
+*.cert
+*.crt 
+*.pem
 
 # Editor directories and files
 .vscode/*

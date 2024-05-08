@@ -51,3 +51,20 @@ docker run --restart=always \
 --network host \
 -itd registry.cn-hangzhou.aliyuncs.com/infraboard/moperator:v0.0.2
 ```
+
+## 关于证书
+
+[acme.sh](https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E)
+
+```sh
+./acme.sh --install -m email=719118794@qq.com
+```
+
+
+```
+./acme.sh --issue --dns -d console.mdev.group \
+ --yes-I-know-dns-manual-mode-enough-go-ahead-please
+./acme.sh --renew -d console.mdev.group \
+  --yes-I-know-dns-manual-mode-enough-go-ahead-please
+```
+

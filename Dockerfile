@@ -29,7 +29,12 @@ ENV MCENTER_SERVICE_URL=http://127.0.0.1:8010 \
 MPAAS_SERVICE_URL=http://127.0.0.1:8080 \
 MFLOW_SERVICE_URL=http://127.0.0.1:8090
 
+
+# 非SSL部署
 COPY etc/nginx.conf /etc/nginx/templates/default.conf.template
+# SSL 部署
+# COPY etc/nginx_ssl.conf /etc/nginx/templates/default.conf.template
+# COPY etc/ssl /etc/nginx/ssl
 
 # 启动 Nginx
 CMD ["nginx", "-g", "daemon off;"]
