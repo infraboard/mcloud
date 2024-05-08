@@ -37,8 +37,8 @@ var term = new Terminal({
 
 const connect = () => {
   emit('changed', '连接中')
-
-  let socket = new WebSocket(`ws://${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/log`)
+  var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
+  let socket = new WebSocket(`${protocol}//${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/log`)
 
   //心跳检测
   var heartCheck = HeartCheck(socket)

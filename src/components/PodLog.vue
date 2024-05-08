@@ -46,9 +46,9 @@ var term = new Terminal({
 
 const connect = () => {
   emit('changed', '连接中')
-
+  var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
   let socket = new WebSocket(
-    `ws://${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/log`
+    `${protocol}//${location.host}/mpaas/api/v1/ws/proxy/${props.option.cluster_id}/pods/${props.option.pod_name}/log`
   )
 
   //心跳检测
