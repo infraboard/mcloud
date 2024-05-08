@@ -8,7 +8,7 @@
             d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.876-1.008a4.002 4.002 0 0 1-7.752 0A1.01 1.01 0 0 1 4 9H1a1 1 0 1 1 0-2h3c.042 0 .083.003.124.008a4.002 4.002 0 0 1 7.752 0A1.01 1.01 0 0 1 12 7h3a1 1 0 0 1 0 2h-3a1.01 1.01 0 0 1-.124-.008z"
           ></path>
         </svg>
-        <a-link class="f12" target="_blank" :href="commit.url ">{{ commit.id.slice(0, 8) }}</a-link>
+        <a-link class="f12" target="_blank" :href="commit.url">{{ commit.id.slice(0, 8) }}</a-link>
         <span class="f12"><icon-send /> {{ record.name }}</span>
         <span class="f12"><icon-branch /> {{ record.sub_name }}</span>
         <span class="f12"><icon-user /> {{ commit.author.name }}</span>

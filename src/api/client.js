@@ -5,8 +5,14 @@ import { Modal } from '@arco-design/web-vue'
 import { app } from '@/stores/localstorage'
 import { Message } from '@arco-design/web-vue'
 
+// 检查当前页面是否使用HTTPS协议
+var baseURL = import.meta.env.VITE_BASE_URL
+if (baseURL === '' && window.location.protocol === 'https:') {
+  baseURL = 'https://'
+} 
+
 var instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: baseURL,
   timeout: 5000,
   headers: { 'Content-Type': 'application/json' }
 })
