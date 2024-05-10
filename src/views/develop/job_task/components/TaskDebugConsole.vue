@@ -53,7 +53,9 @@ const fitSize = () => {
 const connect = () => {
   emit('changed', '连接中')
   var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
-  socket = new WebSocket(`${protocol}//${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/debug`)
+  socket = new WebSocket(
+    `${protocol}//${location.host}/mflow/api/v1/ws/job_tasks/${props.taskId}/debug`
+  )
   //心跳检测
   var heartCheck = HeartCheck(socket)
 
