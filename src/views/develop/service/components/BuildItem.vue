@@ -9,6 +9,7 @@
             buildConf.condition.sub_events.join(',')
           }}</span
         >
+        <span>状态: {{ buildConf.enabled ? '启用中': '未启用' }}</span>
       </a-space>
     </template>
     <template #extra>
