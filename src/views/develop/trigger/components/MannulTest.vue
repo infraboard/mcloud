@@ -22,7 +22,7 @@
         <a-form-item field="sub_name" label="分支" help="代码分支名称" required>
           <a-input v-model="form.sub_name" />
         </a-form-item>
-        <a-form-item field="extra.commit_id" label="分支" help="代码commit号" required>
+        <a-form-item field="extra.commit_id" label="提交号" help="代码commit号" required>
           <a-input v-model="form.extra.commit_id" />
         </a-form-item>
         <a-form-item field="run_pipeline" label="执行流水线" help="是否执行流水线" required>

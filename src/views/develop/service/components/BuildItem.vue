@@ -9,7 +9,7 @@
             buildConf.condition.sub_events.join(',')
           }}</span
         >
-        <span>状态: {{ buildConf.enabled ? '启用中': '未启用' }}</span>
+        <span>状态: {{ buildConf.enabled ? '启用中' : '未启用' }}</span>
       </a-space>
     </template>
     <template #extra>
@@ -42,11 +42,22 @@
           </a-table-column>
           <a-table-column align="center" title="事件" data-index="name" />
           <a-table-column align="center" title="分支" data-index="sub_name" />
-          <a-table-column align="center" title="触发状态">
+          <a-table-column align="center" title="状态">
             <template #cell="{ record }">
-              <span v-if="record.build_status[0].error_message">
+              <span v-if="record.build_status[0].stage === 'FAILED'">
                 <a-popover :content-style="{ fontSize: '12px' }">
-                  <a-button size="mini" type="text" status="danger"
+                  <div v-if="ps(record).id">
+                    <a-button
+                      @click="
+                        $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
+                      "
+                      size="mini"
+                      type="text"
+                      status="danger"
+                      >失败 <icon-question-circle-fill
+                    /></a-button>
+                  </div>
+                  <a-button v-else size="mini" type="text" status="danger"
                     >失败 <icon-question-circle-fill
                   /></a-button>
                   <template #content>
@@ -54,23 +65,34 @@
                   </template>
                 </a-popover>
               </span>
-              <span v-else style="color: rgb(var(--success-6))">成功</span>
-            </template>
-          </a-table-column>
-          <a-table-column align="center" title="执行状态">
-            <template #cell="{ record }">
-              <div v-if="ps(record).id">
-                <a-button
-                  @click="
-                    $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
-                  "
-                  size="mini"
-                  type="text"
-                  :status="ps(record).color"
-                  >{{ ps(record).stage }}</a-button
-                >
-              </div>
-              <span v-else>-</span>
+              <span
+                v-else-if="record.build_status[0].stage === 'RUNNING'"
+                style="color: rgb(var(--arcoblue-6))"
+                >运行中</span
+              >
+              <span
+                v-else-if="record.build_status[0].stage === 'SUCCESS'"
+                style="color: rgb(var(--success-6))"
+              >
+                <div v-if="ps(record).id">
+                  <a-button
+                    @click="
+                      $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
+                    "
+                    size="mini"
+                    type="text"
+                    status="success"
+                    >成功</a-button>
+                </div>
+                <a-button v-else size="mini" type="text" status="success"
+                  >成功</a-button
+              ></span>
+              <span
+                v-else-if="record.build_status[0].stage === 'ENQUEUE'"
+                style="color: rgb(var(--arcoblue-3))"
+                >排队中</span
+              >
+              <span v-else style="color: var(--color-neutral-4)">等待中</span>
             </template>
           </a-table-column>
         </template>
