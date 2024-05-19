@@ -9,7 +9,6 @@
         layout="vertical"
         @submit="handleSubmit"
         auto-label-width
-        size="large"
       >
         <a-form-item field="old_pass" label="用户名">
           <span style="font-size: 12px"> {{ stage.username }}</span>
@@ -23,7 +22,7 @@
           ]"
           help="新密码与当前密码不能相同"
         >
-          <a-input-password v-model="form.new_pass" />
+          <a-input-password size="large" v-model="form.new_pass" />
         </a-form-item>
         <a-form-item
           field="new_pass_repeat"
@@ -32,9 +31,8 @@
           :rules="[{ validator: validatePassRule }]"
           help="请再次输入相同的密码进行确认"
         >
-          <a-input-password v-model="form.new_pass_repeat" />
+          <a-input-password size="large" v-model="form.new_pass_repeat" />
         </a-form-item>
-
         <div class="form-submit">
           <a-button
             style="width: 100%"
@@ -74,7 +72,7 @@ const handleSubmit = async (data) => {
       submitLoading.value = true
       form.old_pass = stage.old_password
       await UPDATE_MY_PASSWORD(form)
-      router.push({name: 'UserWorkspace'})
+      router.push({ name: 'UserWorkspace' })
     } finally {
       submitLoading.value = false
     }
