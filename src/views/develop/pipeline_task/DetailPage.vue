@@ -94,12 +94,6 @@ const queryData = async () => {
   }
 }
 
-// const queryPipelineTriggerEvent =  async () => {
-//   const eventId = pipelineTask.value.labels['_EVENT_ID']
-//   const resp = await GET_TRIGGER_RECORD(eventId)
-//   console.log(resp)
-// }
-
 // 运行Pipeline
 const runPipelineLoading = ref(false)
 

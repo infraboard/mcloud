@@ -138,7 +138,7 @@ const auditIsComplete = (record) => {
             <div style="margin-left: 6px">{{ record.audit.status.audit_by.split('@')[0] }}</div>
           </template>
         </a-table-column>
-        <a-table-column title="状态">
+        <a-table-column title="审核状态">
           <template #cell="{ record }">
             <span>{{ mapping.audit[record.audit.status.stage] }}</span>
           </template>

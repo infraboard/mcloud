@@ -2,7 +2,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { GitHub, Solarized_Darcula, GetTermSize, HeartCheck } from '@/tools/term'
-import { onMounted, watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 
 // 声明属性
 const props = defineProps({
@@ -35,6 +35,7 @@ var term = new Terminal({
   disableStdin: true
 })
 
+var heartCheck = null
 const connect = () => {
   emit('changed', '连接中')
   var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
@@ -43,7 +44,7 @@ const connect = () => {
   )
 
   //心跳检测
-  var heartCheck = HeartCheck(socket)
+  heartCheck = HeartCheck(socket)
 
   socket.onopen = function () {
     emit('changed', '已连接')
@@ -92,6 +93,12 @@ onMounted(() => {
   fitSize()
   // 监听窗口变化
   window.onresize = fitSize
+})
+
+onUnmounted(() => {
+  if(heartCheck) {
+    heartCheck.reset()
+  }
 })
 
 // 终端修改

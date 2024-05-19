@@ -65,28 +65,31 @@
                   </template>
                 </a-popover>
               </span>
-              <span
-                v-else-if="record.build_status[0].stage === 'RUNNING'"
-                style="color: rgb(var(--arcoblue-6))"
-                >运行中</span
+              <span v-else-if="record.build_status[0].stage === 'RUNNING'">
+                <a-button
+                  @click="
+                    $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
+                  "
+                  size="mini"
+                  type="text"
+                  status="info"
+                  >运行中</a-button
+                ></span
               >
               <span
                 v-else-if="record.build_status[0].stage === 'SUCCESS'"
                 style="color: rgb(var(--success-6))"
               >
-                <div v-if="ps(record).id">
-                  <a-button
-                    @click="
-                      $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
-                    "
-                    size="mini"
-                    type="text"
-                    status="success"
-                    >成功</a-button>
-                </div>
-                <a-button v-else size="mini" type="text" status="success"
+                <a-button
+                  @click="
+                    $router.push({ name: 'PipelineTaskDetail', params: { id: ps(record).id } })
+                  "
+                  size="mini"
+                  type="text"
+                  status="success"
                   >成功</a-button
-              ></span>
+                ></span
+              >
               <span
                 v-else-if="record.build_status[0].stage === 'ENQUEUE'"
                 style="color: rgb(var(--arcoblue-3))"
