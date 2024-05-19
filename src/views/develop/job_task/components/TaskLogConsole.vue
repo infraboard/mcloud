@@ -96,7 +96,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if(heartCheck) {
+  if (heartCheck) {
     heartCheck.reset()
   }
 })

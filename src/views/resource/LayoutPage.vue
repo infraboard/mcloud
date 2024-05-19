@@ -51,6 +51,11 @@ onMounted(() => {
           <a-menu-item key="ResourceSecretList">账号管理</a-menu-item>
           <a-menu-item key="ResourceTaskList">任务列表</a-menu-item>
         </a-sub-menu>
+        <a-sub-menu key="ConsoleAudit">
+          <template #icon><icon-video-camera /></template>
+          <template #title><span class="menu-title">登录审计</span></template>
+          <a-menu-item key="PodAudit">容器登录</a-menu-item>
+        </a-sub-menu>
       </a-menu>
     </div>
     <!-- 内容操作区 -->

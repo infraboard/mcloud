@@ -49,7 +49,7 @@ docker run --restart=always \
 -v /etc/rancher/k3s/k3s.yaml:/root/.kube/config \
 --name moperator \
 --network host \
--itd registry.cn-hangzhou.aliyuncs.com/infraboard/moperator:v0.0.2
+-itd registry.cn-hangzhou.aliyuncs.com/infraboard/moperator:v0.0.1
 ```
 
 ## 关于证书

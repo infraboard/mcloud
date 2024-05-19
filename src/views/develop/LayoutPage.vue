@@ -46,11 +46,6 @@ onMounted(() => {
           <a-menu-item key="TaskAuditList">任务审批</a-menu-item>
           <a-menu-item key="DomainJobList">任务模版</a-menu-item>
         </a-sub-menu>
-        <a-sub-menu key="ConsoleAudit">
-          <template #icon><icon-video-camera /></template>
-          <template #title><span class="menu-title">登录审计</span></template>
-          <a-menu-item key="PodAudit">容器登录</a-menu-item>
-        </a-sub-menu>
       </a-menu>
     </div>
     <!-- 内容操作区 -->

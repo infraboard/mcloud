@@ -54,6 +54,7 @@ import { reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { app } from '@/stores/localstorage'
 import { ISSUE_TOKEN } from '@/api/mcenter/token'
+import { stage } from './state.js'
 
 // 用户登录数据
 const form = reactive({
@@ -75,6 +76,15 @@ const handleSubmit = async (data) => {
     // useRoute vue-router 来提供获取当前页面的路由对象, Route对象
     // {name: 'TagList'}
     let redirect = { name: app.value.system, params: {}, query: {} }
+
+    // 如果需要重置密码, 则需要调整
+    if (resp.meta.reset_password) {
+      redirect.name = 'LoginPasswordReset'
+      stage.reset_reason = resp.meta.reset_password
+      stage.username = form.username
+      stage.old_password = form.password
+    }
+
     if (route.query.name) {
       redirect.name = route.query.name
     }

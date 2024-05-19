@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '../views/login/LoginPage.vue'
 import { beforeEachHanler } from './permission'
 import console from './console'
 import admin from './admin'
@@ -15,7 +14,13 @@ const router = createRouter({
     {
       path: '/login',
       name: 'LoginPage',
-      component: LoginPage
+      component: () => import('@/views/login/LoginPage.vue')
+    },
+    // 登录
+    {
+      path: '/login-reset-password',
+      name: 'LoginPasswordReset',
+      component: () => import('@/views/login/PasswordReset.vue')
     },
     // Home页面
     {
