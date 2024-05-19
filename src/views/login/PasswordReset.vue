@@ -50,7 +50,7 @@
 
 <script setup>
 import { stage } from './state.js'
-import { reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 import { UPDATE_MY_PASSWORD } from '@/api/mcenter/account'
 import { useRouter } from 'vue-router'
 
@@ -62,6 +62,11 @@ const form = reactive({
   new_pass: '',
   new_pass_repeat: '',
   is_reset: false
+})
+
+// 为了安全页面关闭后清空之前密码
+onUnmounted(() => {
+  stage.old_password = ''
 })
 
 // 表单提交
