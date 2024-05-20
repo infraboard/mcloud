@@ -8,7 +8,6 @@
 .sidebar {
   display: flex;
   height: calc(100vh - 46px);
-  overflow: scroll;
 }
 
 .sidebar-menu {
@@ -18,13 +17,11 @@
 .main {
   width: 100%;
   height: calc(100vh - 46px);
-  overflow: scroll;
   background-color: var(--color-fill-1);
 }
 
 .page {
   padding: 8px;
-  overflow: scroll;
 }
 
 .table-op {

@@ -231,10 +231,6 @@ onBeforeMount(() => {
   height: 100%;
 }
 
-.nav :deep(.arco-menu-inner) {
-  padding: -7px;
-}
-
 .nav :deep(.arco-menu-selected-label) {
   bottom: -7px;
 }
