@@ -63,7 +63,6 @@ const deleteTask = async (id) => {
   <div class="page">
     <BreadcrumbMenu />
     <a-table
-      style="margin-top: 12px"
       :data="data.items"
       :loading="queryLoading"
       :pagination="pagination"

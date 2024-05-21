@@ -42,7 +42,7 @@ onMounted(() => {
 <template>
   <div class="page">
     <BreadcrumbMenu />
-    <div class="table-op"></div>
+    <!-- <div class="table-op"></div> -->
     <a-table
       :data="data.items"
       :loading="queryLoading"
