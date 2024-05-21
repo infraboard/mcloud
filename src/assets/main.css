@@ -24,6 +24,18 @@
   padding: 8px;
 }
 
+.content {
+  width: 100%;
+  height: calc(100vh - 110px);
+  overflow: scroll;
+  padding-bottom: 12px;
+  -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
+}
+
+.content::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
+}
+
 .table-op {
   margin-top: 8px;
   margin-bottom: 8px;
