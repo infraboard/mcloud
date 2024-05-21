@@ -236,20 +236,25 @@ const stepItemValueStyle = {
 </script>
 
 <template>
-  <!-- 页头 -->
-  <a-page-header :title="title" @back="router.push({ name: 'DomainPipelineList' })">
-    <template #extra>
-      <a-space>
-        <a-button :loading="saveOrUpdateLoading" @click="saveOrUpdate" size="small" type="primary">
-          <template #icon>
-            <icon-save />
-          </template>
-          保存
-        </a-button>
-      </a-space>
-    </template>
-  </a-page-header>
-  <div class="page" style="padding-top: 0px">
+  <div class="page">
+    <!-- 页头 -->
+    <a-page-header :title="title" @back="router.push({ name: 'DomainPipelineList' })">
+      <template #extra>
+        <a-space>
+          <a-button
+            :loading="saveOrUpdateLoading"
+            @click="saveOrUpdate"
+            size="small"
+            type="primary"
+          >
+            <template #icon>
+              <icon-save />
+            </template>
+            保存
+          </a-button>
+        </a-space>
+      </template>
+    </a-page-header>
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <template #title>
         <span>{{ pipeline.name }}</span>

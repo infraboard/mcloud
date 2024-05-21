@@ -1,5 +1,5 @@
 <template>
-  <a-breadcrumb style="margin-bottom: 12px">
+  <a-breadcrumb style="margin-bottom: 8px">
     <a-breadcrumb-item v-for="item in breadcrumbRoutes()" :key="item.name">
       {{ item.label }}
     </a-breadcrumb-item>

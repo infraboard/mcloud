@@ -73,20 +73,20 @@ const runPipeline = async () => {
 </script>
 
 <template>
-  <!-- 页头 -->
-  <a-page-header title="流水线详情" @back="router.push({ name: 'DomainPipelineList' })">
-    <template #extra>
-      <a-space>
-        <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
-          <template #icon>
-            <icon-send />
-          </template>
-          运行
-        </a-button>
-      </a-space>
-    </template>
-  </a-page-header>
-  <div class="page" style="padding-top: 0px">
+  <div class="page">
+    <!-- 页头 -->
+    <a-page-header title="流水线详情" @back="router.push({ name: 'DomainPipelineList' })">
+      <template #extra>
+        <a-space>
+          <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
+            <template #icon>
+              <icon-send />
+            </template>
+            运行
+          </a-button>
+        </a-space>
+      </template>
+    </a-page-header>
     <PipelineDetail :pipeline="pipeline" @updateParam="updateParam" @updateAudit="updateAudit" />
   </div>
 </template>

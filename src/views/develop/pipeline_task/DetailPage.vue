@@ -136,19 +136,19 @@ const stepItemValueStyle = {
 
 <template>
   <!-- 页头 -->
-  <a-page-header title="任务详情" @back="router.go(-1)">
-    <template #extra>
-      <a-space>
-        <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
-          <template #icon>
-            <icon-refresh />
-          </template>
-          重新运行
-        </a-button>
-      </a-space>
-    </template>
-  </a-page-header>
-  <div class="page" style="padding-top: 0px">
+  <div class="page">
+    <a-page-header title="任务详情" @back="router.go(-1)">
+      <template #extra>
+        <a-space>
+          <a-button :loading="runPipelineLoading" @click="runPipeline" size="small" type="primary">
+            <template #icon>
+              <icon-refresh />
+            </template>
+            重新运行
+          </a-button>
+        </a-space>
+      </template>
+    </a-page-header>
     <a-card :header-style="{ height: '36px' }" :body-style="{ padding: '0px 8px 8px 8px' }">
       <div style="margin: 10px 0px">
         <a-alert :type="mapping.statusAlert[pipelineTask.stage]">

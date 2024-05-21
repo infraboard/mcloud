@@ -8,6 +8,12 @@
 .sidebar {
   display: flex;
   height: calc(100vh - 46px);
+  overflow: scroll;
+  -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
 }
 
 .sidebar-menu {
@@ -46,7 +52,6 @@
 }
 
 .table-op {
-  margin-top: 8px;
   margin-bottom: 8px;
   display: flex;
 }
@@ -84,7 +89,7 @@
 
 .detail-header {
   background-color: #fff;
-  padding-bottom: 0px !important;
+  padding: 4px 0px 0px 14px !important;
 }
 
 .f12 {
