@@ -159,7 +159,12 @@
   font-size: 12px;
 }
 
-.arco-drawer-header .arco-drawer-title {
+.arco-page-header-header {
+  padding-top: 0px;
+  font-size: 12px;
+}
+
+.arco-page-header-back-btn {
   font-size: 12px;
 }
 

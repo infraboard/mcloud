@@ -123,7 +123,7 @@ onBeforeMount(() => {
           :selected-keys="[app.system]"
           @menu-item-click="menuItemClickHandler"
         >
-          <a-menu-item key="ServiceConsole">工作台</a-menu-item>
+          <a-menu-item key="ServiceConsole"> 工作台 </a-menu-item>
           <a-menu-item key="SettingPage" v-if="showMemberManagement()">成员管理</a-menu-item>
           <a-menu-item key="ResourcePage">资源管理</a-menu-item>
           <a-menu-item key="DevelopPage">研发交付</a-menu-item>

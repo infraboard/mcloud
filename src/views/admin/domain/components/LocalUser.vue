@@ -47,7 +47,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="page">
+  <div class="content">
     <a-card>
       <a-form :model="form" @submit="handleSubmit" auto-label-width>
         <a-form-item

@@ -158,8 +158,6 @@ onBeforeMount(async () => {
               <a-radio value="Deployment">无状态部署</a-radio>
               <a-radio value="StatefulSet">有状态部署</a-radio>
               <a-radio value="DaemonSet">守护进程部署</a-radio>
-              <a-radio value="Job">一次性任务</a-radio>
-              <a-radio value="CronJob">定时任务</a-radio>
             </a-radio-group>
           </a-form-item>
           <a-form-item
