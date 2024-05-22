@@ -158,7 +158,12 @@ const stepItemValueStyle = {
   flex-direction: row;
   align-items: center;
   overflow: scroll;
+  -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
   height: 700px;
+}
+
+.stage::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
 }
 
 .stage-card {
