@@ -45,7 +45,9 @@ onMounted(() => {
   <div class="page">
     <BreadcrumbMenu />
     <div class="table-op">
-      <a-button type="primary" :size="app.size"> 创建角色 </a-button>
+      <a-button type="primary" :size="app.size" @click="router.push({ name: 'CreateRole' })">
+        创建角色
+      </a-button>
     </div>
     <a-table
       :data="data.items"

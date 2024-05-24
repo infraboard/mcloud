@@ -4,6 +4,7 @@ import { GET_ROLE } from '@/api/mcenter/role'
 import { Notification } from '@arco-design/web-vue'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { FormatDate } from '@/tools/time.js'
 
 const router = useRouter()
 const id = router.currentRoute.value.query.id
@@ -26,6 +27,11 @@ const GetRole = async () => {
     let attr = []
     Object.keys(attrMap).forEach((key) => {
       let value = resp[key]
+      switch (key) {
+        case 'create_at':
+          value = FormatDate(value * 1000)
+          break
+      }
       let label = attrMap[key]
       if (label) {
         attr.push({ label, value })
@@ -47,9 +53,14 @@ onBeforeMount(() => {
     <!-- 页头 -->
     <a-page-header title="角色详情" @back="router.go(-1)"> </a-page-header>
     <a-card>
-      <a-descriptions :size="app.size" title="基础信息" :data="roleAttr">
+      <a-descriptions
+        :size="app.size"
+        :label-style="{ fontSize: '12px' }"
+        title="基础信息"
+        :data="roleAttr"
+      >
         <a-descriptions-item v-for="item of roleAttr" :key="item.label" :label="item.label">
-          <span>{{ item.value }}</span>
+          <span style="font-size: 12px">{{ item.value }}</span>
         </a-descriptions-item>
       </a-descriptions>
     </a-card>

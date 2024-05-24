@@ -53,6 +53,12 @@ export default {
           meta: { label: '角色详情' }
         },
         {
+          path: 'role/create',
+          name: 'CreateRole',
+          component: () => import('@/views/admin/role/CreatePage.vue'),
+          meta: { label: '创建角色' }
+        },
+        {
           path: 'label/list',
           name: 'LabelList',
           component: () => import('@/views/admin/label/ListPage.vue'),
