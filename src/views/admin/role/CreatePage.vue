@@ -41,14 +41,54 @@
             </a-table>
           </div>
         </div>
-        <div v-if="current === 2">基本信息</div>
-        <div v-if="current === 3">权限确认</div>
+        <div v-if="current === 2">
+          <a-form :model="form" ref="baseFromRef" auto-label-width>
+            <a-form-item field="name" label="名称" required>
+              <a-input v-model="form.name" />
+            </a-form-item>
+            <a-form-item field="description" label="描述" required>
+              <a-input v-model="form.description" />
+            </a-form-item>
+            <a-form-item field="enabled" label="启用">
+              <a-switch type="round" v-model="form.enabled" />
+            </a-form-item>
+          </a-form>
+        </div>
+        <div v-if="current === 3">
+          <a-space direction="vertical" fill>
+            <div style="font-size: 12px; font-weight: 500">基本信息</div>
+            <div class="f12">名称: {{ form.name }}</div>
+            <div class="f12">描述: {{ form.description }}</div>
+            <div class="f12">
+              启用: <a-switch type="round" size="small" disabled v-model="form.enabled" />
+            </div>
+            <a-table :data="form.permissions" :span-method="spanMethod">
+              <template #columns>
+                <a-table-column
+                  title="服务名称"
+                  :width="160"
+                  data-index="service_id"
+                ></a-table-column>
+                <a-table-column
+                  title="资源名称"
+                  :width="160"
+                  data-index="resource_name"
+                ></a-table-column>
+                <a-table-column title="资源操作">
+                  <template #cell="{ record }">
+                    {{ record.label_values }}
+                  </template>
+                </a-table-column>
+              </template>
+            </a-table>
+          </a-space>
+        </div>
       </div>
       <a-space align="center" class="summit">
         <a-button type="secondary" :disabled="current <= 1" @click="onPrev">
           <IconLeft /> 上一步
         </a-button>
-        <a-button type="primary" :disabled="current >= 3" @click="onNext">
+        <a-button :loadding="nextLoadding" type="primary" :disabled="current >= 4" @click="onNext">
           下一步 <IconRight />
         </a-button>
       </a-space>
@@ -58,7 +98,11 @@
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
-import { LIST_SYSTEM_SERVICE, LIST_SYSTEM_RESOURCE } from '@/api/mcenter/role'
+import { LIST_SYSTEM_SERVICE, LIST_SYSTEM_RESOURCE, CREATE_ROLE } from '@/api/mcenter/role'
+import { Message } from '@arco-design/web-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // 判断更新模式
 let pageHeader = '创建角色'
@@ -79,14 +123,57 @@ const treeData = ref([
   }
 ])
 
+// 基本信息
+const baseFromRef = ref(null)
+const form = ref({
+  name: '',
+  description: '',
+  enabled: true,
+  permissions: []
+})
+
+// 合并值相同的项目
+const spanMethod = ({ record, column }) => {
+  if (column.dataIndex === 'service_id') {
+    return { rowspan: 1 }
+  }
+  console.log(record, column)
+}
+
 // 切换
 const current = ref(1)
 const onPrev = () => {
   current.value = Math.max(1, current.value - 1)
 }
-const onNext = () => {
+const nextLoadding = ref(false)
+const onNext = async () => {
   // 判断是否选择有权限
-  console.log(current.value)
+  switch (current.value) {
+    case 1:
+      if (totalSelected() === 0) {
+        Message.error({
+          content: '请选择需要添加的权限'
+        })
+        return
+      }
+      break
+    case 2:
+      var err = await baseFromRef.value.validate()
+      if (err) {
+        return
+      }
+      form.value.permissions = selectedPerms()
+      break
+    case 3:
+      nextLoadding.value = true
+      try {
+        CREATE_ROLE(form.value)
+        router.push({ name: 'RoleList' })
+      } finally {
+        nextLoadding.value = false
+      }
+      break
+  }
 
   current.value = Math.min(3, current.value + 1)
 }
@@ -120,6 +207,38 @@ const selectTreeNode = async (e) => {
   }
 }
 
+// 统计选中选
+const totalSelected = () => {
+  var count = 0
+  Object.values(nodeResource).forEach((node) => {
+    node.items.forEach((rs) => {
+      if (rs.selected) {
+        count += rs.selected.length
+      }
+    })
+  })
+  return count
+}
+
+const selectedPerms = () => {
+  const permissions = []
+  Object.values(nodeResource).forEach((node) => {
+    node.items.forEach((rs) => {
+      if (rs.selected) {
+        permissions.push({
+          effect: 'ALLOW',
+          desc: '',
+          service_id: rs.service_id,
+          resource_name: rs.name,
+          label_key: 'action',
+          label_values: rs.selected
+        })
+      }
+    })
+  })
+  return permissions
+}
+
 const selectTService = () => {
   const v = nodeResource[selectedKeys.value[0]]
   if (v) {
@@ -128,6 +247,7 @@ const selectTService = () => {
 
   return { resource: { items: [] } }
 }
+
 const nodeTitle = (node) => {
   var title = node.title
 
