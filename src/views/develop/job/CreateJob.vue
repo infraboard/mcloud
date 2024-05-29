@@ -332,9 +332,9 @@ const GetK8sEnumOption = async (kc) => {
         </a-form-item>
         <a-form-item field="visiable_mode" label="访问范围" help="访问范围" required>
           <a-radio-group v-model="form.visiable_mode" type="button">
-            <a-radio value="NAMESPACE">{{ mapping['NAMESPACE'] }}</a-radio>
-            <a-radio value="DOMAIN">{{ mapping['DOMAIN'] }}</a-radio>
-            <a-radio value="GLOBAL">{{ mapping['GLOBAL'] }}</a-radio>
+            <a-radio value="NAMESPACE">{{ mapping.visiable['NAMESPACE'] }}</a-radio>
+            <a-radio value="DOMAIN">{{ mapping.visiable['DOMAIN'] }}</a-radio>
+            <a-radio value="GLOBAL">{{ mapping.visiable['GLOBAL'] }}</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item field="display_name" label="展示名称" help="暂时名称" required>

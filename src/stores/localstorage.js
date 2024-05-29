@@ -46,3 +46,7 @@ export var showMemberManagement = () => {
 
   return true
 }
+
+export var isResourceOwner = (domain, namespace) => {
+  return app.value.token.domain === domain && app.value.token.namespace === namespace
+}

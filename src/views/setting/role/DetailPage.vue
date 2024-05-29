@@ -5,6 +5,7 @@ import { Notification } from '@arco-design/web-vue'
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { FormatDate } from '@/tools/time.js'
+import mapping from '@/stores/mapping'
 
 const router = useRouter()
 const id = router.currentRoute.value.query.id
@@ -30,6 +31,9 @@ const GetRole = async () => {
       switch (key) {
         case 'create_at':
           value = FormatDate(value * 1000)
+          break
+        case 'visiable':
+          value = mapping.visiable[value]
           break
       }
       let label = attrMap[key]

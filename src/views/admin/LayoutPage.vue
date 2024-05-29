@@ -35,7 +35,6 @@ onMounted(() => {
           <a-menu-item key="DomainDetail">登录设置</a-menu-item>
           <a-menu-item key="SubUserList">用户列表</a-menu-item>
           <a-menu-item key="NamespaceList">空间列表</a-menu-item>
-          <a-menu-item key="RoleList">角色列表</a-menu-item>
           <a-menu-item key="LabelList">标签列表</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="AuditManage">

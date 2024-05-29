@@ -90,7 +90,7 @@ const handleSelect = async (v, record) => {
         <a-table-column align="center" title="描述" data-index="description"></a-table-column>
         <a-table-column align="center" title="访问范围">
           <template #cell="{ record }">
-            <span>{{ mapping[record.visiable_mode] }}</span>
+            <span>{{ mapping.visiable[record.visiable_mode] }}</span>
           </template>
         </a-table-column>
         <a-table-column align="center" title="创建人" data-index="create_by"></a-table-column>

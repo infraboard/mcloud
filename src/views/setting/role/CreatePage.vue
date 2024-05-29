@@ -89,7 +89,7 @@
           <IconLeft /> 上一步
         </a-button>
         <a-button :loadding="nextLoadding" type="primary" :disabled="current >= 4" @click="onNext">
-          下一步 <IconRight />
+          <span v-if="current < 3">下一步 <IconRight /></span><span v-else>保存 <icon-save /></span>
         </a-button>
       </a-space>
     </a-card>
@@ -156,13 +156,13 @@ const onNext = async () => {
         })
         return
       }
+      form.value.permissions = selectedPerms()
       break
     case 2:
       var err = await baseFromRef.value.validate()
       if (err) {
         return
       }
-      form.value.permissions = selectedPerms()
       break
     case 3:
       nextLoadding.value = true

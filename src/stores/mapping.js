@@ -1,7 +1,4 @@
 export default {
-  NAMESPACE: '空间内',
-  DOMAIN: '组织内',
-  GLOBAL: '公开',
   K8S_JOB: 'K8s Job',
   ENUM: '枚举',
   statusAlert: {
@@ -29,5 +26,10 @@ export default {
   BOOLEAN: {
     true: '是',
     false: '否'
+  },
+  visiable: {
+    NAMESPACE: '空间内',
+    DOMAIN: '组织内',
+    GLOBAL: '公开'
   }
 }

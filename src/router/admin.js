@@ -41,24 +41,6 @@ export default {
           meta: { label: '创建空间' }
         },
         {
-          path: 'role/list',
-          name: 'RoleList',
-          component: () => import('@/views/admin/role/ListPage.vue'),
-          meta: { label: '角色列表' }
-        },
-        {
-          path: 'role/detail',
-          name: 'RoleDetail',
-          component: () => import('@/views/admin/role/DetailPage.vue'),
-          meta: { label: '角色详情' }
-        },
-        {
-          path: 'role/create',
-          name: 'CreateRole',
-          component: () => import('@/views/admin/role/CreatePage.vue'),
-          meta: { label: '创建角色' }
-        },
-        {
           path: 'label/list',
           name: 'LabelList',
           component: () => import('@/views/admin/label/ListPage.vue'),

@@ -15,6 +15,11 @@ export var GET_ROLE = (id) => {
   return instance.get(`/mcenter/api/v1/role/${id}`)
 }
 
+// 删除角色详情
+export var DELETE_ROLE = (id) => {
+  return instance.delete(`/mcenter/api/v1/role/${id}`)
+}
+
 // 查询系统服务
 export var LIST_SYSTEM_SERVICE = (params) => {
   return instance.get('/mcenter/api/v1/system/service', { params })
