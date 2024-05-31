@@ -1,10 +1,9 @@
 <script setup>
 import { app, showMemberManagement } from '@/stores/localstorage'
 import { useRouter } from 'vue-router'
-import { LIST_NAMESPACE } from '@/api/mcenter/permission'
-import { CHANGE_NAMESPACE } from '@/api/mcenter/token'
-import { onBeforeMount, reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import mapping from '@/stores/mapping'
+import NamespaceSelect from './NamespaceSelect.vue'
 
 const router = useRouter()
 const Logout = () => {
@@ -68,26 +67,6 @@ watch(
     isAdminPage.value = value.indexOf('/admin') === 0
   }
 )
-
-// 查询空间列表
-const currentNamespace = ref(app.value.token.namespace)
-const namespaces = reactive({ items: [], total: 0 })
-const ListNamespace = async () => {
-  var resp = await LIST_NAMESPACE()
-  namespaces.items = resp.items
-  namespaces.total = resp.total
-}
-
-// 切换空间
-const ChangeNamespace = async (namespace) => {
-  var resp = await CHANGE_NAMESPACE({ namespace })
-  app.value.token = resp
-  router.go(0)
-}
-
-onBeforeMount(() => {
-  ListNamespace()
-})
 </script>
 
 <template>
@@ -100,19 +79,7 @@ onBeforeMount(() => {
       </div>
       <!-- 空间选择区 -->
       <div v-if="!isAdminPage" class="namespace-choice">
-        <a-select
-          placeholder="请选择工作空间"
-          :bordered="false"
-          v-model="currentNamespace"
-          @change="ChangeNamespace"
-        >
-          <a-option
-            v-for="item in namespaces.items"
-            :key="item.id"
-            :label="item.description"
-            :value="item.name"
-          ></a-option>
-        </a-select>
+        <NamespaceSelect></NamespaceSelect>
       </div>
 
       <!-- 系统菜单 -->
@@ -242,9 +209,8 @@ onBeforeMount(() => {
 .namespace-choice {
   display: flex;
   align-items: center;
-  width: 180px;
-  height: 100%;
-  border-right: 1px solid rgb(229, 230, 235);
+  width: 160px;
+  padding: 4px;
 }
 
 .namespace-choice :deep(.arco-select-view-single) {
@@ -259,7 +225,6 @@ onBeforeMount(() => {
   width: 193px !important;
   font-size: 12px;
   color: var(--color-text-2);
-  border-right: 1px solid rgb(229, 230, 235);
 }
 
 .user-info {
@@ -267,7 +232,6 @@ onBeforeMount(() => {
   align-items: center;
   justify-content: flex-end;
   height: 100%;
-  border-left: 1px solid rgb(229, 230, 235);
   width: 120px;
   cursor: pointer;
 }

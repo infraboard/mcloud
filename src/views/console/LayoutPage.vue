@@ -160,10 +160,15 @@ const clickNode = (keys, data) => {
     <TopMenu />
     <a-layout>
       <a-layout-sider breakpoint="xl" :width="381" class="sider">
-        <!-- 环境 -->
-        <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
-          <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
-        </a-radio-group>
+        <div>
+          <!-- 环境 -->
+          <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
+            <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{
+              env.label
+            }}</a-radio>
+          </a-radio-group>
+        </div>
+
         <!-- 搜索框 -->
         <a-input-search style="margin-bottom: 8px; max-width: 360px" v-model="searchKey" />
         <!-- Loading 骨架 -->

@@ -12,12 +12,12 @@
   -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
 }
 
-.sidebar::-webkit-scrollbar {
-  display: none; /* 隐藏滚动条（Chrome, Safari） */
+.sidebar-height-with-ns {
+  height: calc(100vh - 46px - 40px);
 }
 
-.sidebar-menu {
-  border-right: 1px solid rgb(229, 230, 235);
+.sidebar::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
 }
 
 .main {
