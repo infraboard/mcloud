@@ -74,6 +74,20 @@ export default {
           component: () => import('@/views/resource/secret/ListPage.vue')
         }
       ]
+    },
+    {
+      path: 'audit',
+      name: 'AuditManagement',
+      component: () => import('@/components/RedirectPage.vue'),
+      redirect: { name: 'PodAudit' },
+      children: [
+        {
+          path: 'pod/list',
+          name: 'PodAudit',
+          component: () => import('@/views/develop/audit/ListPage.vue'),
+          meta: { label: 'Pod登录' }
+        }
+      ]
     }
   ]
 }

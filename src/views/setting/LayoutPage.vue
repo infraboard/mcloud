@@ -18,7 +18,7 @@ onMounted(() => {
   <TopMenu />
   <div class="sidebar">
     <!-- 菜单导航区 -->
-    <div class="sidebar-menu sidebar-height-with-ns">
+    <div class="sidebar-menu">
       <a-menu
         :style="{ width: '200px', height: '100%' }"
         :default-open-keys="['ResourceList']"

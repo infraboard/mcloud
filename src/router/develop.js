@@ -58,12 +58,6 @@ export default {
           name: 'TriggerList',
           component: () => import('@/views/develop/trigger/ListPage.vue'),
           meta: { label: '持续构建' }
-        },
-        {
-          path: 'audit/pod/list',
-          name: 'PodAudit',
-          component: () => import('@/views/develop/audit/ListPage.vue'),
-          meta: { label: 'Pod登录' }
         }
       ]
     },

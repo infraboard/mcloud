@@ -6,7 +6,6 @@
       :bordered="false"
       v-model="currentNamespace"
       @change="ChangeNamespace"
-      style="  background-color: var(--color-neutral-2);"
     >
       <a-option
         v-for="item in namespaces.items"
