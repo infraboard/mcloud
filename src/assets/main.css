@@ -12,10 +12,6 @@
   -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
 }
 
-.sidebar-height-with-ns {
-  height: calc(100vh - 46px - 40px);
-}
-
 .sidebar::-webkit-scrollbar {
   display: none; /* 隐藏滚动条（Chrome, Safari） */
 }
