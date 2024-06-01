@@ -1,5 +1,5 @@
 export default {
-  path: '/service_console',
+  path: 'service_console',
   name: 'ServiceConsole',
   component: () => import('@/views/console/LayoutPage.vue'),
   redirect: { name: 'ServiceDashboard' },

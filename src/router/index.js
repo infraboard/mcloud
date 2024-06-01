@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { beforeEachHanler } from './permission'
-import console from './console'
-import admin from './admin'
-import setting from './setting'
-import resource from './resource'
-import develop from './develop'
-import person from './person'
+import console from './system/console'
+import admin from './system/admin'
+import setting from './system/setting'
+import resource from './system/resource'
+import develop from './system/develop'
+import person from './system/person'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,24 +22,32 @@ const router = createRouter({
       name: 'LoginPasswordReset',
       component: () => import('@/views/login/PasswordReset.vue')
     },
+    {
+      path: '/system',
+      name: 'SystemMenuLayout',
+      component: () => import('@/layout/SystemMenu.vue'),
+      children: [
+        // 账号中心
+        person,
+        // 服务工作台
+        console,
+        // 后台管理
+        admin,
+        // 空间设置
+        setting,
+        // 资源管理
+        resource,
+        // 研发交付
+        develop
+      ]
+    },
     // Home页面
     {
       path: '/',
       name: 'UserWorkspace',
       redirect: { name: 'ServiceConsole' }
     },
-    // 账号中心
-    person,
-    // 服务工作台
-    console,
-    // 后台管理
-    admin,
-    // 空间设置
-    setting,
-    // 资源管理
-    resource,
-    // 研发交付
-    develop,
+
     // 其他通用页面
     {
       path: '/errors/403',

@@ -156,75 +156,57 @@ const clickNode = (keys, data) => {
 </script>
 
 <template>
-  <a-layout class="layout">
-    <TopMenu />
-    <a-layout>
-      <a-layout-sider breakpoint="xl" :width="381" class="sider">
-        <div>
-          <!-- 环境 -->
-          <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
-            <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{
-              env.label
-            }}</a-radio>
-          </a-radio-group>
-        </div>
+  <a-layout class="system">
+    <a-layout-sider breakpoint="xl" :width="381" class="sidebar" style="padding: 6px">
+      <div style="margin-bottom: 8px">
+        <!-- 环境 -->
+        <a-radio-group class="env" v-model="currentEnv" @change="changeEnv" type="button">
+          <a-radio :value="env.value" v-for="env in envs" :key="env.label">{{ env.label }}</a-radio>
+        </a-radio-group>
+      </div>
 
-        <!-- 搜索框 -->
-        <a-input-search style="margin-bottom: 8px; max-width: 360px" v-model="searchKey" />
-        <!-- Loading 骨架 -->
-        <a-skeleton v-if="queryLoading" animation :loading="queryLoading">
-          <a-space direction="vertical" :style="{ width: '100%' }" size="mini">
-            <a-skeleton-line :rows="10" />
-          </a-space>
-        </a-skeleton>
-        <div v-else>
-          <!-- 服务树 -->
-          <a-tree
-            v-if="clusters.items.length > 0"
-            style="width: 100%"
-            size="mini"
-            :blockNode="true"
-            :show-line="true"
-            :data="treeData"
-            :selected-keys="selectedKeys"
-            @select="clickNode"
-          >
-            <template #title="nodeData">
-              <template v-if="((index = getMatchIndex(nodeData?.title)), index < 0)">{{
-                nodeData?.title
-              }}</template>
-              <span v-else>
-                {{ nodeData?.title?.substr(0, index) }}
-                <span style="color: var(--color-primary-light-4)">
-                  {{ nodeData?.title?.substr(index, searchKey.length) }} </span
-                >{{ nodeData?.title?.substr(index + searchKey.length) }}
-              </span>
-            </template>
-          </a-tree>
-          <a-empty v-else />
-        </div>
-      </a-layout-sider>
-      <a-layout-content class="main">
-        <!-- 内容操作区 -->
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-      </a-layout-content>
-    </a-layout>
+      <!-- 搜索框 -->
+      <a-input-search style="max-width: 360px" v-model="searchKey" />
+      <!-- Loading 骨架 -->
+      <a-skeleton v-if="queryLoading" animation :loading="queryLoading">
+        <a-space direction="vertical" :style="{ width: '100%' }" size="mini">
+          <a-skeleton-line :rows="10" />
+        </a-space>
+      </a-skeleton>
+      <div v-else>
+        <!-- 服务树 -->
+        <a-tree
+          v-if="clusters.items.length > 0"
+          style="width: 100%"
+          size="mini"
+          :blockNode="true"
+          :show-line="true"
+          :data="treeData"
+          :selected-keys="selectedKeys"
+          @select="clickNode"
+        >
+          <template #title="nodeData">
+            <template v-if="((index = getMatchIndex(nodeData?.title)), index < 0)">{{
+              nodeData?.title
+            }}</template>
+            <span v-else>
+              {{ nodeData?.title?.substr(0, index) }}
+              <span style="color: var(--color-primary-light-4)">
+                {{ nodeData?.title?.substr(index, searchKey.length) }} </span
+              >{{ nodeData?.title?.substr(index + searchKey.length) }}
+            </span>
+          </template>
+        </a-tree>
+        <a-empty v-else />
+      </div>
+    </a-layout-sider>
+    <a-layout-content class="main">
+      <!-- 内容操作区 -->
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
+    </a-layout-content>
   </a-layout>
 </template>
 
-<style scoped>
-.layout {
-  height: 100vh;
-}
-
-.sider {
-  padding: 12px;
-  border-right: 1px solid rgb(229, 230, 235);
-}
-
-.env {
-  margin-bottom: 8px;
-}
-</style>
+<style scoped></style>

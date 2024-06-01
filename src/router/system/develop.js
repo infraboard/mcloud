@@ -1,5 +1,5 @@
 export default {
-  path: '/develop',
+  path: 'develop',
   name: 'DevelopPage',
   component: () => import('@/views/develop/LayoutPage.vue'),
   redirect: { name: 'BaseDevelop' },

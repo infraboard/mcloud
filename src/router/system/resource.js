@@ -1,5 +1,5 @@
 export default {
-  path: '/resource',
+  path: 'resource',
   name: 'ResourcePage',
   component: () => import('@/views/resource/LayoutPage.vue'),
   redirect: { name: 'ResourceSearch' },

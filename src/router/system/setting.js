@@ -1,5 +1,5 @@
 export default {
-  path: '/setting',
+  path: 'setting',
   name: 'SettingPage',
   component: () => import('@/views/setting/LayoutPage.vue'),
   redirect: { name: 'NamespacePermission' },

@@ -60,11 +60,11 @@ const menuItemClickHandler = (routeName) => {
 }
 
 // 监听URL变化
-const isAdminPage = ref(router.currentRoute.value.fullPath.indexOf('/admin') === 0)
+const isAdminPage = ref(router.currentRoute.value.fullPath.indexOf('/system/admin') === 0)
 watch(
   () => router.currentRoute.value.fullPath,
   (value) => {
-    isAdminPage.value = value.indexOf('/admin') === 0
+    isAdminPage.value = value.indexOf('/system/admin') === 0
   }
 )
 </script>

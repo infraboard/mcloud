@@ -1,5 +1,5 @@
 export default {
-  path: '/person',
+  path: 'person',
   name: 'PersonPage',
   component: () => import('@/views/person/LayoutPage.vue'),
   redirect: { name: 'AccountManage' },

@@ -15,12 +15,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <TopMenu />
-  <div class="sidebar">
+  <div class="system">
     <!-- 菜单导航区 -->
-    <div class="sidebar-menu">
+    <div class="sidebar">
       <a-menu
-        :style="{ width: '200px', height: '100%' }"
+        :style="{ width: '200px', height: '100%', marginRight: '16px' }"
         :default-open-keys="['AccountManage']"
         :default-selected-keys="['UpdateMyPassword']"
         :selected-keys="[app.menu.person]"

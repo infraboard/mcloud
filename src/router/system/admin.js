@@ -1,5 +1,5 @@
 export default {
-  path: '/admin',
+  path: 'admin',
   name: 'AdminPage',
   component: () => import('@/views/admin/LayoutPage.vue'),
   redirect: { name: 'PermissionManage' },

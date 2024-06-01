@@ -5,9 +5,13 @@
   font-weight: normal;
 }
 
-.sidebar {
+.system {
   display: flex;
   height: calc(100vh - 46px);
+}
+
+.sidebar {
+  height: 100%;
   overflow: scroll;
   -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
 }
@@ -18,8 +22,13 @@
 
 .main {
   width: 100%;
-  height: calc(100vh - 46px);
+  height: 100%;
   background-color: var(--color-fill-1);
+  -ms-overflow-style: none; /* 隐藏滚动条（IE和Edge） */
+}
+
+.main::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条（Chrome, Safari） */
 }
 
 .page {
