@@ -29,8 +29,6 @@ onBeforeMount(async () => {
 <template>
   <div>
     <!-- 页头 -->
-    <a-page-header title="详情" class="detail-header" @back="router.push({ name: 'ServiceList' })">
-    </a-page-header>
     <!-- 详情标签页 -->
     <a-tabs :active-key="tab" @change="ChangeTab" lazy-load>
       <a-tab-pane key="BaseInfo" title="基础信息"> </a-tab-pane>
