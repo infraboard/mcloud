@@ -54,20 +54,28 @@ onMounted(() => {
         <a-table-column title="令牌" data-index="access_token"></a-table-column>
         <a-table-column title="登录IP">
           <template #cell="{ record }">
-            <div>{{ record.location.ip_location.remote_ip }}</div>
-            <div
-              v-if="
-                record.location.ip_location.province != '' &&
-                record.location.ip_location.province != '0'
-              "
-            >
-              {{ record.location.ip_location.province }} {{ record.location.ip_location.city }}
+            <div v-if="record.location">
+              <div>{{ record.location.ip_location.remote_ip }}</div>
+                <div
+                  v-if="
+                    record.location.ip_location.province != '' &&
+                    record.location.ip_location.province != '0'
+                  "
+                >
+                  {{ record.location.ip_location.province }} {{ record.location.ip_location.city }}
+                </div>
             </div>
+            <div v-else> - </div>
           </template>
         </a-table-column>
         <a-table-column title="登录浏览器">
           <template #cell="{ record }">
-            {{ record.location.user_agent.os }} {{ record.location.user_agent.browser_name }}
+            <div v-if="record.location">
+              {{ record.location.user_agent.os }} {{ record.location.user_agent.browser_name }}
+            </div>
+            <div v-else>
+              - 
+            </div>
           </template>
         </a-table-column>
         <a-table-column title="用户Id" data-index="user_id"></a-table-column>
