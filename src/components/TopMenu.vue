@@ -38,6 +38,14 @@ const ChangeSystem = () => {
         router.push({ name: 'ResourceSearch' })
       }
       break
+    case 'K8sPage':
+      try {
+        router.push({ name: app.value.menu.k8s })
+      } catch (error) {
+        console.log(error)
+        router.push({ name: 'K8sClusterList' })
+      }
+      break
     case 'DevelopPage':
       try {
         router.push({ name: app.value.menu.develop })
@@ -93,6 +101,7 @@ watch(
           <a-menu-item key="ServiceConsole"> 工作台 </a-menu-item>
           <a-menu-item key="SettingPage" v-if="showMemberManagement()">成员管理</a-menu-item>
           <a-menu-item key="ResourcePage">资源管理</a-menu-item>
+          <a-menu-item key="K8sClusterList">容器平台</a-menu-item>
           <a-menu-item key="DevelopPage">研发交付</a-menu-item>
         </a-menu>
       </div>
@@ -170,7 +179,7 @@ watch(
 .nav {
   /* margin-top: 46px; */
   padding: 0 0 0 8px;
-  height: 45px;
+  height: 59px;
   width: 100vw;
   display: flex;
   align-items: center;
@@ -275,7 +284,7 @@ watch(
 
 .user-menu {
   width: 260px;
-  margin-top: 4px;
+  margin-top: 14px;
 }
 
 .user-menu :deep(.arco-card-header) {

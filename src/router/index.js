@@ -6,6 +6,7 @@ import setting from './system/setting'
 import resource from './system/resource'
 import develop from './system/develop'
 import person from './system/person'
+import ks8 from './system/k8s'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,8 @@ const router = createRouter({
         setting,
         // 资源管理
         resource,
+        // k8s平台
+        ks8,
         // 研发交付
         develop
       ]

@@ -14,6 +14,8 @@ export var app = useStorage(
       console: 'ServiceConsole',
       develop: 'ServiceList',
       resource: 'ResourceSearch',
+      k8s: 'K8sClusterList',
+      k8s_dashboard: '',
       setting: 'NamespacePolicyList'
     },
     size: 'medium',
