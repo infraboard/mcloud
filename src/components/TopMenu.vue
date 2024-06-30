@@ -188,8 +188,12 @@ watch(
 }
 
 .nav-menu {
-  width: 50%;
+  width: 100%;
   height: 100%;
+}
+
+.nav-menu :deep(.arco-menu-selected) {
+  margin-top: 14px;
 }
 
 .nav-right {
@@ -284,7 +288,7 @@ watch(
 
 .user-menu {
   width: 260px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .user-menu :deep(.arco-card-header) {
