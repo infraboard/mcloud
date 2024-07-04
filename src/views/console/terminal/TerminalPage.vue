@@ -66,7 +66,7 @@ watch(
       :key="ts"
       :option="logOption"
       :width="'calc(100vw - 272px)'"
-      :height="'calc(100vh - 120px)'"
+      :height="'calc(100vh - 140px)'"
       :theme="app.xterm.theme"
     ></PodLog>
     <PodConsole
@@ -74,7 +74,7 @@ watch(
       :key="ts"
       :option="logOption"
       :width="'calc(100vw - 272px)'"
-      :height="'calc(100vh - 120px)'"
+      :height="'calc(100vh - 140px)'"
       :theme="app.xterm.theme"
     ></PodConsole>
   </div>
@@ -82,6 +82,7 @@ watch(
 
 <style scoped>
 .headline {
+  margin-top: 6px;
   height: 40px;
   width: 100%;
   display: flex;

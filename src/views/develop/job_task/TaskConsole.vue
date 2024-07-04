@@ -102,7 +102,7 @@ onBeforeMount(async () => {
             v-if="consoleType === 'debug'"
             :taskId="task.task_id"
             containerName=""
-            height="calc(100vh - 60px - 45px)"
+            height="calc(100vh - 60px - 80px)"
             :theme="app.xterm.theme"
             :reconect="reconect"
             @changed="
@@ -118,7 +118,7 @@ onBeforeMount(async () => {
             v-if="consoleType === 'log'"
             :taskId="task.task_id"
             containerName=""
-            height="calc(100vh - 60px - 45px)"
+            height="calc(100vh - 60px - 80px)"
             :theme="app.xterm.theme"
             @changed="
               (v) => {

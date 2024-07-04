@@ -48,6 +48,10 @@ const handleSelect = async (e, v, cluster) => {
   switch (v) {
     case 'delete':
       Modal.warning({
+        hideCancel: false,
+        okButtonProps: {
+          status: 'danger'
+        },
         title: '集群删除提醒',
         content: `你当前正在删除【${cluster.name}】集群, 是否确认？`,
         ok: async () => {

@@ -179,7 +179,7 @@ const deleteStep = () => {
               <TaskLogConsole
                 style="margin-top: 8px"
                 :taskId="step.task_id"
-                height="calc(100vh - 72px)"
+                height="calc(100vh - 98px)"
               ></TaskLogConsole>
             </KeepAlive>
           </a-tab-pane>
