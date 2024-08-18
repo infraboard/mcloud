@@ -15,15 +15,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="system">
-    <!-- 菜单导航区 -->
-    <div class="sidebar">
+  <a-layout class="system">
+    <a-layout-sider collapsible class="sidebar" breakpoint="xl">
       <a-menu
-        :style="{ width: '200px', height: '100%', marginRight: '16px' }"
         :default-open-keys="['PermissionManage']"
         :default-selected-keys="['SubUserList']"
         :selected-keys="[app.menu.admin]"
-        show-collapse-button
         auto-open
         breakpoint="xl"
         @menu-item-click="menuItemClickHandler"
@@ -43,14 +40,17 @@ onMounted(() => {
           <a-menu-item key="AuditOperateLog">操作日志</a-menu-item>
         </a-sub-menu>
       </a-menu>
-    </div>
-    <!-- 内容操作区 -->
-    <div class="main">
+      <template #trigger="{ collapsed }">
+        <icon-menu-unfold class="collapsed-icon" v-if="collapsed" />
+        <icon-menu-fold class="collapsed-icon" v-else />
+      </template>
+    </a-layout-sider>
+    <layout-content class="main">
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />
         </keep-alive>
       </router-view>
-    </div>
-  </div>
+    </layout-content>
+  </a-layout>
 </template>

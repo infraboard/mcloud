@@ -6,6 +6,7 @@
 }
 
 .system {
+  width: 100%;
   display: flex;
   height: calc(100vh - 60px);
 }
@@ -133,4 +134,9 @@
   color: var(--color-neutral-6);
   font-weight: 500;
   margin-right: 6px;
+}
+
+.collapsed-icon {
+  color: var(--color-text-3) !important;
+  background-color: var(--color-fill-1) !important;
 }

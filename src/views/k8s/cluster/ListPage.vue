@@ -3,8 +3,8 @@ import { app } from '@/stores/localstorage'
 import { LIST_K8S_CLUSTER, DELETE_K8S_CLUSTER } from '@/api/mpaas/k8s'
 import { onMounted, reactive, ref } from 'vue'
 import { Notification } from '@arco-design/web-vue'
-import { useRouter } from 'vue-router';
-import { Modal } from '@arco-design/web-vue';
+import { useRouter } from 'vue-router'
+import { Modal } from '@arco-design/web-vue'
 
 const router = useRouter()
 
@@ -59,11 +59,11 @@ const handleSelect = async (e, v, cluster) => {
           Notification.success(`删除${cluster.id}成功`)
           QueryData()
         }
-      });
+      })
       break
     case 'update':
       router.push({ name: 'K8sClusterCreate', query: { id: cluster.id } })
-      break;
+      break
     default:
       break
   }
@@ -73,25 +73,37 @@ const jumpToDashboard = (cluster) => {
   router.push({ name: 'K8sDashoard', params: { id: cluster.id } })
   app.value.menu.k8s_dashboard = cluster.id
 }
-
 </script>
 
 <template>
   <div class="page">
     <div class="table-op">
       <div>
-        <a-button type="primary" @click="$router.push({ name: 'K8sClusterCreate' })" :size="app.size">
+        <a-button
+          type="primary"
+          @click="$router.push({ name: 'K8sClusterCreate' })"
+          :size="app.size"
+        >
           添加集群
         </a-button>
       </div>
       <div style="margin-left: auto; margin-right: 12px">
-        <a-pagination :size="app.size" :total="pagination.total" @change="pageChange"
-          @page-size-change="pageSizeChange" />
+        <a-pagination
+          :size="app.size"
+          :total="pagination.total"
+          @change="pageChange"
+          @page-size-change="pageSizeChange"
+        />
       </div>
     </div>
     <div class="cluster-list">
-      <a-card v-for="cluster in data.items" :key="cluster.id" class="cluster-card" hoverable
-        @click="jumpToDashboard(cluster)">
+      <a-card
+        v-for="cluster in data.items"
+        :key="cluster.id"
+        class="cluster-card"
+        hoverable
+        @click="jumpToDashboard(cluster)"
+      >
         <template #title>
           <div class="cluster-title">
             {{ cluster.name }}
@@ -105,13 +117,14 @@ const jumpToDashboard = (cluster) => {
           </a-button>
           <a-button type="text" :size="app.size" @click="handleSelect($event, 'delete', cluster)">
             <template #icon>
-              <icon-delete style="color: rgb(var(--red-6));" />
+              <icon-delete style="color: rgb(var(--red-6))" />
             </template>
           </a-button>
         </template>
         <div class="cluster-content">
           <span>{{ cluster.server_info.server }}</span>
-          (<span>{{ cluster.server_info.version }}</span>)
+          (<span>{{ cluster.server_info.version }}</span
+          >)
         </div>
       </a-card>
     </div>

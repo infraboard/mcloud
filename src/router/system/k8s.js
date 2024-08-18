@@ -34,7 +34,7 @@ export default {
           path: 'namespace/list',
           name: 'K8sNamespaceList',
           component: () => import('@/views/k8s/namespace/ListPage.vue'),
-          meta: { label: '命名空间列表' }
+          meta: { label: '命名空间' }
         },
         {
           path: 'namespace/create',

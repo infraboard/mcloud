@@ -82,6 +82,10 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
+.content {
+  margin-top: 12px;
+}
+
 .enable-line {
   margin-bottom: 0px;
 }
